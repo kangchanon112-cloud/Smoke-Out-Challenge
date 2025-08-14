@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #fff8e7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #f5e6d3;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        input {
+            display: block;
+            margin: 10px 0;
+            padding: 8px;
+            width: 100%;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #6b4f3f;
+            color: white;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #473429;
+        }
+
+        #message {
+            margin-top: 10px;
+            color: red;
+            text-align: center;
+        }
+
+        a {
+            display: block;
+            margin-top: 15px;
+            color: #6b4f3f;
+            text-decoration: none;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 style="text-align:center;">เข้าสู่ระบบ</h2>
+        <input type="text" id="loginUsername" placeholder="Username">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button onclick="login()">เข้าสู่ระบบ</button>
+        <div id="message"></div>
+        <a href="index.html">ยังไม่มีบัญชี? สมัครสมาชิก</a>
+    </div>
+
+    <script>
+function login() {
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const messageDiv = document.getElementById('message');
+
+    if (!username || !password) {
+        messageDiv.textContent = 'กรอกข้อมูลให้ครบทุกช่อง!';
+        return;
+    }
+
+    fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+        messageDiv.textContent = data.message;
+        if (data.success) {
+            messageDiv.style.color = 'green';
+            localStorage.setItem('userId', data.userId); // เก็บ userId
+            setTimeout(() => { window.location.href = 'part1.html'; }, 1000);
+        } else {
+            messageDiv.style.color = 'red';
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        messageDiv.textContent = 'เกิดข้อผิดพลาด';
+        messageDiv.style.color = 'red';
+    });
+}
+</script>
+
+</body>
+
+</html>
