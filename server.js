@@ -1,11 +1,21 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const bcrypt = require('bcryptjs');
-const app = express();
-const PORT = 3000;
+import express from 'express';
+import http from 'http';
+import { Server } from 'socket.io';
+import mongoose from 'mongoose';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import bcrypt from 'bcryptjs';
 
+// สร้าง Express app
+const app = express();
+
+// สร้าง HTTP server จาก Express app
+const server = http.createServer(app);
+
+// สร้าง Socket.io server จาก HTTP server
+const io = new Server(server);
+const PORT = 3000;
+// Middlewares
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.static('view'));
@@ -13,11 +23,24 @@ app.use('/public', express.static('public'));
 
 // เชื่อม MongoDB
 mongoose.connect('mongodb+srv://test:099227@test.jcccez1.mongodb.net/?retryWrites=true&w=majority&appName=test', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+
 })
     .then(() => console.log('✅ Connected to MongoDB'))
     .catch(err => console.error('❌ MongoDB connection error:', err));
+
+
+io.on('connection', (socket) => {
+    console.log('ผู้ใช้เชื่อมต่อแล้ว');
+
+    socket.on('sendSticker', (sticker) => {
+        io.emit('receiveSticker', sticker); // ส่งสติ๊กเกอร์ให้ทุกคน
+    });
+
+    socket.on('disconnect', () => {
+        console.log('ผู้ใช้ออกจากเว็บ');
+    });
+});
+
 
 // Schema สำหรับผู้ใช้
 const userSchema = new mongoose.Schema({
@@ -38,7 +61,7 @@ const scoreSchema = new mongoose.Schema({
 });
 const Score = mongoose.model('Score', scoreSchema);
 
-// Route สำหรับสมัครสมาชิก
+//
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
@@ -52,13 +75,10 @@ app.post('/register', async (req, res) => {
             return res.status(400).json({ success: false, message: 'ชื่อผู้ใช้นี้มีอยู่แล้ว' });
         }
 
-        // เข้ารหัสรหัสผ่าน
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // สร้างผู้ใช้ใหม่
+        // สร้างผู้ใช้ใหม่ (เก็บ password เป็น plaintext)
         const newUser = new User({
             username,
-            password: hashedPassword,
+            password, // ไม่เข้ารหัส
             role: 'user'
         });
         await newUser.save();
@@ -84,19 +104,15 @@ app.post('/login', async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password)
         return res.status(400).json({ success: false, message: 'กรอกข้อมูลให้ครบ' });
-
     try {
         const user = await User.findOne({ username });
         if (!user)
             return res.status(400).json({ success: false, message: 'ผู้ใช้ไม่ถูกต้อง' });
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = password === user.password;
         if (!isMatch)
             return res.status(400).json({ success: false, message: 'รหัสผ่านไม่ถูกต้อง' });
-
-        // ส่ง userId กลับไป client
         res.json({ success: true, message: 'เข้าสู่ระบบเรียบร้อย', userId: user._id });
-
     } catch (err) {
         res.status(500).json({ success: false, message: err.message });
     }
@@ -195,6 +211,6 @@ app.post('/save-profile', async (req, res) => {
 });
 
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
 });

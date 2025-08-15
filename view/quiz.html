@@ -18,8 +18,7 @@
             align-items: center;
             min-height: 100vh;
             cursor: pointer;
-              height: 100vh; /* เต็มจอ */
-              
+            height: 100vh;
         }
 
         h1 {
@@ -62,47 +61,50 @@
             box-shadow: 0 2px 6px rgba(0, 128, 0, 0.2);
         }
 
-        #resultImage {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.5);
-            max-width: 200px;
-            z-index: 999;
-            opacity: 0;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
+        /* Popup แสดงถูก/ผิด */
+       .popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.5);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    display: none;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
 
-        #resultImage.show {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-            animation: bounce 0.6s ease;
-        }
+.popup.show {
+    display: block;
+    opacity: 1;
+    animation: popupBounce 0.5s ease forwards; /* forwards = ค้างหลัง animation จบ */
+}
 
-        @keyframes bounce {
-            0% {
-                transform: translate(-50%, -50%) scale(0.5);
-            }
+.popup img {
+    max-width: 300px; /* ปรับขนาดตามต้องการ */
+}
 
-            50% {
-                transform: translate(-50%, -50%) scale(1.1);
-            }
+@keyframes popupBounce {
+    0% { transform: translate(-50%, -50%) scale(0.5); }
+    50% { transform: translate(-50%, -50%) scale(1.2); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
 
-            100% {
-                transform: translate(-50%, -50%) scale(1);
-            }
-        }
     </style>
 </head>
 
 <body>
-
     <h1>Quiz</h1>
+    <div class="answers"></div>
 
-    <div class=" answers">
-    </div><img id="resultImage" src="" alt="result" style="display:none; position:fixed; top:80%; left:50%; transform:translate(-50%, -50%);
-            max-width:300px; z-index:999;">
+    <!-- Popup แสดงผล -->
+    <div id="popupResult" class="popup">
+        <img id="popupImg" src="" alt="result">
+    </div>
+
     <script type="module">
         import { questions } from './array.js';
 
@@ -111,6 +113,10 @@
 
         const h1 = document.querySelector('h1');
         const answersDiv = document.querySelector('.answers');
+        const popup = document.getElementById('popupResult');
+        const popupImg = document.getElementById('popupImg');
+
+        let answeredCurrentQuestion = false;
 
         function renderQuestion() {
             const q = questions[currentQuestionIndex];
@@ -132,17 +138,16 @@
             });
         }
 
-        // เพิ่มการคลิกที่พื้นที่ว่าง
-        let answeredCurrentQuestion = false;
-
         function submitAnswer(q, opt, btn) {
-            if (answeredCurrentQuestion) return; // กันกดซ้ำในข้อเดียวกัน
+            if (answeredCurrentQuestion) return;
 
+            // ไฮไลท์ปุ่มที่เลือก
             document.querySelectorAll('.answers button').forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
 
             answeredCurrentQuestion = true;
 
+            // เก็บคำตอบ
             const index = answers.findIndex(a => a.question === q.question);
             if (index >= 0) answers[index] = { question: q.question, answer: opt.text, score: Number(opt.score) };
             else answers.push({ question: q.question, answer: opt.text, score: Number(opt.score) });
@@ -151,54 +156,59 @@
 
             const userId = localStorage.getItem('userId');
             if (userId) {
-                fetch('http://localhost:3000/submit-answer', {
+                fetch('/submit-answer', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ userId, question: q.question, answer: opt.text })
                 }).then(res => res.json()).then(d => console.log(d)).catch(err => console.error(err));
             }
 
-            // แสดงรูปว่าถูกหรือผิด
-           
-
-
-            // แสดงรูปว่าถูกหรือผิด
-            const resultImg = document.getElementById('resultImage');
-            resultImg.src = Number(opt.score) > 0 ? '/public/img/5.png' : '/public/img/4.png';
-            resultImg.style.display = 'block';
-
-            // รีเซ็ต class เพื่อให้ animation เล่นใหม่ได้ทุกครั้ง
-            resultImg.classList.remove('show');
-            void resultImg.offsetWidth; // trick บังคับ browser รีคอมพิวต์
-            resultImg.classList.add('show');
-
+            // แสดง popup ถูก/ผิด
+            showResultPopup(Number(opt.score) > 0);
         }
 
-        document.body.addEventListener('click', (e) => {
-            if (e.target.tagName !== 'BUTTON') {
-                if (answeredCurrentQuestion) {
-                    // ซ่อนรูปก่อนเปลี่ยนข้อ
-                    document.getElementById('resultImage').style.display = 'none';
-document.getElementById('resultImage').classList.remove('show');
+       function showResultPopup(isCorrect) {
+    popupImg.src = isCorrect ? '/public/img/5.png' : '/public/img/4.png';
 
-                    answeredCurrentQuestion = false;
+    // รีเซ็ต class เพื่อให้ animation เล่นใหม่
+    popup.classList.remove('show');
+    void popup.offsetWidth;
+    popup.classList.add('show');
 
-                    if (currentQuestionIndex < questions.length - 1) {
-                        currentQuestionIndex++;
-                        renderQuestion();
-                    } else {
-                        window.location.href = 'part1.html#section8';
-                    }
-                } else {
-                    alert("กรุณาเลือกคำตอบก่อน");
-                }
-            }
-        });
+    // ซ่อนอัตโนมัติหลัง 1 วินาทีและไปข้อถัดไป
+    setTimeout(() => {
+        popup.classList.remove('show');
+
+        // ไปข้อถัดไป
+        answeredCurrentQuestion = false;
+        if (currentQuestionIndex < questions.length - 1) {
+            currentQuestionIndex++;
+            renderQuestion();
+        } else {
+            window.location.href = 'part1.html#section8';
+        }
+
+    }, 3000);
+}
+
+
+        // คลิกพื้นที่ว่างเพื่อไปข้อถัดไป
+        // document.body.addEventListener('click', (e) => {
+        //     if (e.target.tagName !== 'BUTTON') {
+        //         if (answeredCurrentQuestion) {
+        //             answeredCurrentQuestion = false;
+
+        //             if (currentQuestionIndex < questions.length - 1) {
+        //                 currentQuestionIndex++;
+        //                 renderQuestion();
+        //             } else {
+        //                 window.location.href = 'part1.html#section8';
+        //             }
+        //         }
+        //     }
+        // });
 
         renderQuestion();
-
     </script>
-
 </body>
-
 </html>
