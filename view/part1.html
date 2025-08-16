@@ -41,19 +41,19 @@
     <img src="/public/img/smok.png" class="img-fluid mb-4" alt="No Smoke Logo" style="max-height: 120px;" />
 
     <h2 class="fw-bold">
-      SOC <br>(Smoke Out Challenge) <br>ท้าพิชิตชีวิตไร้ควัน
+      SOC <br>(Smoke Out Challenge)<br>ท้าพิชิตชีวิตไร้ควัน
     </h2>
 
-    <h2 class="mt-4 quote">
+    <h3 class="mt-4 quote">
       "บุหรี่ไม่ใช่แค่เรื่องส่วนตัว แต่กระทบต่อสุขภาพและคนรอบข้าง
       ชีวิตสอนให้เราเห็นการป้องกันสำคัญกว่าการแก้ไข"
-    </h2>
+    </h3>
 
     <h6 class="m">
       *เนื้อหาในเว็บนี้เป็นผลงานการออกแบบการสื่อสาร
       ให้ความรู้ผ่านการให้ผู้เล่นมีส่วนร่วมในการตอบคำถาม
     </h6>
-
+    <br><br>
     <div class="ma">
       <a href="#" id="nextBtn1" class="arrow-text">&gt;&gt;&gt;</a>
     </div>
@@ -63,20 +63,20 @@
 
   <div class="text-center bg" id="section2">
     <br>
-    <h1 class="fw-bold mt-5" style="color: #222222;">
-      งานนี้เป็นส่วนหนึ่งของวิจัย
-    </h1>
+    <h2 class="fw-bold mb-3" style="color: #222222;">
+      งานนี้เป็นส่วนหนึ่ง <br>ของงานวิจัย
+    </h2>
     <h3 class="my-2 quote">
       “ผลของเกม SOC ท้าพิชิตชีวิตไร้ควันต่อทัศนคติและพฤติกรรม
       การป้องกันการสูบบุหรี่ไฟฟ้าในนักเรียนชั้นมัธยมศึกษาตอนต้น”
     </h3>
-    <br>
-    <h5 class="m">
+    <br> <br>
+    <h6 class="m">
       โดยนักศึกษาพยาบาลชั้นปีที่ 3<br />
       วิทยาลัยพยาบาลบรมราชชนนีแพร่
-    </h5>
+    </h6>
 
-    <div class="mt-5 ma">
+    <div class="ma">
       <a href="#" id="nextBtn2" class="arrow-text">แตะเพื่อไปต่อ</a>
     </div>
   </div>
@@ -113,11 +113,11 @@
     </h2>
 
     <div class="d-flex justify-content-center gap-3 mt-4">
-      <button onclick="playText()" id="btnUnderstand" type="button" class="btn btn-outline-success fw-semibold me-5"
+      <button onclick="playText(5)" id="btnUnderstand" type="button" class="btn btn-outline-success fw-semibold me-5"
         style="min-width: 140px; border-radius: 8px; padding: 0.75rem 2rem; font-size: 1.25rem;">
         รู้จัก
       </button>
-      <button onclick="playText()" id="btnNotUnderstand" type="button" class="btn btn-outline-danger fw-semibold"
+      <button onclick="playText(5)" id="btnNotUnderstand" type="button" class="btn btn-outline-danger fw-semibold"
         style="min-width: 140px; border-radius: 8px; padding: 0.75rem 2rem; font-size: 1.25rem;">
         ไม่รู้จัก
       </button>
@@ -130,26 +130,31 @@
       บุหรี่ไฟฟ้า
     </h1>
     <div class="mb-4 p-3 rounded-3 border border-dark">
-      <p class="fs-5 mb-0" id="nicotineText">
-        <span class="text-danger fw-bold ">บุหรี่ไฟฟ้า</span>
+      <p class="fs-5 mb-0" id="nicotineText5">
+       บุหรี่ไฟฟ้า
         คือผลิตภัณฑ์ยาสูบรูปแบบใหม่ที่ใช้แบตเตอรี่ทำให้เกิดความร้อนเพื่อระเหยน้ำยาในบุหรี่ไฟฟ้าให้เป็นละอองลอยโดยไม่มีการเผาไหม้
         ผู้สูบบุหรี่ไฟฟ้าจะสูดละอองลอยผ่านระบบทางเดินหายใจ ในน้ำยาบุหรี่ไฟฟ้ามีสารเคมีสำคัญหลายชนิด ได้แก่
       </p>
     </div>
-    <audio id="voice" src="/public/img/voice.mp3"></audio>
-    <div class="mt-5 ma">
-      <a href="#" id="nextBtn3" class="arrow-text">แตะเพื่อไปต่อ</a>
+    <audio id="voice5" src="/public/img/voice.mp3"></audio>
+     <div class="mt-5 ma">
+      <a href="#" id="nextBtn3" onclick="playText(6)" class="arrow-text">แตะเพื่อไปต่อ</a>
     </div>
   </div>
 
   <!-- ส่วนที่ 6 -->
   <div class=" text-center pt-5 bg2" id="section6" style="max-width: 700px;">
+    <br>
     <div class="mb-4 p-3 rounded-3 border border-dark">
-      <p class="fs-5 mb-0">
-        <span class="text-danger fw-bold">🚬 นิโคติน</span> เป็นสารเสพติดที่เพิ่มการหลั่งของสารโดปามีนในสมองทําให้
+      <p class="fs-5 mb-0 " id="nicotineText6">
+        🚬 นิโคติน เป็นสารเสพติดที่เพิ่มการหลั่งของสารโดปามีนในสมองทําให้
         ผู้สูบบุหรี่ไฟฟ้าเสพติด และมีผลต่อร่างกายในการเพิ่มความดันโลหิตและเพิ่มอัตราการเต้นของหัวใจ
         ทําให้หัวใจทํางานหนักขึ้นเสี่ยงต่อหัวใจวายเฉียบพลัน
       </p>
+    </div>
+    <audio id="voice6" src="/public/img/voice2.mp3"></audio>
+    <div class="mt-5 ma">
+      <a href="#" id="nextBtn4" onclick="playText(7)" class="arrow-text">แตะเพื่อไปต่อ</a>
     </div>
     <img src="/public/img/6.png" class="img1">
     <img src="/public/img/7.png" class="img2">
@@ -160,11 +165,15 @@
   <!-- ส่วนที่ 7 -->
   <div class=" text-center pt-5 bg2" id="section7" style="max-width: 700px;">
     <div class="mb-4 p-3 rounded-3 border border-dark">
-      <p class="fs-5 mb-0">
-        <span class="text-danger fw-bold">🍃 สารปรุงแต่งกลิ่นรสชาติ</span> เพื่อจูงใจให้เยาวชนอยากลอง
+      <p class="fs-5 mb-0 " id="nicotineText7">
+        🍃 สารปรุงแต่งกลิ่นรสชาติ เพื่อจูงใจให้เยาวชนอยากลอง
         สูบบุหรี่ไฟฟ้า สารปรุงแต่งกลิ่นรสชาติจะทําให้เกิดการระคายเคืองของปอดที่เรียกว่าป๊อปคอร์น ลัง โดย
         เฉพาะกลิ่นอบเชย และเชอรี่จะมีอันตรายมากที่สุด
       </p>
+    </div>
+    <audio id="voice7" src="/public/img/voice3.mp3"></audio>
+    <div class="mt-5 ma">
+      <a href="#" id="nextBtn5" class="arrow-text">แตะเพื่อไปต่อ</a>
     </div>
     <img src="/public/img/8.png" class="img1">
     <img src="/public/img/9.png" class="img2">
@@ -203,287 +212,14 @@
       <h4 class="fw-semibold mt-5" style="color: #b38600;">
         โปรดติดตามกิจกรรมครั้งต่อไปน้าาา <span style="font-size: 1.5rem;">✨</span>
       </h4>
-    </div>  
+    </div>
     <!-- <div class="mt-5">
       <a href="part1.html" class="arrow-text">กลับไปหน้าแรก</a>
     </div> -->
 
   </div>
 
-  <script>
-    ///////////////////////////// เริ่มต้นแสดง section1//////////////////////////
-    document.getElementById('section0').classList.add('active');
-
-    // ไฮไลท์ปุ่มที่เลือก
-    const answerButtons = document.querySelectorAll('#section8 .answer-btn');
-
-    answerButtons.forEach(btn => {
-      btn.addEventListener('click', function () {
-        // เอาคลาส active ออกจากปุ่มทุกปุ่ม
-        answerButtons.forEach(b => b.style.background = '#fff');
-        answerButtons.forEach(b => b.style.color = '#333');
-
-        // ไฮไลท์ปุ่มที่คลิก
-        this.style.background = '#dfc4aa';
-        this.style.color = '#333';
-
-        // ไป section ถัดไปหลังเลือก
-        const nextId = this.dataset.next;
-        if (nextId) {
-          document.getElementById('section8').classList.remove('active');
-          document.getElementById(nextId).classList.add('active');
-        }
-      });
-    });
-
-
-    ////////////////////////
-    // ประกาศ socket ก่อนใช้งาน
-    const socket = io();
-
-    // ดึง element
-    const display = document.getElementById('display');
-    const messageInput = document.getElementById('message');
-    const sendBtn = document.getElementById('sendBtn');
-    const stickers = document.querySelectorAll('#stickers .sticker');
-
-    // ฟังก์ชันส่งสติ๊กเกอร์
-    function sendSticker(sticker) {
-      socket.emit('sendSticker', sticker);
-    }
-
-    // ฟังก์ชันส่งข้อความ (ส่งเป็น "sticker" เหมือนกัน)
-    function sendMessage() {
-      const text = messageInput.value.trim();
-      if (!text) return;
-      socket.emit('sendSticker', text); // ถ้าต้องการแยก message กับ sticker ต้องสร้าง event ใหม่
-      messageInput.value = '';
-    }
-
-    // ผูก event
-    sendBtn.addEventListener('click', sendMessage);
-    messageInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') sendMessage();
-    });
-
-    // ผูก event ให้สติ๊กเกอร์
-    stickers.forEach(sticker => {
-      sticker.addEventListener('click', () => {
-        sendSticker(sticker.textContent);
-      });
-    });
-
-    // รับสติ๊กเกอร์/ข้อความจาก server แล้วแสดง animation
-    socket.on('receiveSticker', (sticker) => {
-      const s = document.createElement('div');
-      s.textContent = sticker;
-      s.className = 'floating';
-      s.style.left = Math.random() * (window.innerWidth - 50) + 'px';
-      s.style.top = window.innerHeight + 'px';
-      display.appendChild(s);
-
-      setTimeout(() => display.removeChild(s), 3000);
-    });
-
-
-    //////////////////////////////////////////////////////
-    function setupNextButton(nextBtnId, currentSectionId, nextSectionId) {
-      document.getElementById(nextBtnId).addEventListener('click', function (e) {
-        e.preventDefault();
-        document.getElementById(currentSectionId).classList.remove('active');
-        document.getElementById(nextSectionId).classList.add('active');
-      });
-    }
-
-    setupNextButton('nextBtn0', 'section0', 'section1');
-    setupNextButton('nextBtn1', 'section1', 'section2');
-    setupNextButton('nextBtn2', 'section2', 'section3');
-    setupNextButton('nextBtn3', 'section5', 'section6');
-
-
-    // กำหนด event submit สำหรับฟอร์มที่ section3
-    const form = document.querySelector('#section3 form');
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      if (form.checkValidity()) {
-        document.getElementById('section3').classList.remove('active');
-        document.getElementById('section4').classList.add('active');
-      } else {
-        form.reportValidity();
-      }
-    });
-
-    // แตะพื้นที่ว่างเพื่อไปต่อ (skip) ยกเว้นตอนกรอกฟอร์ม//////////////////////////
-    document.body.addEventListener('click', function (e) {
-      const activeSectionIds = [
-        'section0', 'section1', 'section2', 'section3', 'section4', 'section5',
-        'section6', 'section7', 'section8', 'section9'
-      ];
-
-      const nextBtns = activeSectionIds
-        .map(id => document.querySelector(`#${id} .arrow-text`))
-        .filter(el => el !== null);
-
-      // ถ้าแตะปุ่ม next หรืออยู่ในฟอร์ม ไม่ต้องทำอะไร
-      if (
-        nextBtns.some(btn => btn.contains(e.target)) ||
-        form.contains(e.target)
-      ) {
-        return;
-      }
-
-      // หาดูว่าตอนนี้อยู่ section ไหน active
-      let currentIndex = activeSectionIds.findIndex(id => document.getElementById(id).classList.contains('active'));
-      if (currentIndex === -1) return;
-
-      // ถ้าอยู่ section3 (ฟอร์ม) ห้ามแตะพื้นที่ว่างข้ามไป ////////////////////////////////////////////////////
-      const skipSections = ['section0', 'section3', 'section4','section5', 'section8', 'section9'];
-      if (skipSections.includes(activeSectionIds[currentIndex])) return;
-
-      if (activeSectionIds[currentIndex] === 'section7') {
-        window.location.href = "quiz.html";
-        return;
-      }
-      // ซ่อน section ปัจจุบัน
-      document.getElementById(activeSectionIds[currentIndex]).classList.remove('active');
-
-      // แสดง section ถัดไป
-      if (currentIndex + 1 < activeSectionIds.length) {
-        document.getElementById(activeSectionIds[currentIndex + 1]).classList.add('active');
-      }
-    });
-
-    document.getElementById('btnNotUnderstand').addEventListener('click', function (e) {
-      e.stopPropagation(); // ป้องกันไม่ให้ event เด้งไป body
-      document.getElementById('section4').classList.remove('active');
-      document.getElementById('section5').classList.add('active');
-    });
-
-    document.getElementById('btnUnderstand').addEventListener('click', function (e) {
-      e.stopPropagation(); // กันไม่ให้ข้าม section9
-      document.getElementById('section4').classList.remove('active');
-      document.getElementById('section5').classList.add('active');
-    });
-
-    document.getElementById('btnNotUnderstand2').addEventListener('click', function (e) {
-      e.stopPropagation(); // กันไม่ให้คลิกทะลุไป body
-      window.location.hash = 'section4';
-    });
-    document.getElementById('btnUnderstand2').addEventListener('click', function (e) {
-      e.stopPropagation(); // กันไม่ให้คลิกทะลุไป body
-      window.location.hash = 'section9';
-    });
-
-    ////////////////////////////////////////////
-    function openSectionFromHash() {
-      const hash = window.location.hash.replace('#', '');
-      if (hash) {
-        const allSections = document.querySelectorAll(
-          '#section0 ,#section1, #section2, #section3, #section4, #section5, #section6, #section7, #section8, #section9'
-        );
-        allSections.forEach(sec => sec.classList.remove('active'));
-
-        const targetSection = document.getElementById(hash);
-        if (targetSection) {
-          targetSection.classList.add('active');
-        }
-      }
-    }
-
-
-    openSectionFromHash();
-
-    //////////////////////////////////////////////////////////////////////////////
-    window.addEventListener('hashchange', openSectionFromHash);
-    document.getElementById('profileForm').addEventListener('submit', async function (e) {
-      e.preventDefault();
-
-      const name = document.getElementById('nameInput').value.trim();
-      const age = parseInt(document.getElementById('ageInput').value);
-      const gender = document.getElementById('genderSelect').value;
-
-      if (!name || !age || !gender) {
-        alert('กรุณากรอกข้อมูลให้ครบ');
-        return;
-      }
-
-      try {
-        const res = await fetch('/save-profile', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, age, gender })
-        });
-
-        const data = await res.json();
-        if (data.success) {
-
-          localStorage.setItem('profileId', data.profileId);
-
-        } else {
-          alert(data.message || 'เกิดข้อผิดพลาด');
-        }
-      } catch (err) {
-        console.error(err);
-
-      }
-    });
-
-
-    let isPlaying = false;
-    let typingTimeout;
-    let audio = document.getElementById("voice");
-    let textEl = document.getElementById("nicotineText");
-    let fullText = textEl.textContent; // เก็บข้อความต้นฉบับ
-
-    function playText() {
-      textEl.textContent = ""; // ล้างข้อความก่อนเล่น
-      audio.play();
-      isPlaying = true;
-
-      const segments = [
-        { length: 24, speed: 60 },
-        { length: fullText.length - 25, speed: 72 }
-      ];
-
-      let charIndex = 0;
-      let segIndex = 0;
-      let countInSeg = 0;
-
-      function typeNextChar() {
-        textEl.textContent += fullText[charIndex];
-        charIndex++;
-        countInSeg++;
-
-        if (segIndex < segments.length && countInSeg >= segments[segIndex].length) {
-          segIndex++;
-          countInSeg = 0;
-        }
-
-        if (charIndex < fullText.length) {
-          typingTimeout = setTimeout(typeNextChar, segments[segIndex]?.speed || 70);
-        } else {
-          isPlaying = false;
-        }
-      }
-
-      typeNextChar();
-    }
-
-    // หยุดกลางคันและแสดงข้อความเต็ม
-    document.getElementById('section5').addEventListener('click', function (e) {
-      if (isPlaying) {
-        clearTimeout(typingTimeout);    // หยุดการพิมพ์
-        textEl.textContent = fullText;  // แสดงข้อความทั้งหมดทันที
-        audio.pause();                  // หยุดเสียง
-        audio.currentTime = 0;          // รีเซ็ตเวลาเสียง
-        isPlaying = false;
-      }
-    });
-
-
-
-  </script>
-
 </body>
+<script src="/public/js/scr.js"></script>
 
 </html>

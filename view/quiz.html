@@ -62,43 +62,62 @@
         }
 
         /* Popup แสดงถูก/ผิด */
-       .popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.5);
-    background: rgba(255, 255, 255, 0.95);
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    z-index: 9999;
-    display: none;
-    opacity: 0;
-    transition: all 0.3s ease;
-}
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            display: none;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
 
-.popup.show {
-    display: block;
-    opacity: 1;
-    animation: popupBounce 0.5s ease forwards; /* forwards = ค้างหลัง animation จบ */
-}
+        .popup.show {
+            display: block;
+            opacity: 1;
+            animation: popupBounce 0.5s ease forwards;
+            /* forwards = ค้างหลัง animation จบ */
+        }
 
-.popup img {
-    max-width: 300px; /* ปรับขนาดตามต้องการ */
-}
+        .popup img {
+            max-width: 300px;
+            /* ปรับขนาดตามต้องการ */
+        }
 
-@keyframes popupBounce {
-    0% { transform: translate(-50%, -50%) scale(0.5); }
-    50% { transform: translate(-50%, -50%) scale(1.2); }
-    100% { transform: translate(-50%, -50%) scale(1); }
-}
+        @keyframes popupBounce {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+            }
 
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .error {
+            color: red;
+            font-size: 1rem;
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+            /* ซ่อนไว้ก่อน */
+        }
     </style>
 </head>
 
 <body>
     <h1>Quiz</h1>
     <div class="answers"></div>
+    <div id="errorMsg" class="error"></div>
 
     <!-- Popup แสดงผล -->
     <div id="popupResult" class="popup">
@@ -123,34 +142,46 @@
             h1.textContent = q.question;
 
             answersDiv.innerHTML = '';
-            q.options.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.textContent = opt.text;
-                btn.onclick = (e) => {
-                    e.stopPropagation();
-                    submitAnswer(q, opt, btn);
-                };
 
-                const prev = answers.find(a => a.question === q.question);
-                if (prev && prev.answer === opt.text) btn.classList.add('selected');
+            // สร้าง input ให้ผู้ใช้พิมพ์คำตอบ
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = "พิมพ์คำตอบของคุณที่นี่...";
+            input.classList.add('answer-input');
+            answersDiv.appendChild(input);
 
-                answersDiv.appendChild(btn);
-            });
+            // สร้างปุ่มส่งคำตอบ
+            const btn = document.createElement('button');
+            btn.textContent = "ส่งคำตอบ";
+            btn.onclick = (e) => {
+                e.stopPropagation();
+                submitAnswer(q, input.value.trim(), btn);
+            };
+            answersDiv.appendChild(btn);
+
+
         }
 
-        function submitAnswer(q, opt, btn) {
-            if (answeredCurrentQuestion) return;
 
-            // ไฮไลท์ปุ่มที่เลือก
-            document.querySelectorAll('.answers button').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
+        function isAnswerCorrect(userAnswer) {
+            const ua = userAnswer.trim().toLowerCase();
+            const keywords = ["พัฒนาการ", "สมอง"]; 
+            return keywords.every(k => ua.includes(k));
+        }
+        function submitAnswer(q, userAnswer, btn) {
+            const errorMsg = document.getElementById("errorMsg");
 
+            if (!userAnswer) {
+                errorMsg.textContent = "⚠ กรุณาพิมพ์คำตอบก่อน";
+                errorMsg.style.display = "block";
+                return;
+            }
             answeredCurrentQuestion = true;
 
             // เก็บคำตอบ
             const index = answers.findIndex(a => a.question === q.question);
-            if (index >= 0) answers[index] = { question: q.question, answer: opt.text, score: Number(opt.score) };
-            else answers.push({ question: q.question, answer: opt.text, score: Number(opt.score) });
+            if (index >= 0) answers[index] = { question: q.question, answer: userAnswer };
+            else answers.push({ question: q.question, answer: userAnswer });
 
             localStorage.setItem('quizAnswers', JSON.stringify(answers));
 
@@ -159,37 +190,38 @@
                 fetch('/submit-answer', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId, question: q.question, answer: opt.text })
+                    body: JSON.stringify({ userId, question: q.question, answer: userAnswer })
                 }).then(res => res.json()).then(d => console.log(d)).catch(err => console.error(err));
             }
 
-            // แสดง popup ถูก/ผิด
-            showResultPopup(Number(opt.score) > 0);
+            // ✅ ตรวจคำตอบถูก/ผิด
+            const isCorrect = userAnswer.trim().toLowerCase() === q.correctAnswer.trim().toLowerCase();
+
+            showResultPopup(isCorrect);
         }
 
-       function showResultPopup(isCorrect) {
-    popupImg.src = isCorrect ? '/public/img/5.png' : '/public/img/4.png';
 
-    // รีเซ็ต class เพื่อให้ animation เล่นใหม่
-    popup.classList.remove('show');
-    void popup.offsetWidth;
-    popup.classList.add('show');
+        function showResultPopup(isCorrect) {
+            popupImg.src = isCorrect ? '/public/img/5.png' : '/public/img/4.png';
 
-    // ซ่อนอัตโนมัติหลัง 1 วินาทีและไปข้อถัดไป
-    setTimeout(() => {
-        popup.classList.remove('show');
+            popup.classList.remove('show');
+            void popup.offsetWidth; // รีเซ็ต animation
+            popup.classList.add('show');
 
-        // ไปข้อถัดไป
-        answeredCurrentQuestion = false;
-        if (currentQuestionIndex < questions.length - 1) {
-            currentQuestionIndex++;
-            renderQuestion();
-        } else {
-            window.location.href = 'part1.html#section8';
+            setTimeout(() => {
+                popup.classList.remove('show');
+
+                answeredCurrentQuestion = false;
+                if (currentQuestionIndex < questions.length - 1) {
+                    currentQuestionIndex++;
+                    renderQuestion();
+                } else {
+                    window.location.href = 'part1.html#section8';
+                }
+            }, 2000);
         }
 
-    }, 3000);
-}
+
 
 
         // คลิกพื้นที่ว่างเพื่อไปข้อถัดไป
@@ -211,4 +243,5 @@
         renderQuestion();
     </script>
 </body>
+
 </html>

@@ -15,6 +15,16 @@
    overflow: hidden;
  }
 
+ @media (max-width: 576px) {
+   .quote {
+     font-size: 1rem;
+     /* ลดขนาดบนมือถือ */
+     line-height: 1.8;
+     /* เพิ่ม spacing ให้โปร่งกว่า */
+     padding: 0 10px;
+     /* กันติดขอบจอ */
+   }
+ }
 
  img {
    max-width: 100%;
@@ -178,28 +188,28 @@
 
  .bg2 img {
    position: absolute;
-   max-width: 10rem;
+   max-width: 8rem;
    /* ป้องกันรูปใหญ่เกิน */
    height: auto;
  }
 
  .img1 {
    left: 0%;
-   top: 65%;
+   top: 60%;
    transform: translateY(-50%);
    animation: bounce1 4s ease-in-out infinite;
  }
 
  .img2 {
    right: 0;
-   top: 75%;
+   top: 80%;
    transform: translateY(-50%);
    animation: bounce2 5s ease-in-out infinite;
  }
 
  .img3 {
    right: 10%;
-   top: 55%;
+   top: 60%;
    transform: translateY(-50%);
    animation: bounce3 3.5s ease-in-out infinite;
  }
