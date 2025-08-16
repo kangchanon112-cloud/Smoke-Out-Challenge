@@ -17,7 +17,7 @@
 
  @media (max-width: 576px) {
    .quote {
-     font-size: 1rem;
+     font-size: 0.8rem;
      /* ลดขนาดบนมือถือ */
      line-height: 1.8;
      /* เพิ่ม spacing ให้โปร่งกว่า */
@@ -43,7 +43,7 @@
 
  @media (max-width: 576px) {
    h2 {
-     font-size: 1.6rem;
+     font-size: 1.5rem;
    }
 
    h3 {
@@ -55,7 +55,7 @@
    }
 
    .quote {
-     font-size: 1.3rem;
+     font-size: 1.2rem;
    }
 
    .arrow-text {
@@ -161,7 +161,7 @@
  }
 
  .quote {
-   line-height: 1.8;
+   line-height: 1.3;
    text-align: center;
    max-width: 700px;
    margin: auto;
@@ -188,14 +188,14 @@
 
  .bg2 img {
    position: absolute;
-   max-width: 8rem;
+   max-width: 7.7rem;
    /* ป้องกันรูปใหญ่เกิน */
    height: auto;
  }
 
  .img1 {
    left: 0%;
-   top: 60%;
+   top: 70%;
    transform: translateY(-50%);
    animation: bounce1 4s ease-in-out infinite;
  }

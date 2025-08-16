@@ -1,5 +1,5 @@
 ///////////////////////////// เริ่มต้นแสดง section1//////////////////////////
-document.getElementById('section4').classList.add('active');
+document.getElementById('section0').classList.add('active');
 
 // ไฮไลท์ปุ่มที่เลือก
 const answerButtons = document.querySelectorAll('#section8 .answer-btn');
@@ -86,9 +86,16 @@ document.addEventListener('DOMContentLoaded', function () {
   setupNextButton('nextBtn0', 'section0', 'section1');
   setupNextButton('nextBtn1', 'section1', 'section2');
   setupNextButton('nextBtn2', 'section2', 'section3');
-  setupNextButton('nextBtn3', 'section5', 'section6');
-  setupNextButton('nextBtn4', 'section6', 'section7');
-  setupNextButton('nextBtn5', 'section7', 'section8');
+
+
+});
+
+document.getElementById('nextBtn5').addEventListener('click', (e) => {
+  e.preventDefault();
+  document.getElementById('section7').classList.remove('active');
+
+  // ถ้า section7 ให้ไปหน้า quiz.html
+  window.location.href = "quiz.html";
 });
 
 
@@ -154,7 +161,7 @@ document.getElementById('profileForm').addEventListener('submit', async function
   const name = document.getElementById('nameInput').value.trim();
   const age = parseInt(document.getElementById('ageInput').value);
   const gender = document.getElementById('genderSelect').value;
-
+  const userId = localStorage.getItem('userId'); // ต้อง login ก่อน
   if (!name || !age || !gender) {
     alert('กรุณากรอกข้อมูลให้ครบ');
     return;
@@ -164,7 +171,9 @@ document.getElementById('profileForm').addEventListener('submit', async function
     const res = await fetch('/save-profile', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, age, gender })
+
+      body: JSON.stringify({ name, age, gender, userId })
+
     });
 
     const data = await res.json();
@@ -282,6 +291,6 @@ document.getElementById('nextBtn4').addEventListener('click', (e) => {
 document.getElementById('nextBtn5').addEventListener('click', (e) => {
   e.preventDefault();
   document.getElementById('section7').classList.remove('active');
-  // ถัดไป section8 ถ้ามี
-  document.getElementById('section8')?.classList.add('active');
+  // ไปหน้า quiz.html แทน section8
+  window.location.href = "quiz.html";
 });

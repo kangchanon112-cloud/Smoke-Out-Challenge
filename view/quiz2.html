@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>part 2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS เดิมเหมือนก่อนหน้า */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Prompt', sans-serif;
+            background-color: #fbdfc7;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* กึ่งกลางแนวตั้ง */
+            align-items: center;
+            /* กึ่งกลางแนวนอน */
+            min-height: 100vh;
+            cursor: pointer;
+        }
+
+        h1 {
+            margin: 0 0 20px 0;
+            /* ลด margin ด้านบน-ล่าง */
+            font-weight: 400;
+            color: #6b4f3f;
+            pointer-events: none;
+            text-align: center;
+        }
+
+
+        video {
+            width: 90%;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            pointer-events: auto;
+            display: none;
+        }
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 80%;
+            max-width: 400px;
+            pointer-events: auto;
+        }
+
+        .answers button {
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            background-color: #f5e6d3;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #6b4f3f;
+            font-weight: 500;
+        }
+
+        .answers button:hover {
+            background-color: #edd9b5;
+            transform: translateY(-2px);
+        }
+
+        .answers button.selected {
+            background-color: #cde7c1;
+            box-shadow: 0 2px 6px rgba(0, 128, 0, 0.2);
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            display: none;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .popup.show {
+            display: block;
+            opacity: 1;
+            animation: popupBounce 0.5s ease forwards;
+        }
+
+        .popup img {
+            max-width: 300px;
+        }
+
+        @keyframes popupBounce {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Quiz</h1>
+    <video id="questionVideo" controls>
+        <source src="" type="video/mp4">
+        เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ
+    </video>
+    <div class="answers"></div>
+    <div id="popupResult" class="popup">
+        <img id="popupImg" src="" alt="result">
+    </div>
+
+
+    <script type="module">
+
+        import { questions2 } from './array.js';
+        const popup = document.getElementById('popupResult');
+        const popupImg = document.getElementById('popupImg');
+
+        let currentQuestionIndex = 0;
+        let answers = JSON.parse(localStorage.getItem('quizAnswers') || "[]");
+        let answeredCurrentQuestion = false;
+        const h1 = document.querySelector('h1');
+        const answersDiv = document.querySelector('.answers');
+        const videoEl = document.getElementById('questionVideo');
+
+        function renderQuestion() {
+
+            const q = questions2[currentQuestionIndex];
+            h1.textContent = q.question;
+            answeredCurrentQuestion = false;
+            if (q.video) {
+                videoEl.style.display = 'block';
+                videoEl.querySelector('source').src = q.video;
+                videoEl.load();
+            } else {
+                videoEl.style.display = 'none';
+            }
+
+            answersDiv.innerHTML = '';
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.textContent = opt.text;
+                btn.onclick = () => submitAnswer(q, opt, btn);
+
+                const prev = answers.find(a => a.question === q.question);
+                if (prev && prev.answer === opt.text) btn.classList.add('selected');
+
+                answersDiv.appendChild(btn);
+            });
+        }
+
+        renderQuestion();
+        function submitAnswer(q, opt, btn) {
+            document.querySelectorAll('.answers button').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+
+            const index = answers.findIndex(a => a.question === q.question);
+            if (index >= 0) answers[index] = { question: q.question, answer: opt.text, score: Number(opt.score) };
+            else answers.push({ question: q.question, answer: opt.text, score: Number(opt.score) });
+
+            localStorage.setItem('quizAnswers', JSON.stringify(answers));
+
+            const userId = localStorage.getItem('userId');
+            if (userId) {
+                fetch('http://localhost:3000/submit-answer', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId, question: q.question, answer: opt.text })
+                }).then(res => res.json()).then(d => console.log(d)).catch(err => console.error(err));
+            }
+
+            // แสดง popup เฉพาะเมื่อ score = 1
+            // ใน submitAnswer
+            if (Number(opt.score) === 1) {
+                showResultPopup(q.id); // ส่ง id ของคำถามไป
+            } else {
+                setTimeout(() => {
+                    nextQuestion();
+                }, 2000);
+            }
+        }
+        // ปรับฟังก์ชัน showResultPopup ให้รับ parameter
+        function showResultPopup(questionId) {
+            if (questionId === 'q4' || questionId === 'q5') {
+                popupImg.src = 'public/img/good2.png'; // รูปสำหรับ q4, q5
+            } else {
+                popupImg.src = 'public/img/good.png'; // รูปถูกทั่วไป
+            }
+
+            popup.classList.remove('show');
+            void popup.offsetWidth;
+            popup.classList.add('show');
+
+            setTimeout(() => {
+                popup.classList.remove('show');
+                nextQuestion();
+            }, 2000);
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions2.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                window.location.href = 'part2.html#section11';
+            }
+        }
+
+
+
+    </script>
+
+</body>
+
+</html>

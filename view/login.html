@@ -74,39 +74,67 @@
     </div>
 
     <script>
-function login() {
-    const username = document.getElementById('loginUsername').value.trim();
-    const password = document.getElementById('loginPassword').value;
-    const messageDiv = document.getElementById('message');
+        function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const messageDiv = document.getElementById('message');
 
-    if (!username || !password) {
-        messageDiv.textContent = 'กรอกข้อมูลให้ครบทุกช่อง!';
-        return;
-    }
+            if (!username || !password) {
+                messageDiv.textContent = 'กรอกข้อมูลให้ครบทุกช่อง!';
+                return;
+            }
 
-    fetch('/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-    })
-    .then(res => res.json())
-    .then(data => {
-        messageDiv.textContent = data.message;
-        if (data.success) {
-            messageDiv.style.color = 'green';
-            localStorage.setItem('userId', data.userId); // เก็บ userId
-            setTimeout(() => { window.location.href = 'part1.html'; }, 1000);
-        } else {
-            messageDiv.style.color = 'red';
+            fetch('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+                .then(res => res.json())
+                .then(async data => {
+                    messageDiv.textContent = data.message;
+                    if (data.success) {
+                        messageDiv.style.color = 'green';
+                        localStorage.setItem('userId', data.userId);
+                        localStorage.setItem('role', data.role);
+
+                        // admin ไปหน้า admin.html ปกติ
+                        if (data.role === 'admin') {
+                            setTimeout(() => { window.location.href = 'admin.html'; }, 1000);
+                            return;
+                        }
+
+                        // user -> fetch partStatus ก่อน redirect
+                        // user -> fetch partStatus ก่อน redirect
+                        try {
+                            const resPart = await fetch('/admin/get-part-status');
+                            const parts = await resPart.json();
+
+                            let redirectPage = '';
+                            if (parts.part1) redirectPage = 'part1.html';
+                            else if (parts.part2) redirectPage = 'part2.html';
+                            else if (parts.part3) redirectPage = 'part3.html';
+                            else if (parts.part4) redirectPage = 'part4.html';
+                            else redirectPage = 'no-part.html'; // ถ้าไม่มี part เปิด
+
+                            setTimeout(() => { window.location.href = redirectPage; }, 1000);
+
+                        } catch (err) {
+                            console.error(err);
+                            alert('โหลดสถานะ part ล้มเหลว');
+                        }
+
+                    } else {
+                        messageDiv.style.color = 'red';
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    messageDiv.textContent = 'เกิดข้อผิดพลาด';
+                    messageDiv.style.color = 'red';
+                });
         }
-    })
-    .catch(err => {
-        console.error(err);
-        messageDiv.textContent = 'เกิดข้อผิดพลาด';
-        messageDiv.style.color = 'red';
-    });
-}
-</script>
+    </script>
+
 
 </body>
 

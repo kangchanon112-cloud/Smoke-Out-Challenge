@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet" />
+    <title>Part 2</title>
+    <style>
+        body {
+            background-color: #fbdfc7;
+            color: #333333;
+            font-family: "Prompt", sans-serif;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            margin: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #section1,
+        #section2,
+        #section3,
+        #section4,
+        #section5,
+        #section6,
+        #section7,
+        #section8,
+        #section9,
+        #section10,
+        #section11,
+        #section12 {
+            display: none !important;
+            width: 100%;
+            height: 100%;
+            padding: 0 50px;
+            /* กันชิดขอบ */
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* กึ่งกลางแนวตั้ง */
+            align-items: center;
+            /* กึ่งกลางแนวนอน */
+            text-align: center;
+        }
+
+        /* แสดง section ที่ active */
+        #section1.active,
+        #section2.active,
+        #section3.active,
+        #section4.active,
+        #section5.active,
+        #section6.active,
+        #section7.active,
+        #section8.active,
+        #section9.active,
+        #section10.active,
+        #section11.active,
+        #section12.active {
+            display: flex !important;
+        }
+
+
+        .quote {
+            max-width: 700px;
+            /* จำกัดความกว้าง */
+            margin: 0 auto;
+            /* กึ่งกลางแนวนอน */
+            line-height: 1.8;
+            font-style: italic;
+            color: #555555;
+        }
+
+
+        .ma {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            /* ทำให้กดได้ */
+            text-align: center;
+        }
+
+
+        .arrow-text {
+            display: inline-block;
+            padding: 1.5rem 3rem;
+            font-size: 1.5rem;
+            color: #7c7c7c60;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.2s, transform 0.2s;
+            border-radius: 0.5rem;
+            user-select: none;
+            cursor: pointer;
+        }
+
+        .arrow-text:hover {
+            color: #555555a5;
+            transform: scale(1.1);
+        }
+
+        .section {
+            min-height: 100vh;
+            /* อย่างน้อยเต็มจอ */
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* กึ่งกลางแนวตั้ง */
+            align-items: center;
+            /* กึ่งกลางแนวนอน */
+            text-align: center;
+        }
+
+        .bg {
+            background-image: url('/public/img/stop2.png'), url('/public/img/stop1.png'), url('/public/img/stop3.png');
+            background-size: 8rem, 8rem, 8rem;
+            background-repeat: no-repeat, no-repeat, no-repeat;
+            background-position: right 0% top 100%, left 0% top 100%, right 0% top 0%;
+            /* เว้นเป็น % */
+            width: 95vw;
+            height: 95vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .bg2 {
+            background-image: url('/public/img/tik.png');
+            background-size: 12rem;
+            background-repeat: no-repeat;
+            background-position: right 50% top 100%;
+            width: 95vw;
+            height: 95vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .bg3 {
+            background-image: url('/public/img/stop5.1.png'), url('/public/img/stop5.png');
+            background-size: 9rem, 9rem;
+            background-repeat: no-repeat, no-repeat;
+            background-position: left 0% top 100%, right 0% top 100%;
+            width: 95vw;
+            height: 95vh;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ส่วนที่ 1 -->
+    <div class="" id="section1">
+        <h2 class="fw-bold quote" style="color: #222222;">
+            สวัสดีน้องๆทุกคน <br>
+            มาครบไหมเอ่ยย <br>
+            จํากิจกรรมครั้งที่ผ่านมาได้ไหมน้าา
+        </h2>
+        <div class="ma">
+            <a href="#" id="nextBtn1" class="arrow-text">แตะเพื่อไปต่อ</a>
+        </div>
+    </div>
+
+
+
+    <!-- ส่วนที่ 2 -->
+    <div class="container text-center py-4" id="section2">
+        <h2 class="fw-bold my-5 quote fs-3" style="color: #222222;">
+            จากกิจรรมครั้งที่ผ่านมา <br>ทําให้ทราบว่าบุหรี่ไฟฟ้ามี
+            อันตราย ทําให้ปอดอักเสบอย่างรุนแรง แม้จะสูบบุหรี่
+            ไฟฟ้าในเวลาเพียงไม่กี่ปีดังนั้นเยาวชนจะต้องดูแล
+            ปกป้องตนเองไม่ให้ตกเป็นเหยื่อเสพติดนิโคตินในบุหรี่
+            ไฟฟ้า รู้จักรักและเห็นคุณค่าในตนเอง และรู้จักหลัก
+            การปฏิเสธที่มีประสิทธิภาพ
+        </h2>
+        <div class="mt-5">
+            <!-- <a href="#" id="nextBtn2" class="arrow-text">แตะเพื่อไปต่อ</a> -->
+        </div>
+    </div>
+
+    <!-- ส่วนที่ 3 -->
+    <div class="text-center py-4" id="section3">
+        <h2 class="fw-bold my-5 quote" style="color: #222222;">
+            วันนี้เราจะมาเรียนรู้หลักการปฏิเสธ <br>
+            ที่มีประสิทธิภาพกัน !!
+        </h2>
+        <div class="mt-5">
+
+        </div>
+    </div>
+
+
+    <!-- ส่วนที่ 4 -->
+    <div class=" text-center bg" id="section4">
+        <h2 class="fw-bold mb-5 quote" style="color: #222222;">
+            เทคนิคปฏิเสธ... <br>
+            ถ้าไม่อยากสูบ
+        </h2>
+        <h2 class="fw-bold quote my-4  text-danger" style="color: #222222;">
+            1.หยุด
+        </h2>
+        <h3 class="fw-bold quote ">
+            อย่าเพิ่งตอบรับ
+            หรือปฏิเสธโดยทันที
+            เพราะคนชวนมักมี
+            เหตุผล "สารพัด"
+            เพื่อซักชวนเรา
+        </h3>
+    </div>
+
+
+    <!-- ส่วนที่ 5 -->
+    <div class=" text-center bg2" id="section5">
+        <h2 class="fw-bold mb-5 quote text-danger" style="color: #222222;">
+            2.คิด
+        </h2>
+        <h3 class="fw-bold quote">
+            วิเคราะห์ผลดีผลเสีย
+            รวมผลลัพธ์ของแต่ละทางเลือก เพื่อเป็น
+            ข้อมูลก่อนตัดสินใจ
+        </h3>
+
+    </div>
+
+    <!-- ส่วนที่ 6 -->
+    <div class=" text-center bg3" id="section6">
+        <h2 class="fw-bold mb-5 quote text-danger" style="color: #222222;">
+            3.ตัดสินใจ
+        </h2>
+        <h3 class="fw-bold quote">
+            เลือกและบอกเหตุผลของทางเลือกนั้น
+            ว่าเพราะอะไร ซึ่งแน่นอนว่าทางเลือก
+            ที่ดีกว่า คือปฏิเสธการชักชวนและ
+            ไม่สูบบุหรี่
+        </h3>
+    </div>
+
+    <!-- ส่วนที่ 7 -->
+
+    <div class="container py-4" id="section7" style="max-width: 700px; margin: auto;">
+        <h2 class="fw-bold mb-4 quote text-danger" style="text-align: start; color: #222222;">
+            เทคนิคที่ดีสําหรับปฏิเสธการสูบบุหรี่
+        </h2>
+        <h3 class="fw-bold  quote" style="text-align: start; color: #222222;">
+            1. ปฏิเสธอย่างจริงจังทั้งท่าทาง คําพูด และนํ้าเสียง เพื่อแสดงความตั้งใจอย่างชัดเจนที่จะขอปฏิเสธ <br><br>
+            2. บอกความรู้สึกประกอบเหตุผล เพราะใช้เหตุผลอย่างเดียวมักถูกโต้แย้งด้วยเหตุผลของคนชวน <br><br>
+            3. ถามความเห็นชอบที่จะปฏิเสธ เพื่อรักษานํ้าใจของคนชวน และแสดงความขอบคุณเมื่อคนชวนยอมรับการปฏิเสธ
+        </h3>
+    </div>
+
+
+    <!-- ส่วนที่ 8 -->
+    <div class="container py-4 " id="section8" style="max-width: 700px; margin: auto;">
+        <h3 class="fw-bold my-5 quote" style="text-align: start; color: #222222;">
+            4. หากถูกเช้าขี้หรือสบประมาท อย่าหวั่นไหว
+            ควรยืนยันการปฏิเสธด้วยวิธีใดวิธีหนึ่ง ดังนี้<br>
+            • ปฏิเสธข้าโดยไม่ต้องใช้ข้ออ้าง พร้อมทั้งบอก
+            ลา แล้วเดินจากไปทันที <br>
+            • ต่อรองชวนไปทํากิจกรรมอื่นที่ดีกว่า<br>
+            • ผัดผ่อนเพื่อยืดเวลาออกไป ให้คนชวนเปลี่ยน<br>
+            ความตั้งใจ แล้วเลี่ยงออกจากเหตุการณ์
+
+        </h3>
+    </div>
+
+    <!-- ส่วนที่ 9 -->
+    <div class="container text-center" id="section9">
+        <h2 class="fw-bold quote" style="color: #222222;">
+            หากน้องๆตกอยู่ในสถานการณ์เหล่านี้<br>
+            น้องจะทําอย่างไร!!!
+        </h2>
+    </div>
+    <!-- ส่วนที่ 10 -->
+    <div class="container text-center py-5" id="section10">
+        <h2 class="fw-bold my-5 quote" style="color: #222222;">
+            ชมวิดีโอเกี่ยวกับการถูกเพื่อนชักชวนให้สูบบุหรี่
+            และเลือกใช้เทคนิคการปฏิเสธให้เหมาะสมกับ
+            สถานการณ์ดังกล่าว
+        </h2>
+        <div class="ma">
+            <a href="#" id="nextBtn2" class="arrow-text">แตะเพื่อไปต่อ</a>
+        </div>
+    </div>
+
+
+
+    <!-- ส่วนที่ 11 -->
+    <div class="container text-center py-5" id="section11">
+        <h2 class="fw-bold my-5 quote" style="color: #222222;">
+            คนที่เก่งและฉลาด <br>
+            เขาเลือกทําสิ่งที่ดีต่อตัวเอง<br>
+            ไม่ใช่ทําลายมัน
+        </h2>
+    </div>
+
+    <!-- ส่วนที่ 12 -->
+    <div class="container text-center py-5" id="section12">
+        <h2 class="fw-bold my-5 quote" style="color: #222222;">
+            อย่ากระพริบตา ! ! ! <br>
+            เพราะรอบหน้ามีสิ่ง <br>
+            ใหม่รออยู่
+        </h2>
+    </div>
+
+
+    <script>
+
+        document.getElementById('section1').classList.add('active');
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const nextBtn1 = document.getElementById('nextBtn1');
+            if (nextBtn1) {
+                nextBtn1.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.getElementById('section1').classList.remove('active');
+                    document.getElementById('section2').classList.add('active');
+                });
+            }
+        });
+
+
+        document.body.addEventListener('click', function (e) {
+            const activeSectionIds = [
+                'section1', 'section2', 'section3', 'section4', 'section5',
+                'section6', 'section7', 'section8', 'section9','section10', 'section11', 'section12'
+            ];
+
+            let currentIndex = activeSectionIds.findIndex(id => document.getElementById(id).classList.contains('active'));
+            if (currentIndex === -1) return;
+
+            // ห้ามข้าม section3 และ section12
+            const currentSectionId = activeSectionIds[currentIndex];
+            if (currentSectionId === 'section10' ||currentSectionId === 'section12' ) {
+                return;
+            }
+
+            // ปิด section ปัจจุบัน
+            document.getElementById(currentSectionId).classList.remove('active');
+
+            // เปิด section ถัดไป (ถ้ามี)
+            if (currentIndex + 1 < activeSectionIds.length) {
+                document.getElementById(activeSectionIds[currentIndex + 1]).classList.add('active');
+            }
+        });
+
+
+
+        document.getElementById('nextBtn2').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('section10').classList.remove('active');
+            window.location.href = "quiz2.html";
+        });
+
+
+
+        function openSectionFromHash() {
+            const hash = window.location.hash.replace('#', '');
+            if (hash) {
+                const allSections = document.querySelectorAll(
+                    ' #section1, #section2, #section3, #section4, #section5, #section6, #section7, #section8, #section9'
+                );
+                allSections.forEach(sec => sec.classList.remove('active')); 
+
+                const targetSection = document.getElementById(hash);
+                if (targetSection) {
+                    targetSection.classList.add('active'); 
+                }
+            }
+        }
+
+
+
+        openSectionFromHash();
+
+    </script>
+
+</body>
+
+</html>

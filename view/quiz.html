@@ -4,22 +4,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz 18 คำถาม</title>
+    <title>Part 1</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
-            padding: 40px;
+            padding: 0;
+            /* ลบ 50px */
             font-family: 'Prompt', sans-serif;
             background-color: #fbdfc7;
             color: #333;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            /* กลางแนวนอน */
+            align-items: center;
+
+            font-weight: 600;
+            /* ทำตัวหนา */
+        }
+
+        .quiz-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-            cursor: pointer;
-            height: 100vh;
+            /* กลางแนวนอนภายใน container */
+            width: 80%;
+            max-width: 400px;
+            gap: 15px;
         }
+
 
         h1 {
             margin: 20px 0;
@@ -29,36 +43,57 @@
             text-align: center;
         }
 
+
+        /* กรอบ input คำตอบ */
+        .answers input.answer-input {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 16px;
+            outline: none;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            background-color: #fff;
+            color: #333;
+        }
+
+        .answers input.answer-input:focus {
+            border-color: #6b4f3f;
+            box-shadow: 0 6px 15px rgba(107, 79, 63, 0.25);
+            transform: translateY(-1px);
+        }
+
         .answers {
             display: flex;
             flex-direction: column;
+            width: 100%;
             gap: 15px;
-            width: 80%;
-            max-width: 400px;
-            pointer-events: auto;
+            align-items: center;
+            /* เพิ่มตรงนี้ */
         }
 
         .answers button {
-            padding: 12px;
+            padding: 14px;
             font-size: 16px;
             border: none;
-            border-radius: 8px;
-            background-color: #f5e6d3;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: #6b4f3f;
+            border-radius: 16px;
+            background-color: #6b4f3f;
+            color: #fff;
             font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 70%;
+            margin: 10px;
+            /* กำหนดให้ปุ่มอยู่กลาง */
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
         }
+
 
         .answers button:hover {
-            background-color: #edd9b5;
+            background-color: #8b674e;
             transform: translateY(-2px);
-        }
-
-        .answers button.selected {
-            background-color: #cde7c1;
-            box-shadow: 0 2px 6px rgba(0, 128, 0, 0.2);
+            box-shadow: 0 6px 15px rgba(107, 79, 63, 0.25);
         }
 
         /* Popup แสดงถูก/ผิด */
@@ -81,12 +116,10 @@
             display: block;
             opacity: 1;
             animation: popupBounce 0.5s ease forwards;
-            /* forwards = ค้างหลัง animation จบ */
         }
 
         .popup img {
             max-width: 300px;
-            /* ปรับขนาดตามต้องการ */
         }
 
         @keyframes popupBounce {
@@ -109,16 +142,16 @@
             margin-top: 10px;
             text-align: center;
             display: none;
-            /* ซ่อนไว้ก่อน */
         }
     </style>
 </head>
 
 <body>
-    <h1>Quiz</h1>
-    <div class="answers"></div>
-    <div id="errorMsg" class="error"></div>
-
+    <div class="quiz-container">
+        <h1>Quiz</h1>
+        <div class="answers"></div>
+        <div id="errorMsg" class="error"></div>
+    </div>
     <!-- Popup แสดงผล -->
     <div id="popupResult" class="popup">
         <img id="popupImg" src="" alt="result">
@@ -137,13 +170,27 @@
 
         let answeredCurrentQuestion = false;
 
+        // ตรวจสอบ userId
+        // ตรวจสอบ userId
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            alert("กรุณาเข้าสู่ระบบก่อนทำ Quiz");
+            window.location.href = '/login.html';
+        } else {
+            console.log(userId);
+
+            // รีเซ็ตคะแนนก่อนเริ่ม Quiz
+            localStorage.setItem('quizScore', "0");
+        }
+
+        // แสดงคำถาม
         function renderQuestion() {
             const q = questions[currentQuestionIndex];
             h1.textContent = q.question;
 
             answersDiv.innerHTML = '';
 
-            // สร้าง input ให้ผู้ใช้พิมพ์คำตอบ
+            // สร้าง input
             const input = document.createElement('input');
             input.type = 'text';
             input.placeholder = "พิมพ์คำตอบของคุณที่นี่...";
@@ -158,60 +205,73 @@
                 submitAnswer(q, input.value.trim(), btn);
             };
             answersDiv.appendChild(btn);
-
-
         }
 
+        // ตรวจคำตอบ
+        function isAnswerCorrect(userAnswer, question) {
+            if (!userAnswer || !question || !question.correctAnswer) return false;
 
-        function isAnswerCorrect(userAnswer) {
-            const ua = userAnswer.trim().toLowerCase();
-            const keywords = ["พัฒนาการ", "สมอง"]; 
-            return keywords.every(k => ua.includes(k));
-        }
-        function submitAnswer(q, userAnswer, btn) {
-            const errorMsg = document.getElementById("errorMsg");
+            const ua = userAnswer.replace(/\s+/g, '').toLowerCase();
+            const ca = question.correctAnswer.replace(/\s+/g, '').toLowerCase();
 
-            if (!userAnswer) {
-                errorMsg.textContent = "⚠ กรุณาพิมพ์คำตอบก่อน";
-                errorMsg.style.display = "block";
-                return;
+            // ข้อ 2: แค่มีคำว่า "สมอง" ก็ถูก
+            if (question.id === 'q2') {
+                return ua.includes(ca);
             }
-            answeredCurrentQuestion = true;
 
-            // เก็บคำตอบ
-            const index = answers.findIndex(a => a.question === q.question);
-            if (index >= 0) answers[index] = { question: q.question, answer: userAnswer };
-            else answers.push({ question: q.question, answer: userAnswer });
+            return ua === ca;
+        }
 
-            localStorage.setItem('quizAnswers', JSON.stringify(answers));
+        // ส่งคำตอบ + คะแนน
+        async function submitAnswer(q, userAnswer) {
+            const isCorrect = isAnswerCorrect(userAnswer, q);
 
-            const userId = localStorage.getItem('userId');
-            if (userId) {
-                fetch('/submit-answer', {
+            // update local score
+            let score = parseInt(localStorage.getItem('quizScore') || "0");
+            if (isCorrect) score += 1;
+            localStorage.setItem('quizScore', score);
+
+            try {
+                // ส่งคำตอบ
+                const ansRes = await fetch('/submit-answer', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ userId, question: q.question, answer: userAnswer })
-                }).then(res => res.json()).then(d => console.log(d)).catch(err => console.error(err));
-            }
+                });
+                const ansData = await ansRes.json();
+                console.log("คำตอบส่งสำเร็จ:", ansData);
 
-            // ✅ ตรวจคำตอบถูก/ผิด
-            const isCorrect = userAnswer.trim().toLowerCase() === q.correctAnswer.trim().toLowerCase();
+                // ส่งคะแนน
+                const scoreRes = await fetch('/submit-score', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId, score: isCorrect ? 1 : 0 }) // ส่ง 1 หรือ 0 ต่อข้อ
+                });
+                const scoreData = await scoreRes.json();
+                console.log("คะแนนส่งสำเร็จ:", scoreData);
+            } catch (err) {
+                console.error(err);
+            }
 
             showResultPopup(isCorrect);
         }
 
 
+
+
+
+
+        // แสดง popup + auto next
         function showResultPopup(isCorrect) {
             popupImg.src = isCorrect ? '/public/img/5.png' : '/public/img/4.png';
-
             popup.classList.remove('show');
-            void popup.offsetWidth; // รีเซ็ต animation
+            void popup.offsetWidth;
             popup.classList.add('show');
 
             setTimeout(() => {
                 popup.classList.remove('show');
-
                 answeredCurrentQuestion = false;
+
                 if (currentQuestionIndex < questions.length - 1) {
                     currentQuestionIndex++;
                     renderQuestion();
@@ -221,27 +281,10 @@
             }, 2000);
         }
 
-
-
-
-        // คลิกพื้นที่ว่างเพื่อไปข้อถัดไป
-        // document.body.addEventListener('click', (e) => {
-        //     if (e.target.tagName !== 'BUTTON') {
-        //         if (answeredCurrentQuestion) {
-        //             answeredCurrentQuestion = false;
-
-        //             if (currentQuestionIndex < questions.length - 1) {
-        //                 currentQuestionIndex++;
-        //                 renderQuestion();
-        //             } else {
-        //                 window.location.href = 'part1.html#section8';
-        //             }
-        //         }
-        //     }
-        // });
-
+        // เริ่ม Quiz
         renderQuestion();
     </script>
+
 </body>
 
 </html>
