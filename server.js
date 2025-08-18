@@ -119,7 +119,7 @@ app.post('/login', async (req, res) => {
         res.json({
             success: true,
             message: 'เข้าสู่ระบบเรียบร้อย',
-            userId: user._id,
+            userID: user._id,
             role: user.role  // <-- เพิ่มตรงนี้
         });
 
@@ -213,7 +213,7 @@ const Answer = mongoose.model('Answer', answerSchema);
 app.post('/submit-answer', async (req, res) => {
     const { userId, question, answer } = req.body;
 
-    if (!userId || !question || !answer) 
+    if (!userId || !question || !answer)
         return res.status(400).json({ success: false, message: 'ต้องส่ง userId, question และ answer' });
 
     try {
@@ -225,40 +225,47 @@ app.post('/submit-answer', async (req, res) => {
     }
 });
 
+const quizScoreSchema = new mongoose.Schema({
+    userID: { type: String, required: true },
+    quizNumber: { type: Number, required: true },
+    score: { type: Number, required: true }
+});
 
-app.post('/submit-score', async (req, res) => {
+// unique index ป้องกันซ้ำ
+quizScoreSchema.index({ userID: 1, quizNumber: 1 }, { unique: true });
+
+const QuizScore = mongoose.model("QuizScore", quizScoreSchema);
+
+// API: บันทึกคะแนน
+app.post("/saveScore", async (req, res) => {
     try {
-        const { userId, score } = req.body;
-        let user = await User.findById(userId);
+        const { userID, quizNumber, score } = req.body;
 
-        if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+        // หา record เดิม
+        const existing = await QuizScore.findOne({ userID, quizNumber });
 
-        // เพิ่มคะแนนแต่ไม่เกิน 3
-        const newScore = Math.min((user.bestScore || 0) + score, 3);
-        user.bestScore = newScore;
-        await user.save();
-
-        res.json({ success: true, bestScore: user.bestScore });
+        if (existing) {
+            if (score > existing.score) {
+                existing.score = score;
+                await existing.save();
+                return res.json({ message: "อัปเดตคะแนนแล้ว", score: existing.score });
+            } else {
+                return res.json({ message: "คะแนนเดิมสูงกว่าแล้ว", score: existing.score });
+            }
+        } else {
+            const newScore = new QuizScore({ userID, quizNumber, score });
+            await newScore.save();
+            return res.json({ message: "บันทึกคะแนนใหม่แล้ว", score: newScore.score });
+        }
     } catch (err) {
         console.error(err);
-        res.status(500).json({ success: false, message: 'Server error' });
+        res.status(500).json({ error: "เกิดข้อผิดพลาด" });
     }
 });
 
 
 
 
-// Get latest score
-app.get('/get-score/:userId', async (req, res) => {
-    const { userId } = req.params;
-    try {
-        const user = await User.findById(userId);
-        if (!user) return res.status(404).json({ success: false, message: 'User not found' });
-        res.json({ score: user.bestScore || 0 });
-    } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
-    }
-});
 
 // Schema เก็บข้อมูลผู้ใช้เพิ่มเติม
 const profileSchema = new mongoose.Schema({
@@ -301,7 +308,36 @@ app.post('/save-profile', async (req, res) => {
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'view', 'index.html'));
 });
-
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'view', 'login.html'));
+});
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'view', 'admin.html'));
+});
+app.get('/part1', (req, res) => {
+    res.sendFile(path.join(__dirname, 'view', 'part1.html'));
+});
+app.get('/part2', (req, res) => {
+    res.sendFile(path.join(__dirname, 'view', 'part2.html'));
+});
+app.get('/part3', (req, res) => {
+    res.sendFile(path.join(__dirname, 'view', 'part3.html'));
+});
+app.get('/part4', (req, res) => {
+    res.sendFile(path.join(__dirname, 'view', 'part4.html'));
+});
+app.get('/quiz', (req, res) => {
+    res.sendFile(path.join(__dirname, 'view', 'quiz.html'));
+});
+app.get('/quiz2', (req, res) => {
+    res.sendFile(path.join(__dirname, 'view', 'quiz2.html'));
+});
+app.get('/quiz3', (req, res) => {
+    res.sendFile(path.join(__dirname, 'view', 'quiz3.html'));
+});
+app.get('/quiz4', (req, res) => {
+    res.sendFile(path.join(__dirname, 'view', 'quiz4.html'));
+});
 
 
 const PORT = process.env.PORT || 3000; // ใช้ port ของ Render หรือ fallback เป็น 3000
