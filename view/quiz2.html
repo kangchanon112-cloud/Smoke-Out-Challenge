@@ -10,18 +10,19 @@
         /* CSS เดิมเหมือนก่อนหน้า */
         body {
             margin: 0;
-            padding: 0;
+            padding: 30px;
+            /* เพิ่มจาก 0 เป็น 30px */
             font-family: 'Prompt', sans-serif;
             background-color: #fbdfc7;
             color: #333;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            /* กึ่งกลางแนวตั้ง */
             align-items: center;
-            /* กึ่งกลางแนวนอน */
             min-height: 100vh;
             cursor: pointer;
+            overflow: hidden;
+            /* ป้องกัน scroll */
         }
 
         h1 {
@@ -47,33 +48,51 @@
         .answers {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            width: 80%;
-            max-width: 400px;
-            pointer-events: auto;
+            gap: 12px;
+            /* ช่องว่างระหว่างปุ่ม */
+            width: 90%;
+            max-width: 360px;
+
+            padding: 20px;
+            border-radius: 15px;
+
         }
 
         .answers button {
-            padding: 12px;
-            font-size: 16px;
-            border: none;
+            padding: 10px 12px;
+            font-size: 15px;
             border-radius: 8px;
-            background-color: #f5e6d3;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-            cursor: pointer;
-            transition: all 0.2s ease;
+            border: 1px solid rgba(82, 52, 18, 0.836);
+            background-color: #fcdbb1ee;
             color: #6b4f3f;
             font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
         .answers button:hover {
             background-color: #edd9b5;
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
         .answers button.selected {
-            background-color: #cde7c1;
+            background-color: #f8ba5daf;
             box-shadow: 0 2px 6px rgba(0, 128, 0, 0.2);
+        }
+
+        .answers input.form-control {
+            padding: 10px;
+            font-size: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .answers input.form-control:focus {
+            border-color: #e7d7c1;
+            /* เน้นโทนเขียวพาสเทล */
+            box-shadow: 0 0 5px rgba(0, 128, 0, 0.1);
         }
 
         .popup {
@@ -135,76 +154,94 @@
         import { questions2 } from './array.js';
         const popup = document.getElementById('popupResult');
         const popupImg = document.getElementById('popupImg');
-
-        let currentQuestionIndex = 0;
         let answers = JSON.parse(localStorage.getItem('quizAnswers') || "[]");
-        let answeredCurrentQuestion = false;
         const h1 = document.querySelector('h1');
         const answersDiv = document.querySelector('.answers');
         const videoEl = document.getElementById('questionVideo');
 
-        function renderQuestion() {
+        let currentQuestionIndex = 0;
+        let answeredCurrentQuestion = false;
+        let score = 0; // เก็บคะแนน
+        let quizNumber = 2; // quiz ครั้งที่ 1
+        const userID = localStorage.getItem("userID");
 
+        function renderQuestion() {
             const q = questions2[currentQuestionIndex];
             h1.textContent = q.question;
-            answeredCurrentQuestion = false;
+            answersDiv.innerHTML = '';
+
+            // โหลดวิดีโอ ถ้ามี
             if (q.video) {
+                videoEl.src = q.video;
                 videoEl.style.display = 'block';
-                videoEl.querySelector('source').src = q.video;
-                videoEl.load();
             } else {
                 videoEl.style.display = 'none';
             }
 
-            answersDiv.innerHTML = '';
-            q.options.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.textContent = opt.text;
-                btn.onclick = () => submitAnswer(q, opt, btn);
+            if (q.options) {
+                q.options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.textContent = opt.text;
+                    btn.onclick = () => submitAnswer(q, opt, btn);
+                    answersDiv.appendChild(btn);
+                });
+            } else if (q.correctAnswer) {
+                const input = document.createElement('input');
+                input.type = "text";
+                input.placeholder = "พิมพ์คำตอบที่นี่";
+                input.className = "form-control";
 
-                const prev = answers.find(a => a.question === q.question);
-                if (prev && prev.answer === opt.text) btn.classList.add('selected');
+                const submitBtn = document.createElement('button');
+                submitBtn.textContent = "ตอบ";
+                submitBtn.onclick = () => checkTextAnswer(q, input.value);
 
-                answersDiv.appendChild(btn);
-            });
+                answersDiv.appendChild(input);
+                answersDiv.appendChild(submitBtn);
+            } else {
+                console.warn("คำถามไม่มีตัวเลือกหรือคำตอบ:", q);
+            }
+
+            answeredCurrentQuestion = false;
         }
 
-        renderQuestion();
+
         function submitAnswer(q, opt, btn) {
+            if (answeredCurrentQuestion) return;
+            answeredCurrentQuestion = true;
+
             document.querySelectorAll('.answers button').forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
 
-            const index = answers.findIndex(a => a.question === q.question);
-            if (index >= 0) answers[index] = { question: q.question, answer: opt.text, score: Number(opt.score) };
-            else answers.push({ question: q.question, answer: opt.text, score: Number(opt.score) });
-
-            localStorage.setItem('quizAnswers', JSON.stringify(answers));
-
-            const userId = localStorage.getItem('userId');
-            if (userId) {
-                fetch('http://localhost:3000/submit-answer', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId, question: q.question, answer: opt.text })
-                }).then(res => res.json()).then(d => console.log(d)).catch(err => console.error(err));
+            if (opt.score === 1) {
+                score++;
             }
+            showResultPopup(q.id, opt.score === 1);
+        }
 
-            // แสดง popup เฉพาะเมื่อ score = 1
-            // ใน submitAnswer
-            if (Number(opt.score) === 1) {
-                showResultPopup(q.id); // ส่ง id ของคำถามไป
-            } else {
+        function checkTextAnswer(q, userInput) {
+            if (answeredCurrentQuestion) return;
+            answeredCurrentQuestion = true;
+
+            const isCorrect = (userInput.trim() === q.correctAnswer.trim());
+            if (isCorrect) {
+                score++;
+            }
+            showResultPopup(q.id, isCorrect);
+        }
+
+        function showResultPopup(questionId, isCorrect) {
+            if (!isCorrect) {
                 setTimeout(() => {
                     nextQuestion();
-                }, 2000);
+                }, 1000); // ✅ 1 วินาที (ปรับตามต้องการ)
+                return;
             }
-        }
-        // ปรับฟังก์ชัน showResultPopup ให้รับ parameter
-        function showResultPopup(questionId) {
+
+            // ถ้าถูก
             if (questionId === 'q4' || questionId === 'q5') {
-                popupImg.src = 'public/img/good2.png'; // รูปสำหรับ q4, q5
+                popupImg.src = '/public/img/good2.png';
             } else {
-                popupImg.src = 'public/img/good.png'; // รูปถูกทั่วไป
+                popupImg.src = '/public/img/good.png';
             }
 
             popup.classList.remove('show');
@@ -217,16 +254,45 @@
             }, 2000);
         }
 
+
         function nextQuestion() {
-            if (currentQuestionIndex < questions2.length - 1) {
+            if (currentQuestionIndex < questions2.length - 1) {  // ✅ ใช้ questions2
                 currentQuestionIndex++;
                 renderQuestion();
             } else {
-                window.location.href = 'part2.html#section11';
+                saveScoreToDB();
             }
         }
 
+        function saveScoreToDB() {
+            const userID = localStorage.getItem("userID");  // ✅ ดึงจาก localStorage
+            if (!userID) {
+                alert("ไม่พบ userID กรุณา login ก่อน");
+                window.location.href = "/login"; // หรือหน้า login ของคุณ
+                return;
+            }
+            fetch("/saveScore", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    userID: userID,
+                    quizNumber: quizNumber,
+                    score: Math.min(score, 5)
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log("บันทึกแล้ว:", data);
+                    window.location.href = 'part2#section12';
+                })
+                .catch(err => console.error("Error:", err));
+        }
 
+
+        // เริ่มต้น render คำถามแรก
+        renderQuestion();
 
     </script>
 
