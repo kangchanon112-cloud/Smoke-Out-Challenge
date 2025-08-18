@@ -71,7 +71,7 @@
         <input type="password" id="regConfirmPassword" placeholder="Confirm Password">
         <button onclick="register()">สมัครสมาชิก</button>
         <div id="message"></div>
-        <a href="login.html">มีบัญชีแล้ว? เข้าสู่ระบบ</a>
+        <a href="login">มีบัญชีแล้ว? เข้าสู่ระบบ</a>
     </div>
 
     <script>
@@ -102,7 +102,7 @@
                     messageDiv.textContent = data.message;
                     if (data.success) {
                         messageDiv.style.color = 'green';
-                        setTimeout(() => { window.location.href = 'login.html'; }, 1500); // ไปหน้า login อัตโนมัติ
+                        setTimeout(() => { window.location.href = 'login'; }, 1500); // ไปหน้า login อัตโนมัติ
                     } else {
                         messageDiv.style.color = 'red';
                     }
