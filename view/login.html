@@ -70,7 +70,7 @@
         <input type="password" id="loginPassword" placeholder="Password">
         <button onclick="login()">เข้าสู่ระบบ</button>
         <div id="message"></div>
-        <a href="index.html">ยังไม่มีบัญชี? สมัครสมาชิก</a>
+        <a href="index">ยังไม่มีบัญชี? สมัครสมาชิก</a>
     </div>
 
     <script>
@@ -94,12 +94,12 @@
                     messageDiv.textContent = data.message;
                     if (data.success) {
                         messageDiv.style.color = 'green';
-                        localStorage.setItem('userId', data.userId);
+                        localStorage.setItem('userID', data.userID);
                         localStorage.setItem('role', data.role);
 
-                        // admin ไปหน้า admin.html ปกติ
+                        // admin ไปหน้า admin ปกติ
                         if (data.role === 'admin') {
-                            setTimeout(() => { window.location.href = 'admin.html'; }, 1000);
+                            setTimeout(() => { window.location.href = 'admin'; }, 1000);
                             return;
                         }
 
@@ -110,11 +110,11 @@
                             const parts = await resPart.json();
 
                             let redirectPage = '';
-                            if (parts.part1) redirectPage = 'part1.html';
-                            else if (parts.part2) redirectPage = 'part2.html';
-                            else if (parts.part3) redirectPage = 'part3.html';
-                            else if (parts.part4) redirectPage = 'part4.html';
-                            else redirectPage = 'no-part.html'; // ถ้าไม่มี part เปิด
+                            if (parts.part1) redirectPage = 'part1';
+                            else if (parts.part2) redirectPage = 'part2';
+                            else if (parts.part3) redirectPage = 'part3';
+                            else if (parts.part4) redirectPage = 'part4';
+                            else redirectPage = 'no-part'; // ถ้าไม่มี part เปิด
 
                             setTimeout(() => { window.location.href = redirectPage; }, 1000);
 
