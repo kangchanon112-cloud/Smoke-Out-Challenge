@@ -4,13 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Part 1</title>
+    <title>part 2</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
-
     <style>
+        /* CSS เดิมเหมือนก่อนหน้า */
         body {
             margin: 0;
-            padding: 40px;
+            padding: 30px;
+            /* เพิ่มจาก 0 เป็น 30px */
             font-family: 'Prompt', sans-serif;
             background-color: #fbdfc7;
             color: #333;
@@ -19,14 +20,29 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            cursor: pointer;
             overflow: hidden;
+            /* ป้องกัน scroll */
         }
 
         h1 {
             margin: 0 0 20px 0;
+            /* ลด margin ด้านบน-ล่าง */
             font-weight: 400;
             color: #6b4f3f;
+            pointer-events: none;
             text-align: center;
+        }
+
+
+        video {
+            width: 90%;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            pointer-events: auto;
+            display: none;
         }
 
         .answers {
@@ -79,21 +95,19 @@
             box-shadow: 0 0 5px rgba(0, 128, 0, 0.1);
         }
 
-        /* popup */
         .popup {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0.5);
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             z-index: 9999;
             display: none;
             opacity: 0;
             transition: all 0.3s ease;
-            text-align: center;
         }
 
         .popup.show {
@@ -102,69 +116,22 @@
             animation: popupBounce 0.5s ease forwards;
         }
 
-        .popup.correct {
-            border: 3px solid #A3D9A5;
-            /* เขียวพาสเทลอ่อน */
-            background: #E6F4EA;
-            /* เขียวอ่อนมากๆ */
-        }
-
-        .popup.wrong {
-            border: 3px solid #F5A8A8;
-            /* แดงพาสเทลอ่อน */
-            background: #FFEAEA;
-            /* แดงอ่อนมากๆ */
-        }
-
-
         .popup img {
-            width: 200px;
-            height: 200px;
+            max-width: 300px;
         }
 
         @keyframes popupBounce {
             0% {
                 transform: translate(-50%, -50%) scale(0.5);
-                opacity: 0;
             }
 
             50% {
                 transform: translate(-50%, -50%) scale(1.2);
-                opacity: 1;
             }
 
             100% {
                 transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
             }
-        }
-
-        .answers input.form-control {
-            width: 100%;
-            /* ขยายเต็มกล่อง */
-            padding: 10px 12px;
-            /* ระยะห่างข้างใน */
-            font-size: 15px;
-            /* ขนาดตัวอักษร */
-            border-radius: 8px;
-            /* มุมโค้ง */
-            border: 1px solid #ddd;
-            /* เส้นกรอบอ่อน */
-            outline: none;
-            /* ไม่มีเส้น focus default */
-            transition: border 0.2s, box-shadow 0.2s;
-            box-sizing: border-box;
-            /* กัน padding เกิน */
-            background: #ffffff77;
-            text-align: center;
-            /* ข้อความพิมพ์กลาง */
-        }
-
-        .answers input.form-control:focus {
-            border-color: #cde7c1;
-            /* เน้นเขียวพาสเทล */
-            box-shadow: 0 0 5px rgba(0, 128, 0, 0.1);
-            /* เงาอ่อน */
         }
     </style>
 </head>
@@ -172,25 +139,44 @@
 <body>
 
     <h1>Quiz</h1>
+    <video id="questionVideo" controls>
+        <source src="" type="video/mp4">
+        เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ
+    </video>
     <div class="answers"></div>
-    <div id="popupResult" class="popup"></div>
+    <div id="popupResult" class="popup">
+        <img id="popupImg" src="" alt="result">
+    </div>
+
 
     <script type="module">
-        import { questions } from './array.js';
+
+        import { questions2 } from './array.js';
+        const popup = document.getElementById('popupResult');
+        const popupImg = document.getElementById('popupImg');
+        let answers = JSON.parse(localStorage.getItem('quizAnswers') || "[]");
         const h1 = document.querySelector('h1');
         const answersDiv = document.querySelector('.answers');
-        const popup = document.getElementById('popupResult');
+        const videoEl = document.getElementById('questionVideo');
 
         let currentQuestionIndex = 0;
         let answeredCurrentQuestion = false;
         let score = 0; // เก็บคะแนน
-        let quizNumber = 1; // quiz ครั้งที่ 1
+        let quizNumber = 2; // quiz ครั้งที่ 1
         const userID = localStorage.getItem("userID");
 
         function renderQuestion() {
-            const q = questions[currentQuestionIndex];
+            const q = questions2[currentQuestionIndex];
             h1.textContent = q.question;
             answersDiv.innerHTML = '';
+
+            // โหลดวิดีโอ ถ้ามี
+            if (q.video) {
+                videoEl.src = q.video;
+                videoEl.style.display = 'block';
+            } else {
+                videoEl.style.display = 'none';
+            }
 
             if (q.options) {
                 q.options.forEach(opt => {
@@ -199,7 +185,7 @@
                     btn.onclick = () => submitAnswer(q, opt, btn);
                     answersDiv.appendChild(btn);
                 });
-            } else {
+            } else if (q.correctAnswer) {
                 const input = document.createElement('input');
                 input.type = "text";
                 input.placeholder = "พิมพ์คำตอบที่นี่";
@@ -211,10 +197,13 @@
 
                 answersDiv.appendChild(input);
                 answersDiv.appendChild(submitBtn);
+            } else {
+                console.warn("คำถามไม่มีตัวเลือกหรือคำตอบ:", q);
             }
 
             answeredCurrentQuestion = false;
         }
+
 
         function submitAnswer(q, opt, btn) {
             if (answeredCurrentQuestion) return;
@@ -226,35 +215,35 @@
             if (opt.score === 1) {
                 score++;
             }
-            showResultPopup(opt.score === 1);
+            showResultPopup(q.id, opt.score === 1);
         }
 
         function checkTextAnswer(q, userInput) {
             if (answeredCurrentQuestion) return;
             answeredCurrentQuestion = true;
 
-            // ลบช่องว่างทั้งหมด + แปลงเป็น lowercase
-            const normalize = str => str.replace(/\s+/g, '').toLowerCase();
-
-            const isCorrect = normalize(userInput) === normalize(q.correctAnswer);
-
+            const isCorrect = (userInput.trim() === q.correctAnswer.trim());
             if (isCorrect) {
                 score++;
             }
-            showResultPopup(isCorrect);
+            showResultPopup(q.id, isCorrect);
         }
 
+        function showResultPopup(questionId, isCorrect) {
+            if (!isCorrect) {
+                setTimeout(() => {
+                    nextQuestion();
+                }, 1000); // ✅ 1 วินาที (ปรับตามต้องการ)
+                return;
+            }
 
+            // ถ้าถูก
+            if (questionId === 'q4' || questionId === 'q5') {
+                popupImg.src = '/public/img/good2.png';
+            } else {
+                popupImg.src = '/public/img/good.png';
+            }
 
-        function showResultPopup(isCorrect) {
-            let img = document.createElement("img");
-            img.src = isCorrect ? "/public/img/5.png" : "/public/img/4.png";
-
-            popup.innerHTML = "";
-            popup.appendChild(img);
-
-            popup.className = "popup"; // reset
-            popup.classList.add(isCorrect ? "correct" : "wrong");
             popup.classList.remove('show');
             void popup.offsetWidth;
             popup.classList.add('show');
@@ -265,8 +254,9 @@
             }, 2000);
         }
 
+
         function nextQuestion() {
-            if (currentQuestionIndex < questions.length - 1) {
+            if (currentQuestionIndex < questions2.length - 1) {  // ✅ ใช้ questions2
                 currentQuestionIndex++;
                 renderQuestion();
             } else {
@@ -289,21 +279,21 @@
                 body: JSON.stringify({
                     userID: userID,
                     quizNumber: quizNumber,
-                    score: Math.min(score, 3) // ไม่เกิน 3
+                    score: Math.min(score, 5)
                 })
             })
                 .then(res => res.json())
                 .then(data => {
                     console.log("บันทึกแล้ว:", data);
-                    window.location.href = 'part1#section8';
+                    window.location.href = 'part2#section12';
                 })
                 .catch(err => console.error("Error:", err));
         }
 
 
-
-
+        // เริ่มต้น render คำถามแรก
         renderQuestion();
+
     </script>
 
 </body>
