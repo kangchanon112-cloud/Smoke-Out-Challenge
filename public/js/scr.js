@@ -94,8 +94,8 @@ document.getElementById('nextBtn5').addEventListener('click', (e) => {
   e.preventDefault();
   document.getElementById('section7').classList.remove('active');
 
-  // ถ้า section7 ให้ไปหน้า quiz.html
-  window.location.href = "quiz.html";
+  // ถ้า section7 ให้ไปหน้า quiz
+  window.location.href = "quiz";
 });
 
 
@@ -291,6 +291,6 @@ document.getElementById('nextBtn4').addEventListener('click', (e) => {
 document.getElementById('nextBtn5').addEventListener('click', (e) => {
   e.preventDefault();
   document.getElementById('section7').classList.remove('active');
-  // ไปหน้า quiz.html แทน section8
-  window.location.href = "quiz.html";
+  // ไปหน้า quiz แทน section8
+  window.location.href = "quiz";
 });
