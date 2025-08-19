@@ -32,7 +32,7 @@ io.on('connection', (socket) => {
     console.log('ผู้ใช้เชื่อมต่อแล้ว');
 
     socket.on('sendSticker', (sticker) => {
-        io.emit('receiveSticker', sticker); // ส่งสติ๊กเกอร์ให้ทุกคน
+        io.emit('receiveSticker', sticker); 
     });
 
     socket.on('disconnect', () => {
@@ -306,6 +306,9 @@ app.post('/save-profile', async (req, res) => {
 
 
 app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'view', 'index.html'));
+});
+app.get('/index', (req, res) => {
     res.sendFile(path.join(__dirname, 'view', 'index.html'));
 });
 app.get('/login', (req, res) => {
