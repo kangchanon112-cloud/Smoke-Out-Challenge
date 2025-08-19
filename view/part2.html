@@ -20,8 +20,9 @@
             width: 100%;
             height: 100vh;
             overflow: hidden;
-            padding: 40px;
+            padding: 0px;
         }
+
 
         h1 {
             font-size: 2.8rem;
@@ -43,7 +44,7 @@
             display: none !important;
             width: 100%;
             height: 100%;
-          
+
             /* กันชิดขอบ */
             box-sizing: border-box;
             display: flex;
@@ -115,18 +116,23 @@
 
         .section {
             min-height: 100vh;
-            /* อย่างน้อยเต็มจอ */
             width: 100%;
-            padding: 20px;
+            padding: 40px;
+            /* ใส่ padding ที่นี่แทน */
             box-sizing: border-box;
 
             display: flex;
             flex-direction: column;
             justify-content: center;
-            /* กึ่งกลางแนวตั้ง */
             align-items: center;
-            /* กึ่งกลางแนวนอน */
             text-align: center;
+        }
+
+        .section-content {
+            padding: 40px;
+            /* ระยะห่างรอบเนื้อหา */
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .bg {
@@ -135,8 +141,8 @@
             background-repeat: no-repeat, no-repeat, no-repeat;
             background-position: right 0% top 100%, left 0% top 100%, right 0% top 0%;
             /* เว้นเป็น % */
-            width: 95vw;
-            height: 95vh;
+            width: 100vw;
+            height: 100vh;
             margin: 0;
             padding: 0;
         }
@@ -146,8 +152,8 @@
             background-size: 12rem;
             background-repeat: no-repeat;
             background-position: right 50% top 100%;
-            width: 95vw;
-            height: 95vh;
+            width: 100vw;
+            height: 100vh;
             margin: 0;
             padding: 0;
         }
@@ -163,7 +169,15 @@
             padding: 0;
         }
 
-     
+        video {
+            width: 100%;
+            /* กว้างเต็ม container */
+            height: auto;
+            /* รักษาอัตราส่วน */
+            max-width: 100%;
+            /* ป้องกันเกิน container */
+            margin-top: 20px;
+        }
     </style>
 </head>
 
@@ -185,16 +199,18 @@
 
     <!-- ส่วนที่ 2 -->
     <div class="container text-center py-4" id="section2">
-        <h2 class="fw-bold my-5 quote fs-3" style="color: #222222;">
-            จากกิจรรมครั้งที่ผ่านมา <br>ทําให้ทราบว่าบุหรี่ไฟฟ้ามี
-            อันตราย ทําให้ปอดอักเสบอย่างรุนแรง แม้จะสูบบุหรี่
-            ไฟฟ้าในเวลาเพียงไม่กี่ปีดังนั้นเยาวชนจะต้องดูแล
-            ปกป้องตนเองไม่ให้ตกเป็นเหยื่อเสพติดนิโคตินในบุหรี่
-            ไฟฟ้า รู้จักรักและเห็นคุณค่าในตนเอง และรู้จักหลัก
-            การปฏิเสธที่มีประสิทธิภาพ
-        </h2>
-        <div class="mt-5">
-            <!-- <a href="#" id="nextBtn2" class="arrow-text">แตะเพื่อไปต่อ</a> -->
+        <div class="section-content">
+            <h2 class="fw-bold my-5 quote fs-3" style="color: #222222;">
+                จากกิจรรมครั้งที่ผ่านมา <br>ทําให้ทราบว่าบุหรี่ไฟฟ้ามี
+                อันตราย ทําให้ปอดอักเสบอย่างรุนแรง แม้จะสูบบุหรี่
+                ไฟฟ้าในเวลาเพียงไม่กี่ปีดังนั้นเยาวชนจะต้องดูแล
+                ปกป้องตนเองไม่ให้ตกเป็นเหยื่อเสพติดนิโคตินในบุหรี่
+                ไฟฟ้า รู้จักรักและเห็นคุณค่าในตนเอง และรู้จักหลัก
+                การปฏิเสธที่มีประสิทธิภาพ
+            </h2>
+            <div class="mt-5">
+                <!-- <a href="#" id="nextBtn2" class="arrow-text">แตะเพื่อไปต่อ</a> -->
+            </div>
         </div>
     </div>
 
@@ -212,70 +228,77 @@
 
     <!-- ส่วนที่ 4 -->
     <div class=" text-center bg" id="section4">
-        <h2 class="fw-bold mb-5 quote" style="color: #222222;">
-            เทคนิคปฏิเสธ...
-            ถ้าไม่อยากสูบ
-        </h2>
-        <h1 class="fw-bold quote my-4  text-danger" style="color: #222222;">
-            1.หยุด
-        </h1>
-        <h3 class="fw-bold quote ">
-            อย่าเพิ่งตอบรับ
-            หรือปฏิเสธโดยทันที <br>
-            เพราะคนชวนมักมี
-            เหตุผล "สารพัด"
-            เพื่อซักชวนเรา
-        </h3>
+        <div class="section-content">
+            <h2 class="fw-bold mb-5 quote" style="color: #222222;">
+                เทคนิคปฏิเสธ...
+                ถ้าไม่อยากสูบ
+            </h2>
+            <h1 class="fw-bold quote my-4  text-danger" style="color: #222222;">
+                1.หยุด
+            </h1>
+            <h3 class="fw-bold quote ">
+                อย่าเพิ่งตอบรับ
+                หรือปฏิเสธโดยทันที <br>
+                เพราะคนชวนมักมี
+                เหตุผล "สารพัด"
+                เพื่อซักชวนเรา
+            </h3>
+        </div>
     </div>
-
 
     <!-- ส่วนที่ 5 -->
     <div class=" text-center bg2" id="section5">
-        <h1 class="fw-bold mb-4 quote text-danger" style="color: #222222;">
-            2.คิด
-        </h1>
-        <h3 class="fw-bold quote">
-            วิเคราะห์ผลดีผลเสีย
-            รวมผลลัพธ์ของแต่ละทางเลือก <br>เพื่อเป็น
-            ข้อมูลก่อนตัดสินใจ
-        </h3>
-
+        <div class="section-content">
+            <h1 class="fw-bold mb-4 quote text-danger" style="color: #222222;">
+                2.คิด
+            </h1>
+            <h3 class="fw-bold quote">
+                วิเคราะห์ผลดีผลเสีย
+                รวมผลลัพธ์ของแต่ละทางเลือก <br>เพื่อเป็น
+                ข้อมูลก่อนตัดสินใจ
+            </h3>
+        </div>
     </div>
 
     <!-- ส่วนที่ 6 -->
     <div class=" text-center bg3" id="section6">
-        <h1 class="fw-bold mb-4 quote text-danger" style="color: #222222;">
-            3.ตัดสินใจ
-        </h1>
-        <h3 class="fw-bold quote">
-            เลือกและบอกเหตุผลของทางเลือกนั้น
-            ว่าเพราะอะไร <br>ซึ่งแน่นอนว่าทางเลือก
-            ที่ดีกว่าคือ <span style="color: #ff0000;">ปฏิเสธการชักชวนและไม่สูบบุหรี่</span>
-        </h3>
+        <div class="section-content">
+            <h1 class="fw-bold mb-4 quote text-danger" style="color: #222222;">
+                3.ตัดสินใจ
+            </h1>
+            <h3 class="fw-bold quote">
+                เลือกและบอกเหตุผลของทางเลือกนั้น
+                ว่าเพราะอะไร <br>ซึ่งแน่นอนว่าทางเลือก
+                ที่ดีกว่าคือ <span style="color: #ff0000;">ปฏิเสธการชักชวนและไม่สูบบุหรี่</span>
+            </h3>
+        </div>
     </div>
-
     <!-- ส่วนที่ 7 -->
 
     <div class="container" id="section7" style="max-width: 700px; margin: auto;">
-        <h2 class="fw-bold mb-4 quote text-danger" style="text-align: start; color: #222222;">
-            เทคนิคที่ดีสําหรับปฏิเสธการสูบบุหรี่
-        </h2>
-        <h4 class="fw-bold quote" style="text-align: start; color: #222222;">
-            1. ปฏิเสธอย่างจริงจังทั้งท่าทาง คําพูด และนํ้าเสียง เพื่อแสดงความตั้งใจอย่างชัดเจนที่จะขอปฏิเสธ <br><br>
-            2. บอกความรู้สึกประกอบเหตุผล เพราะใช้เหตุผลอย่างเดียวมักถูกโต้แย้งด้วยเหตุผลของคนชวน
-           <video src=""></video>
-        </h4>
+        <div class="section-content">
+            <h2 class="fw-bold mb-4 quote text-danger" style="text-align: start; color: #222222;">
+                เทคนิคที่ดีสําหรับปฏิเสธการสูบบุหรี่
+            </h2>
+            <h4 class="fw-bold quote" style="text-align: start; color: #222222;">
+                1. ปฏิเสธอย่างจริงจังทั้งท่าทาง คําพูด และนํ้าเสียง เพื่อแสดงความตั้งใจอย่างชัดเจนที่จะขอปฏิเสธ <br><br>
+                2. บอกความรู้สึกประกอบเหตุผล เพราะใช้เหตุผลอย่างเดียวมักถูกโต้แย้งด้วยเหตุผลของคนชวน
+                <video src="/public/img/p2.mp4" controls></video>
+            </h4>
+        </div>
     </div>
 
     <div class="container" id="section8" style="max-width: 700px; margin: auto;">
-        <h4 class="fw-bold  quote" style="text-align: start; color: #222222;">
-            3. ถามความเห็นชอบที่จะปฏิเสธ เพื่อรักษานํ้าใจของคนชวน และแสดงความขอบคุณเมื่อคนชวนยอมรับการปฏิเสธ
-           <video src=""></video>
-        </h4>
+        <div class="section-content">
+            <h4 class="fw-bold  quote" style="text-align: start; color: #222222;">
+                3. ถามความเห็นชอบที่จะปฏิเสธ เพื่อรักษานํ้าใจของคนชวน และแสดงความขอบคุณเมื่อคนชวนยอมรับการปฏิเสธ
+                <video src="/public/img/p3.mp4" controls></video>
+            </h4>
+        </div>
     </div>
 
     <!-- ส่วนที่ 8 -->
-    <div class="container py-4 " id="section9" style="max-width: 700px; margin: auto;">
+    <div class="container py-4 " id="section9" style="max-width: 700px; margin: auto;"><div class="section-content">
         <h4 class="fw-bold my-5 quote" style="text-align: start; color: #222222;">
             4. หากถูกเซ้าซี้หรือสบประมาท อย่าหวั่นไหว
             ควรยืนยันการปฏิเสธด้วยวิธีใดวิธีหนึ่ง ดังนี้<br>
@@ -285,16 +308,17 @@
 
         </h4>
     </div>
+    </div>
 
     <!-- ส่วนที่ 9 -->
-    <div class="container text-center" id="section10">
+    <div class="container text-center" id="section10"><div class="section-content">
         <h2 class="fw-bold quote" style="color: #222222;">
             หากน้องๆตกอยู่ในสถานการณ์เหล่านี้<br>
             น้องจะทําอย่างไร!!!
         </h2>
-    </div>
+    </div></div>
     <!-- ส่วนที่ 10 -->
-    <div class="container text-center py-5" id="section11">
+    <div class="container text-center py-5" id="section11"><div class="section-content">
         <h2 class="fw-bold my-5 quote" style="color: #222222;">
             ชมวิดีโอเกี่ยวกับการถูกเพื่อนชักชวนให้สูบบุหรี่
             และเลือกใช้เทคนิคการปฏิเสธให้เหมาะสมกับ
@@ -303,7 +327,7 @@
         <div class="ma">
             <a href="#" id="nextBtn2" class="arrow-text">แตะเพื่อไปต่อ</a>
         </div>
-    </div>
+    </div></div>
 
 
 
@@ -319,7 +343,7 @@
     <!-- ส่วนที่ 12 -->
     <div class="container text-center" id="section13">
         <h2 class="fw-bold my-5 quote" style="color: #222222;">
-            อย่ากระพริบตา ! ! ! <br>
+            อย่ากระพริบตา ! ! <br>
             เพราะรอบหน้ามีสิ่ง <br>
             ใหม่รออยู่
         </h2>
@@ -357,7 +381,11 @@
             if (currentSectionId === 'section11' || currentSectionId === 'section13') {
                 return;
             }
-
+            const videos = document.querySelectorAll('video');
+            videos.forEach(v => {
+                v.pause();
+                v.currentTime = 0; // รีเซ็ตเวลา
+            });
             // ปิด section ปัจจุบัน
             document.getElementById(currentSectionId).classList.remove('active');
 
