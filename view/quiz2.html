@@ -164,44 +164,60 @@
         let score = 0; // เก็บคะแนน
         let quizNumber = 2; // quiz ครั้งที่ 1
         const userID = localStorage.getItem("userID");
+        let isQ5VideoShown = false; // global
 
         function renderQuestion() {
             const q = questions2[currentQuestionIndex];
-            h1.textContent = q.question;
+
+            // ถ้าเป็น Q5 และยังไม่โชว์วิดีโอ
+            if (q.id === 'q5' && !isQ5VideoShown) {
+                h1.textContent = ''; // ซ่อนคำถาม
+                answersDiv.style.display = 'none';
+                videoEl.style.display = 'block';
+
+                setVideo(q.video, () => {
+                    isQ5VideoShown = true; // mark วิดีโอเล่นจบ
+                    renderQuestion(); // แสดงคำถามหลังวิดีโอจบ
+                });
+                return; // หยุด render ตอนนี้ก่อน
+            }
+
+            // render คำถามปกติ (Q1-Q4 หรือ Q5 หลังวิดีโอ)
+            h1.textContent = q.question || '';
+            answersDiv.style.display = 'flex';
             answersDiv.innerHTML = '';
 
-            // โหลดวิดีโอ ถ้ามี
-            if (q.video) {
-                videoEl.src = q.video;
+            // **ซ่อนวิดีโอหลัง Q5 เล่นจบ**
+            if (q.video && (q.id !== 'q5')) {
                 videoEl.style.display = 'block';
+                setVideo(q.video);
             } else {
-                videoEl.style.display = 'none';
+                videoEl.style.display = 'none'; // Q5 หลังเล่นจบ หรือไม่มีวิดีโอ
             }
 
-            if (q.options) {
-                q.options.forEach(opt => {
-                    const btn = document.createElement('button');
-                    btn.textContent = opt.text;
-                    btn.onclick = () => submitAnswer(q, opt, btn);
-                    answersDiv.appendChild(btn);
-                });
-            } else if (q.correctAnswer) {
-                const input = document.createElement('input');
-                input.type = "text";
-                input.placeholder = "พิมพ์คำตอบที่นี่";
-                input.className = "form-control";
-
-                const submitBtn = document.createElement('button');
-                submitBtn.textContent = "ตอบ";
-                submitBtn.onclick = () => checkTextAnswer(q, input.value);
-
-                answersDiv.appendChild(input);
-                answersDiv.appendChild(submitBtn);
-            } else {
-                console.warn("คำถามไม่มีตัวเลือกหรือคำตอบ:", q);
-            }
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.textContent = opt.text;
+                btn.onclick = () => submitAnswer(q, opt, btn);
+                answersDiv.appendChild(btn);
+            });
 
             answeredCurrentQuestion = false;
+        }
+
+
+
+        // set video และ callback หลัง video จบ
+        function setVideo(src, onEnded = null) {
+            videoEl.pause();
+            videoEl.currentTime = 0;
+            const sourceEl = videoEl.querySelector('source');
+            sourceEl.src = src;
+            videoEl.load();
+            videoEl.play().catch(err => console.log(err));
+            videoEl.onended = () => {
+                if (onEnded) onEnded();
+            };
         }
 
 
