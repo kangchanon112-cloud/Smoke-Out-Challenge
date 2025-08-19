@@ -86,7 +86,7 @@
             left: 50%;
             transform: translate(-50%, -50%) scale(0.5);
             background: white;
-            padding: 30px;
+            padding: 20px;
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
             z-index: 9999;
@@ -94,6 +94,11 @@
             opacity: 0;
             transition: all 0.3s ease;
             text-align: center;
+
+            width: 250px;
+            /* ความกว้างเริ่มต้น */
+            max-width: 40%;
+            /* ไม่เกิน 20% ของจอใหญ่ */
         }
 
         .popup.show {
@@ -116,11 +121,16 @@
             /* แดงอ่อนมากๆ */
         }
 
-
         .popup img {
-            width: 200px;
-            height: 200px;
+            max-width: 90%;
+            /* เล็กลงเหลือ 20% ของ popup */
+            height: auto;
+            /* รักษาสัดส่วน */
+            display: block;
+            margin: 0 auto 10px auto;
+            /* กึ่งกลาง + เว้นขอบล่าง */
         }
+
 
         @keyframes popupBounce {
             0% {
