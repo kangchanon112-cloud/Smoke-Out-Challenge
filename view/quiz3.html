@@ -257,7 +257,7 @@
             videoEl.style.display = 'none';
             answersDiv.style.display = 'none';
             h1.textContent = "เฉลย";
-
+            h1.style.fontWeight = "bold";
             interludeVideo.src = clip.src;
             interludeVideo.style.display = 'block';
             interludeVideo.play();
@@ -362,13 +362,40 @@
 
             setTimeout(() => {
                 popup.classList.remove('show');
-                answeredCurrentQuestion = false; // ปลดล็อกที่นี่
-                if (currentQuestionIndex === questions3.length - 1) {
-                    saveScoreToDB(); // ✅ เพิ่มตรงนี้
+                answeredCurrentQuestion = false;
+
+                const isLastQuestion = currentQuestionIndex === questions3.length - 1;
+                const clip = interludeClips.find(c => c.afterQuestion === currentQuestionIndex);
+
+                if (isLastQuestion && clip) {
+                    // ข้อสุดท้าย: เล่นคลิปเฉลยแล้วรอแตะพื้นที่ว่าง
+                    playFinalInterlude(clip);
                 } else {
                     nextQuestion();
                 }
             }, 2000);
+        }
+
+        // ฟังก์ชันเล่นคลิปสุดท้ายและแตะพื้นที่ว่าง
+        function playFinalInterlude(clip) {
+            videoEl.style.display = 'none';
+            answersDiv.style.display = 'none';
+            h1.textContent = "เฉลย";
+            h1.style.fontWeight = "bold";
+
+            interludeVideo.src = clip.src;
+            interludeVideo.style.display = 'block';
+            interludeVideo.play();
+
+            const bodyClickHandler = () => {
+                interludeVideo.pause();
+                interludeVideo.style.display = 'none';
+                saveScoreToDB();
+                document.body.removeEventListener('click', bodyClickHandler);
+            };
+
+            document.body.addEventListener('click', bodyClickHandler);
+            interludeVideo.onended = bodyClickHandler;
         }
 
     </script>
