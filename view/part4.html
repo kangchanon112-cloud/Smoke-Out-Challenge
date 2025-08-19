@@ -252,6 +252,14 @@
                 transform: translateY(0);
             }
         }
+
+        .ma5 {
+            position: absolute;
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -264,12 +272,14 @@
         <h2 class="mb-4">กลิ่นหรือรสของบุหรี่ไฟฟ้า เด็กคิดว่ามีผลทําให้คนอยากลองไหม?</h2>
 
 
-        <div class="ma">
+        <div class="ma5">
 
             <div id="inputBox">
                 <input type="text" id="message" placeholder="พิมพ์ข้อความ...">
                 <button id="sendBtn">ส่ง</button>
             </div>
+            </div>
+        <div class="ma">
             <a href="#" id="nextBtn1" class="arrow-text">แตะเพื่อไปต่อ</a>
         </div>
     </div>
@@ -515,3 +525,4 @@ document.getElementById("nextBtn1").addEventListener("click", () => {
 
 
 </html>
+
