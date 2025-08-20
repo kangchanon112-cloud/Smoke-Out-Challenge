@@ -261,7 +261,7 @@ app.post("/saveScore", async (req, res) => {
 
 // Schema เก็บข้อมูลผู้ใช้เพิ่มเติม
 const profileSchema = new mongoose.Schema({
-    userID: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    userID: { type: String, required: true },
     name: { type: String, required: true },
     age: { type: Number, required: true },
     gender: { type: String, required: true },
@@ -275,7 +275,7 @@ app.post('/save-profile', async (req, res) => {
     const { name, age, gender, userID } = req.body;
 
     if (!name || !age || !gender || !userID) {
-        return res.status(400).json({ success: false, message: 'กรุณากรอกข้อมูลให้ครบ' });
+        return res.status(400).json({ success: false });
     }
 
     try {
