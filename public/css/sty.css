@@ -2,7 +2,7 @@
    background-color: #fbdfc7;
    color: #333333;
    font-family: "Prompt", sans-serif;
-   padding: 50px;
+   padding: 40px;
    cursor: pointer;
    user-select: none;
    -webkit-user-select: none;
@@ -13,14 +13,10 @@
    width: 100vw;
    height: 100vh;
    overflow: hidden;
+
+
  }
- .m3 {
-   position: absolute;
-   bottom: 15%;
-   left: 50%;
-   transform: translateX(-50%);
-   /* จัดให้อยู่กลาง */
- }
+
  @media (max-width: 576px) {
    .quote {
      font-size: 0.8rem;
@@ -181,6 +177,23 @@
 
  .m2 {
    margin-top: 300px;
+ }
+
+ .m3 {
+   position: absolute;
+   bottom: 15%;
+   left: 50%;
+   transform: translateX(-50%);
+   /* จัดให้อยู่กลาง */
+ }
+
+ .logo-top {
+   position: absolute;
+   top: 50px;
+   /* ชิดบน 10px */
+   left: 50%;
+   transform: translateX(-50%);
+   /* จัดให้อยู่กลาง */
  }
 
 
@@ -357,7 +370,6 @@
  .ma {
    position: absolute;
    bottom: 10px;
-   /* ระยะห่างจากขอบล่าง */
    left: 0;
    right: 0;
  }
