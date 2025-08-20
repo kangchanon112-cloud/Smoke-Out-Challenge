@@ -32,7 +32,7 @@ io.on('connection', (socket) => {
     console.log('ผู้ใช้เชื่อมต่อแล้ว');
 
     socket.on('sendSticker', (sticker) => {
-        io.emit('receiveSticker', sticker); 
+        io.emit('receiveSticker', sticker);
     });
 
     socket.on('disconnect', () => {
@@ -52,15 +52,7 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-// ------------------- Register -------------------
 
-// Schema สำหรับคะแนน
-const scoreSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    score: { type: Number, required: true },
-    date: { type: Date, default: Date.now }
-});
-const Score = mongoose.model('Score', scoreSchema);
 
 //
 app.post('/register', async (req, res) => {
@@ -269,7 +261,7 @@ app.post("/saveScore", async (req, res) => {
 
 // Schema เก็บข้อมูลผู้ใช้เพิ่มเติม
 const profileSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    userID: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     name: { type: String, required: true },
     age: { type: Number, required: true },
     gender: { type: String, required: true },
@@ -280,21 +272,21 @@ const Profile = mongoose.model('Profile', profileSchema);
 
 // Route บันทึกข้อมูลโปรไฟล์
 app.post('/save-profile', async (req, res) => {
-    const { name, age, gender, userId } = req.body;
+    const { name, age, gender, userID } = req.body;
 
-    if (!name || !age || !gender || !userId) {
+    if (!name || !age || !gender || !userID) {
         return res.status(400).json({ success: false, message: 'กรุณากรอกข้อมูลให้ครบ' });
     }
 
     try {
         // ตรวจสอบ userId ก่อน
-        const user = await User.findById(userId);
+        const user = await User.findById(userID);
         if (!user) {
             return res.status(404).json({ success: false, message: 'ไม่พบผู้ใช้' });
         }
 
         // สร้าง profile พร้อมเชื่อม user
-        const newProfile = new Profile({ name, age, gender, userId });
+        const newProfile = new Profile({ name, age, gender, userID });
         await newProfile.save();
 
         res.json({ success: true, message: 'บันทึกข้อมูลเรียบร้อย!', profileId: newProfile._id });
@@ -303,6 +295,26 @@ app.post('/save-profile', async (req, res) => {
     }
 });
 
+// API: รวมคะแนนทั้งหมดของ userID
+app.get("/totalScore/:userID", async (req, res) => {
+    try {
+        const { userID } = req.params;
+
+        const result = await QuizScore.aggregate([
+            { $match: { userID } },                // เลือกเฉพาะ userID
+            { $group: { _id: "$userID", total: { $sum: "$score" } } } // รวมคะแนน
+        ]);
+
+        if (result.length === 0) {
+            return res.json({ success: true, userID, totalScore: 0 });
+        }
+
+        res.json({ success: true, userID, totalScore: result[0].total });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: "เกิดข้อผิดพลาด" });
+    }
+});
 
 
 app.get('/', (req, res) => {
