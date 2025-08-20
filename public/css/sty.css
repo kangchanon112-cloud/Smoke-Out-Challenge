@@ -14,7 +14,13 @@
    height: 100vh;
    overflow: hidden;
  }
-
+ .m3 {
+   position: absolute;
+   bottom: 15%;
+   left: 50%;
+   transform: translateX(-50%);
+   /* จัดให้อยู่กลาง */
+ }
  @media (max-width: 576px) {
    .quote {
      font-size: 0.8rem;
