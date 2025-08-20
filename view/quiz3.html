@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>part 4</title>
+    <title>part 3</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         /* CSS เดิมเหมือนก่อนหน้า */
@@ -174,10 +174,13 @@
 
         let bodyClickHandler = null; // ใช้ removeEventListener
 
+        
         const interludeClips = [
-            { afterQuestion: 2, src: '/public/img/1.mp4' },
-            { afterQuestion: 4, src: '/public/img/2.mp4' },
-            { afterQuestion: 5, src: '/public/img/3.mp4' }
+            { afterQuestion: 0, src: '/public/img/q1.1.mp4' },
+            { afterQuestion: 1, src: '/public/img/q1.2.mp4' },
+            { afterQuestion: 3, src: '/public/img/q2.1.mp4' },
+            { afterQuestion: 4, src: '/public/img/q2.2.mp4' },
+            { afterQuestion: 5, src: '/public/img/q3.1.mp4' }
         ];
 
         function renderQuestion() {
@@ -185,13 +188,25 @@
             videoEl.currentTime = 0;
 
             const q = questions3[currentQuestionIndex];
-            h1.textContent = q.question || "";
+            h1.textContent = q.question || "คุณจะเลือกใช้เทคนิคการปฏิเสธให้เหมาะสมกับสถานการณ์อย่างไร";
+
+            // ลบรูปเดิมก่อน (กันซ้ำ)
+            const oldImg = document.getElementById("questionImage");
+            if (oldImg) oldImg.remove();
 
             if (q.video) {
                 videoEl.style.display = 'block';
                 videoEl.querySelector('source').src = q.video;
                 videoEl.load();
-
+            } else if (q.img) {
+                videoEl.style.display = 'none';
+                const imgEl = document.createElement("img");
+                imgEl.id = "questionImage";
+                imgEl.src = q.img;
+                imgEl.style.maxWidth = "370px";
+                imgEl.style.borderRadius = "12px";
+                imgEl.style.marginBottom = "20px";
+                document.body.insertBefore(imgEl, answersDiv);
             } else {
                 videoEl.style.display = 'none';
             }
@@ -423,4 +438,5 @@
 </body>
 
 </html>
+
 
