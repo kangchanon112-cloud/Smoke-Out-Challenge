@@ -193,29 +193,29 @@ app.post('/admin/toggle-part', async (req, res) => {
 // Schema สำหรับเก็บคำตอบ
 const answerSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    question: { type: String, required: true },
+    questionId: { type: String, required: true }, // เปลี่ยนจาก question เป็น questionId
     answer: { type: String, required: true },
     date: { type: Date, default: Date.now }
 });
-
 
 // สร้าง Model
 const Answer = mongoose.model('Answer', answerSchema);
 
 app.post('/submit-answer', async (req, res) => {
-    const { userId, question, answer } = req.body;
+    const { userID, questionId, answer } = req.body;
 
-    if (!userId || !question || !answer)
-        return res.status(400).json({ success: false, message: 'ต้องส่ง userId, question และ answer' });
+    if (!userID || !questionId || !answer)
+        return res.status(400).json({ success: false, message: 'ต้องส่ง userID, questionId และ answer' });
 
     try {
-        const newAnswer = new Answer({ userId, question, answer });
+        const newAnswer = new Answer({ userId: userID, questionId, answer });
         await newAnswer.save();
         res.json({ success: true, message: 'บันทึกคำตอบเรียบร้อย!' });
     } catch (err) {
         res.status(500).json({ success: false, message: err.message });
     }
 });
+
 
 const quizScoreSchema = new mongoose.Schema({
     userID: { type: String, required: true },
