@@ -168,8 +168,8 @@
             const q = questions2[currentQuestionIndex];
 
             // ถ้าเป็น Q5 และยังไม่โชว์วิดีโอ
-            if (q.id === 'q5' && !isQ5VideoShown) {
-                h1.textContent = ''; // ซ่อนคำถาม
+            if (q.id === 'q2.5' && !isQ5VideoShown) {
+                h1.textContent = 'เฉลย'; // ซ่อนคำถาม
                 answersDiv.style.display = 'none';
                 videoEl.style.display = 'block';
 
@@ -186,7 +186,7 @@
             answersDiv.innerHTML = '';
 
             // **ซ่อนวิดีโอหลัง Q5 เล่นจบ**
-            if (q.video && (q.id !== 'q5')) {
+            if (q.video && (q.id !== 'q2.5')) {
                 videoEl.style.display = 'block';
                 setVideo(q.video);
             } else {
@@ -327,5 +327,6 @@
     </script>
 
 </body>
+
 
 </html>
