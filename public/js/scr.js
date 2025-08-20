@@ -94,7 +94,7 @@ document.getElementById('nextBtn5').addEventListener('click', (e) => {
   e.preventDefault();
   document.getElementById('section7').classList.remove('active');
 
-  // ถ้า section7 ให้ไปหน้า quiz
+  // ถ้า section7 ให้ไปหน้า quiz.html
   window.location.href = "quiz";
 });
 
@@ -161,9 +161,10 @@ document.getElementById('profileForm').addEventListener('submit', async function
   const name = document.getElementById('nameInput').value.trim();
   const age = parseInt(document.getElementById('ageInput').value);
   const gender = document.getElementById('genderSelect').value;
-  const userId = localStorage.getItem('userId'); // ต้อง login ก่อน
+  const userId = localStorage.getItem('userID'); // ต้อง login ก่อน
+
   if (!name || !age || !gender) {
-    alert('กรุณากรอกข้อมูลให้ครบ');
+
     return;
   }
 
@@ -171,24 +172,22 @@ document.getElementById('profileForm').addEventListener('submit', async function
     const res = await fetch('/save-profile', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-
-      body: JSON.stringify({ name, age, gender, userId })
-
+      body: JSON.stringify({ name, age, gender, userID: userId }) // <-- แก้ตรงนี้
     });
 
     const data = await res.json();
     if (data.success) {
-
       localStorage.setItem('profileId', data.profileId);
-
+   
     } else {
       alert(data.message || 'เกิดข้อผิดพลาด');
     }
   } catch (err) {
     console.error(err);
-
+    
   }
 });
+
 
 ////////////////////////////////เสียง///////////////////////////////
 let currentAudio = null;
@@ -291,6 +290,6 @@ document.getElementById('nextBtn4').addEventListener('click', (e) => {
 document.getElementById('nextBtn5').addEventListener('click', (e) => {
   e.preventDefault();
   document.getElementById('section7').classList.remove('active');
-  // ไปหน้า quiz แทน section8
+  // ไปหน้า quiz.html แทน section8
   window.location.href = "quiz";
 });
