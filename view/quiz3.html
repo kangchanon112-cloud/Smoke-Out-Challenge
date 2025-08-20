@@ -240,7 +240,7 @@
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         userID: userID,
-                        questionId: q.id,   // ต้องตรงกับ backend
+                        questionId: q.id,
                         answer: opt.text
                     })
                 })
@@ -313,28 +313,10 @@
 
 
 
-        function nextQuestion() {
-            const clip = interludeClips.find(c => c.afterQuestion === currentQuestionIndex);
-
-            // ตรวจสอบว่าเป็นข้อสุดท้าย
-            const isLastQuestion = currentQuestionIndex === questions3.length - 1;
-
-            if (clip) {
-                playInterlude(clip, isLastQuestion);
-                return;
-            }
-            if (currentQuestionIndex < questions3.length - 1) {  // ✅ ใช้ questions2
-                currentQuestionIndex++;
-                renderQuestion();
-            } else {
-                saveScoreToDB();
-            }
-        }
-
-
         function saveScoreToDB() {
             const userID = localStorage.getItem("userID");
             console.log("ส่งไป DB:", { userID, quizNumber, score }); // ตรวจสอบ
+
             if (!userID) {
                 alert("ไม่พบ userID กรุณา login ก่อน");
                 window.location.href = "/login";
@@ -385,6 +367,7 @@
                 if (isLastQuestion && clip) {
                     // ข้อสุดท้าย: เล่นคลิปเฉลยแล้วรอแตะพื้นที่ว่าง
                     playFinalInterlude(clip);
+
                 } else {
                     nextQuestion();
                 }
@@ -411,6 +394,28 @@
 
             document.body.addEventListener('click', bodyClickHandler);
             interludeVideo.onended = bodyClickHandler;
+        }
+
+
+        function nextQuestion() {
+            const clip = interludeClips.find(c => c.afterQuestion === currentQuestionIndex);
+            const isLastQuestion = currentQuestionIndex === questions3.length - 1;
+
+            if (clip) {
+                if (isLastQuestion) {
+                    playFinalInterlude(clip); // เล่นคลิปสุดท้ายแล้วบันทึกคะแนน
+                } else {
+                    playInterlude(clip);
+                }
+                return;
+            }
+
+            if (!isLastQuestion) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                saveScoreToDB(); // ✅ ถ้าไม่มี clip หรือเป็นข้อสุดท้าย ไม่มี clip
+            }
         }
 
     </script>
