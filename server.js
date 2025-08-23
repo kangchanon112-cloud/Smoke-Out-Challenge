@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
-    bestScore: { type: Number, default: 0 }  // ✅ เพิ่มตรงนี้
+  
 });
 
 
@@ -77,12 +77,7 @@ app.post('/register', async (req, res) => {
         await newUser.save();
 
         // สร้างคะแนนเริ่มต้นใน DB พร้อม userId
-        const newScore = new Score({
-            userId: newUser._id,
-            score: 0
-        });
-        await newScore.save();
-
+    
         // ส่ง userId กลับ client
         res.json({ success: true, message: 'สมัครสมาชิกเรียบร้อย!', userId: newUser._id });
 
