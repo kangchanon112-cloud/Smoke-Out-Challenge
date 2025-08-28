@@ -1,16 +1,19 @@
 ///////////////////////////// เริ่มต้นแสดง section1//////////////////////////
-document.getElementById('section0').classList.add('active');
+document.getElementById('section7').classList.add('active');
 
-window.addEventListener("load", () => {
-  // ให้เพลงเริ่มหลัง login redirect เข้ามาหน้านี้
-  const music = document.getElementById("bgMusic");
-  const time = localStorage.getItem("musicTime");
-  music.volume = 0.2; // 🔉 ตั้งเสียงให้เบาหน่อย
-  if (time) {
-    music.currentTime = time; // ต่อจากเดิม
-  }
-  music.play().catch(err => console.log(err));
-});
+const music = document.getElementById("bgMusic");
+const clickedLogin = localStorage.getItem("userClickedLogin");
+
+if (clickedLogin === "true") {
+    music.volume = 0.2;
+    music.play().catch(err => console.log("Autoplay error:", err));
+    localStorage.removeItem("userClickedLogin"); // ล้าง flag
+} else {
+    // ถ้าไม่มี interaction ให้รอ click
+    document.body.addEventListener("click", () => {
+        music.play().catch(err => console.log("Autoplay error:", err));
+    }, { once: true });
+}
 
 
 
