@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>part 2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS เดิมเหมือนก่อนหน้า */
+        body {
+            margin: 0;
+            padding: 30px;
+            /* เพิ่มจาก 0 เป็น 30px */
+            font-family: 'Prompt', sans-serif;
+            background-color: #fbdfc7;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            cursor: pointer;
+            overflow: hidden;
+            /* ป้องกัน scroll */
+            background-image: url('/public/img/part2/p15.png');
+            background-size: 7rem;
+            background-repeat: no-repeat;
+            background-position: left 3% top 3%;
+        }
+
+        h1 {
+            margin: 0 0 20px 0;
+            /* ลด margin ด้านบน-ล่าง */
+            font-size: 30px;
+            color: #6b4f3f;
+            pointer-events: none;
+            text-align: center;
+        }
+
+
+        video {
+            width: 90%;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            pointer-events: auto;
+            display: none;
+        }
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            /* ช่องว่างระหว่างปุ่ม */
+            width: 90%;
+            max-width: 360px;
+
+            padding: 20px;
+            border-radius: 15px;
+
+        }
+
+        .answers button {
+            padding: 10px 12px;
+            font-size: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(82, 52, 18, 0.836);
+            background-color: #fcdbb1ee;
+            color: #6b4f3f;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .answers button:hover {
+            background-color: #edd9b5;
+            transform: translateY(-1px);
+        }
+
+
+
+        .answers input.form-control {
+            padding: 10px;
+            font-size: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .answers input.form-control:focus {
+            border-color: #e7d7c1;
+            /* เน้นโทนเขียวพาสเทล */
+            box-shadow: 0 0 5px rgba(0, 128, 0, 0.1);
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            background: #cdf1cef6;
+            padding: 20px;
+            border-radius: 12px;
+            border: 3px solid #a0e7a3;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            display: none;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .popup.show {
+            display: block;
+            opacity: 1;
+            animation: popupBounce 0.5s ease forwards;
+        }
+
+        .popup img {
+            max-width: 200px;
+        }
+
+        @keyframes popupBounce {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <audio id="bgMusic" src="/public/img/part1/m2.mp3" loop></audio>
+    <h1>Quiz</h1>
+    <video id="questionVideo" controls>
+        <source src="" type="video/mp4">
+        เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ
+    </video>
+    <div class="answers"></div>
+    <div id="popupResult" class="popup">
+        <img id="popupImg" src="" alt="result">
+    </div>
+
+
+    <script type="module">
+        const music = document.getElementById("bgMusic");
+        const time = localStorage.getItem("musicTime");
+        music.volume = 0.2; // 🔉 ตั้งเสียงให้เบาหน่อย
+        if (time) {
+            music.currentTime = time; // ต่อจากเดิม
+        }
+        music.play().catch(err => console.log(err));
+        import { questions2 } from './array.js';
+        const popup = document.getElementById('popupResult');
+        const popupImg = document.getElementById('popupImg');
+        let answers = JSON.parse(localStorage.getItem('quizAnswers') || "[]");
+        const h1 = document.querySelector('h1');
+        const answersDiv = document.querySelector('.answers');
+        const videoEl = document.getElementById('questionVideo');
+
+        let currentQuestionIndex = 0;
+        let answeredCurrentQuestion = false;
+        let score = 0; // เก็บคะแนน
+        let quizNumber = 2; // quiz ครั้งที่ 1
+        const userID = localStorage.getItem("userID");
+        let isQ5VideoShown = false; // global
+
+        function renderQuestion() {
+            const q = questions2[currentQuestionIndex];
+            const oldImg = document.getElementById("questionImage");
+            if (oldImg) oldImg.remove();
+            // ถ้าเป็น Q5 และยังไม่โชว์วิดีโอ
+            if (q.id === 'q2.5' && !isQ5VideoShown) {
+                h1.textContent = 'เฉลย'; // ซ่อนคำถาม
+                answersDiv.style.display = 'none';
+                videoEl.style.display = 'block';
+
+                setVideo(q.video, () => {
+                    isQ5VideoShown = true; // mark วิดีโอเล่นจบ
+                    renderQuestion(); // แสดงคำถามหลังวิดีโอจบ
+                });
+                videoEl.play().catch(err => console.log("Autoplay error:", err));
+                return; // หยุด render ตอนนี้ก่อน
+            }
+            if (q.img) {
+                videoEl.style.display = 'none';
+                const imgEl = document.createElement("img");
+                imgEl.id = "questionImage";
+                imgEl.src = q.img;
+                imgEl.style.maxWidth = "370px";
+                imgEl.style.borderRadius = "12px";
+                imgEl.style.marginBottom = "20px";
+                document.body.insertBefore(imgEl, answersDiv);
+            }
+            if (q.bg) {
+                document.body.style.backgroundImage = `url('${q.bg}')`;
+                document.body.style.backgroundSize = '100%';
+                document.body.style.backgroundRepeat = 'no-repeat';
+                document.body.style.backgroundPosition = 'left 0% top 0%';
+            }
+
+
+            // render คำถามปกติ (Q1-Q4 หรือ Q5 หลังวิดีโอ)
+            h1.textContent = q.question || 'คุณจะเลือกใช้เทคนิคการปฏิเสธให้เหมาะสมกับสถานการณ์อย่างไร';
+            answersDiv.style.display = 'flex';
+            answersDiv.innerHTML = '';
+
+            // **ซ่อนวิดีโอหลัง Q5 เล่นจบ**
+            if (q.video && (q.id !== 'q2.5')) {
+                videoEl.style.display = 'block';
+                setVideo(q.video);
+            } else {
+                videoEl.style.display = 'none'; // Q5 หลังเล่นจบ หรือไม่มีวิดีโอ
+            }
+
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.textContent = opt.text;
+                btn.onclick = () => submitAnswer(q, opt, btn);
+                answersDiv.appendChild(btn);
+            });
+            // ⏸ หยุดเพลงตอนเริ่มเล่นวิดีโอ
+            videoEl.addEventListener("play", () => {
+                music.volume = 0.05; // เบามากๆ ระหว่างวิดีโอเล่น
+            });
+
+            videoEl.addEventListener("pause", () => {
+                music.volume = 0.2; // กลับมาเสียงปกติ
+                music.play().catch(err => console.log("Autoplay error:", err));
+            });
+
+            videoEl.addEventListener("ended", () => {
+                music.volume = 0.2; // กลับมาเสียงปกติ
+                music.play().catch(err => console.log("Autoplay error:", err));
+                renderQuestion();
+            });
+
+            answeredCurrentQuestion = false;
+        }
+
+
+
+        // set video และ callback หลัง video จบ
+        function setVideo(src, onEnded = null) {
+            videoEl.pause();
+            videoEl.currentTime = 0;
+            const sourceEl = videoEl.querySelector('source');
+            sourceEl.src = src;
+            videoEl.load(); // โหลด video แต่ไม่ play อัตโนมัติ
+            // videoEl.play().catch(err => console.log(err)); // ❌ เอาออก
+
+            videoEl.onended = () => {
+                if (onEnded) onEnded();
+            };
+
+            videoEl.style.display = 'block'; // แสดง video ให้ผู้ใช้กดเล่น
+        }
+
+
+
+        function submitAnswer(q, opt, btn) {
+            if (answeredCurrentQuestion) return;
+            answeredCurrentQuestion = true;
+
+            document.querySelectorAll('.answers button').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+
+            if (opt.score === 1) score++;
+
+            // ส่งไป server
+            fetch("/submit-answer", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userID: userID,
+                    questionId: q.id,
+                    answer: opt.text
+                })
+            })
+                .then(res => res.json())
+                .then(data => console.log("ส่งคำตอบแล้ว:", data))
+                .catch(err => console.error(err));
+
+            showResultPopup(q.id, opt.score === 1);
+        }
+        function checkTextAnswer(q, userInput) {
+            if (answeredCurrentQuestion) return;
+            answeredCurrentQuestion = true;
+
+            const isCorrect = (userInput.trim() === q.correctAnswer.trim());
+            if (isCorrect) {
+                score++;
+            }
+            showResultPopup(q.id, isCorrect);
+        }
+
+        function showResultPopup(questionId, isCorrect) {
+            if (!isCorrect) {
+                setTimeout(() => {
+                    nextQuestion();
+                }, 1000); // ✅ 1 วินาที (ปรับตามต้องการ)
+                return;
+            }
+
+            // ถ้าถูก
+            if (questionId === 'q4' || questionId === 'q5') {
+                popupImg.src = '/public/img/good2.png';
+            } else {
+                popupImg.src = '/public/img/good.png';
+            }
+
+            popup.classList.remove('show');
+            void popup.offsetWidth;
+            popup.classList.add('show');
+
+            setTimeout(() => {
+                popup.classList.remove('show');
+                nextQuestion();
+            }, 2000);
+        }
+
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions2.length - 1) {  // ✅ ใช้ questions2
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                saveScoreToDB();
+            }
+        }
+
+        function saveScoreToDB() {
+            const userID = localStorage.getItem("userID");  // ✅ ดึงจาก localStorage
+            if (!userID) {
+                alert("ไม่พบ userID กรุณา login ก่อน");
+                window.location.href = "/login"; // หรือหน้า login ของคุณ
+                return;
+            }
+            fetch("/saveScore", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    userID: userID,
+                    quizNumber: quizNumber,
+                    score: Math.min(score, 5)
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log("บันทึกแล้ว:", data);
+                    localStorage.setItem("musicTime", music.currentTime);
+                    window.location.href = 'part2#section12';
+                })
+                .catch(err => console.error("Error:", err));
+        }
+
+
+        // เริ่มต้น render คำถามแรก
+        renderQuestion();
+
+    </script>
+
+</body>
+
+</html>

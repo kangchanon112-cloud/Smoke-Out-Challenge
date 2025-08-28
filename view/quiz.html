@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Part 1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            font-family: 'Prompt', sans-serif;
+            background-color: #fbdfc7;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        h1 {
+            margin: 0 0 20px 0;
+            font-weight: 400;
+            color: #6b4f3f;
+            text-align: center;
+        }
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            /* ช่องว่างระหว่างปุ่ม */
+            width: 90%;
+            max-width: 360px;
+
+            padding: 20px;
+            border-radius: 15px;
+
+        }
+
+        .answers button {
+            padding: 10px 12px;
+            font-size: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(82, 52, 18, 0.836);
+            background-color: #fcdbb1ee;
+            color: #6b4f3f;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .answers button:hover {
+            background-color: #edd9b5;
+            transform: translateY(-1px);
+        }
+
+        /* .answers button.selected {
+            background-color: #f8ba5daf;
+            box-shadow: 0 2px 6px rgba(0, 128, 0, 0.2);
+        } */
+
+        .answers input.form-control {
+            padding: 10px;
+            font-size: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .answers input.form-control:focus {
+            border-color: #e7d7c1;
+            /* เน้นโทนเขียวพาสเทล */
+            box-shadow: 0 0 5px rgba(0, 128, 0, 0.1);
+        }
+
+        /* popup */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+            z-index: 9999;
+            display: none;
+            opacity: 0;
+            transition: all 0.3s ease;
+            text-align: center;
+
+            width: 250px;
+            /* ความกว้างเริ่มต้น */
+            max-width: 40%;
+            /* ไม่เกิน 20% ของจอใหญ่ */
+        }
+
+        .popup.show {
+            display: block;
+            opacity: 1;
+            animation: popupBounce 0.5s ease forwards;
+        }
+
+        .popup.correct {
+            border: 3px solid #A3D9A5;
+            /* เขียวพาสเทลอ่อน */
+            background: #E6F4EA;
+            /* เขียวอ่อนมากๆ */
+        }
+
+        .popup.wrong {
+            border: 3px solid #F5A8A8;
+            /* แดงพาสเทลอ่อน */
+            background: #FFEAEA;
+            /* แดงอ่อนมากๆ */
+        }
+
+        .popup img {
+            max-width: 90%;
+            /* เล็กลงเหลือ 20% ของ popup */
+            height: auto;
+            /* รักษาสัดส่วน */
+            display: block;
+            margin: 0 auto 10px auto;
+            /* กึ่งกลาง + เว้นขอบล่าง */
+        }
+
+
+        @keyframes popupBounce {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .answers input.form-control {
+            width: 100%;
+            /* ขยายเต็มกล่อง */
+            padding: 10px 12px;
+            /* ระยะห่างข้างใน */
+            font-size: 15px;
+            /* ขนาดตัวอักษร */
+            border-radius: 8px;
+            /* มุมโค้ง */
+            border: 1px solid #ddd;
+            /* เส้นกรอบอ่อน */
+            outline: none;
+            /* ไม่มีเส้น focus default */
+            transition: border 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+            /* กัน padding เกิน */
+            background: #ffffff77;
+            text-align: center;
+            /* ข้อความพิมพ์กลาง */
+        }
+
+        .answers input.form-control:focus {
+            border-color: #cde7c1;
+            /* เน้นเขียวพาสเทล */
+            box-shadow: 0 0 5px rgba(0, 128, 0, 0.1);
+            /* เงาอ่อน */
+        }
+
+        .answers video {
+            width: 100%;
+            max-width: 500px;
+            /* หรือ 100% ของ viewport */
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <audio id="bgMusic" src="/public/img/part1/m2.mp3" loop></audio>
+    <h1></h1>
+
+    <div id="intro"></div> <!-- กล่องโชว์ video -->
+    <div class="answers"></div>
+    <div id="popupResult" class="popup"></div>
+
+    <script type="module">
+        const music = document.getElementById("bgMusic");
+        const time = localStorage.getItem("musicTime");
+        music.volume = 0.2; // 🔉 ตั้งเสียงให้เบาหน่อย
+        if (time) {
+            music.currentTime = time; // ต่อจากเดิม
+        }
+        music.play().catch(err => console.log(err));
+
+
+        import { questions } from './array.js';
+        const h1 = document.querySelector('h1');
+        const answersDiv = document.querySelector('.answers');
+        const popup = document.getElementById('popupResult');
+
+        let currentQuestionIndex = 0;
+        let answeredCurrentQuestion = false;
+        let score = 0; // เก็บคะแนน
+        let quizNumber = 1; // quiz ครั้งที่ 1
+        const userID = localStorage.getItem("userID");
+
+        function playIntro() {
+            const introDiv = document.getElementById("intro");
+            const music = document.getElementById("bgMusic"); // 🎵 ดึง audio มาใช้งาน
+
+            const video = document.createElement("video");
+            video.src = "/public/img/part1/m1.mp4";
+            video.controls = true;
+            video.style.width = "100%";
+            video.style.maxWidth = "500px";
+            video.style.borderRadius = "15px";
+            video.style.display = "block";
+            video.style.margin = "0 auto";
+
+            const h2 = document.createElement('h2');
+            h2.textContent = "ผลกระทบต่อร่างกายเมื่อสูบบุหรี่ไฟฟ้า";
+            h2.style.textAlign = "center";
+
+            introDiv.innerHTML = "";
+            introDiv.appendChild(h2);
+            introDiv.appendChild(video);
+
+            // ⏸ หยุดเพลงตอนเริ่มเล่นวิดีโอ
+            video.addEventListener("play", () => {
+                music.volume = 0.05; // เบามากๆ ระหว่างวิดีโอเล่น
+            });
+
+            video.addEventListener("pause", () => {
+                music.volume = 0.2; // กลับมาเสียงปกติ
+                music.play().catch(err => console.log("Autoplay error:", err));
+            });
+
+            video.addEventListener("ended", () => {
+                music.volume = 0.2; // กลับมาเสียงปกติ
+                music.play().catch(err => console.log("Autoplay error:", err));
+                introDiv.innerHTML = "";
+                renderQuestion();
+            });
+
+        }
+
+
+
+
+        function renderQuestion() {
+            const q = questions[currentQuestionIndex];
+            h1.textContent = q.question;
+            answersDiv.innerHTML = '';
+
+            if (q.options) {
+                q.options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.textContent = opt.text;
+                    btn.onclick = () => submitAnswer(q, opt, btn);
+                    answersDiv.appendChild(btn);
+                });
+            } else {
+                const input = document.createElement('input');
+                input.type = "text";
+                input.placeholder = "พิมพ์คำตอบที่นี่";
+                input.className = "form-control";
+
+                const submitBtn = document.createElement('button');
+                submitBtn.textContent = "ตอบ";
+                submitBtn.onclick = () => checkTextAnswer(q, input.value);
+
+                answersDiv.appendChild(input);
+                answersDiv.appendChild(submitBtn);
+            }
+
+            answeredCurrentQuestion = false;
+        }
+
+        function submitAnswer(q, opt, btn) {
+            if (answeredCurrentQuestion) return;
+            answeredCurrentQuestion = true;
+
+            document.querySelectorAll('.answers button').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+
+            if (opt.score === 1) score++;
+
+            // ✅ ส่งไป server
+            fetch("/submit-answer", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userID: userID,
+                    questionId: q.id, // ส่ง ID ของคำถาม
+                    answer: opt.text
+                })
+            })
+
+                .then(res => res.json())
+                .then(data => console.log("ส่งคำตอบแล้ว:", data))
+                .catch(err => console.error(err));
+
+            showResultPopup(opt.score === 1);
+        }
+
+        function checkTextAnswer(q, userInput) {
+            if (answeredCurrentQuestion) return;
+            answeredCurrentQuestion = true;
+            const normalize = str => str.replace(/\s+/g, '').toLowerCase();
+            const answers = Array.isArray(q.correctAnswer) ? q.correctAnswer : [q.correctAnswer];
+            const isCorrect = answers.some(ans => normalize(userInput) === normalize(ans));
+
+            if (isCorrect) score++;
+
+            // ส่งไป server
+            fetch("/submit-answer", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userID: userID,
+                    questionId: q.id, // ส่ง ID ของคำถาม
+                    answer: userInput
+                })
+            })
+
+                .then(res => res.json())
+                .then(data => console.log("ส่งคำตอบแล้ว:", data))
+                .catch(err => console.error(err));
+
+            showResultPopup(isCorrect);
+        }
+
+
+
+        function showResultPopup(isCorrect) {
+            let img = document.createElement("img");
+            img.src = isCorrect ? "/public/img/5.png" : "/public/img/4.png";
+
+            popup.innerHTML = "";
+            popup.appendChild(img);
+
+            popup.className = "popup"; // reset
+            popup.classList.add(isCorrect ? "correct" : "wrong");
+            popup.classList.remove('show');
+            void popup.offsetWidth;
+            popup.classList.add('show');
+
+            setTimeout(() => {
+                popup.classList.remove('show');
+                nextQuestion();
+            }, 2000);
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                saveScoreToDB();
+            }
+        }
+
+        function saveScoreToDB() {
+            const userID = localStorage.getItem("userID");  // ✅ ดึงจาก localStorage
+            if (!userID) {
+                alert("ไม่พบ userID กรุณา login ก่อน");
+                window.location.href = "/login"; // หรือหน้า login ของคุณ
+                return;
+            }
+            fetch("/saveScore", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    userID: userID,
+                    quizNumber: quizNumber,
+                    score: Math.min(score, 3) // ไม่เกิน 3
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log("บันทึกแล้ว:", data);
+                    localStorage.setItem("musicTime", music.currentTime);
+                    window.location.href = 'part1#section8';
+                })
+                .catch(err => console.error("Error:", err));
+        }
+
+        playIntro();
+
+    </script>
+
+</body>
+
+</html>
