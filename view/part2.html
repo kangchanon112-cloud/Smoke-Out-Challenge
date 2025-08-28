@@ -442,31 +442,18 @@
             music.currentTime = parseFloat(savedTime);
         }
 
-        // ฟังก์ชันเล่นเพลง
-        function startMusicOnce() {
+
+        function playMusicOnTap() {
             if (music.paused) {
                 music.volume = 0.2;
                 music.play().catch(err => console.log("Autoplay blocked:", err));
             }
-
-            // บันทึกเวลาตอนเล่น
-            setInterval(() => {
-                if (!music.paused) {
-                    localStorage.setItem("musicTime", music.currentTime);
-                }
-            }, 1000);
-
-            // ลบ listener หลังครั้งแรก
-            document.removeEventListener("click", startMusicOnce, true);
-            document.removeEventListener("touchstart", startMusicOnce, true);
-            document.removeEventListener("keydown", startMusicOnce, true);
         }
 
-        // ฟังทุก interaction
-        document.addEventListener("click", startMusicOnce, { once: true, capture: true });
-        document.addEventListener("touchstart", startMusicOnce, { once: true, capture: true });
-        document.addEventListener("keydown", startMusicOnce, { once: true, capture: true });
-
+        // เรียกทุกครั้งที่ click, touch หรือ keydown
+        document.addEventListener("click", playMusicOnTap, true);
+        document.addEventListener("touchstart", playMusicOnTap, true);
+        document.addEventListener("keydown", playMusicOnTap, true);
 
 
 
