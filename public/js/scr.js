@@ -1,6 +1,19 @@
 ///////////////////////////// เริ่มต้นแสดง section1//////////////////////////
 document.getElementById('section0').classList.add('active');
 
+window.addEventListener("load", () => {
+  // ให้เพลงเริ่มหลัง login redirect เข้ามาหน้านี้
+  const music = document.getElementById("bgMusic");
+  const time = localStorage.getItem("musicTime");
+  music.volume = 0.2; // 🔉 ตั้งเสียงให้เบาหน่อย
+  if (time) {
+    music.currentTime = time; // ต่อจากเดิม
+  }
+  music.play().catch(err => console.log(err));
+});
+
+
+
 // ไฮไลท์ปุ่มที่เลือก
 const answerButtons = document.querySelectorAll('#section8 .answer-btn');
 
@@ -90,14 +103,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
-document.getElementById('nextBtn5').addEventListener('click', (e) => {
-  e.preventDefault();
-  document.getElementById('section7').classList.remove('active');
-
-  // ถ้า section7 ให้ไปหน้า quiz.html
-  window.location.href = "quiz";
-});
-
 
 // กำหนด event submit สำหรับฟอร์มที่ section3
 const form = document.querySelector('#section3 form');
@@ -178,13 +183,13 @@ document.getElementById('profileForm').addEventListener('submit', async function
     const data = await res.json();
     if (data.success) {
       localStorage.setItem('profileId', data.profileId);
-   
+
     } else {
       alert(data.message || 'เกิดข้อผิดพลาด');
     }
   } catch (err) {
     console.error(err);
-    
+
   }
 });
 
@@ -290,6 +295,10 @@ document.getElementById('nextBtn4').addEventListener('click', (e) => {
 document.getElementById('nextBtn5').addEventListener('click', (e) => {
   e.preventDefault();
   document.getElementById('section7').classList.remove('active');
-  // ไปหน้า quiz.html แทน section8
+  // ก่อนเปลี่ยนหน้า
+  const music = document.getElementById("bgMusic");
+  localStorage.setItem("musicTime", music.currentTime);
   window.location.href = "quiz";
+
 });
+
