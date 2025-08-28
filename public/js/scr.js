@@ -26,6 +26,24 @@ setInterval(() => {
 
 
 
+// --- จัดการคลิปเสียง (voice) ---
+const voices = document.querySelectorAll("audio[id^='voice']");
+
+voices.forEach(voice => {
+  voice.addEventListener("play", () => {
+    music.volume = 0.05; // เบาลงตอนเสียงบรรยายเล่น
+  });
+
+  voice.addEventListener("ended", () => {
+    music.volume = 0.2; // กลับมาเสียงปกติ
+  });
+
+  voice.addEventListener("pause", () => {
+    music.volume = 0.2; // เผื่อ user หยุดกลางคัน
+  });
+});
+
+
 
 
 
