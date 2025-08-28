@@ -365,17 +365,31 @@
     <audio id="bgMusic" src="/public/img/part1/m2.mp3" loop></audio>
     <script>
 
-        window.addEventListener("load", () => {
-            // ให้เพลงเริ่มหลัง login redirect เข้ามาหน้านี้
-            const music = document.getElementById("bgMusic");
-            const time = localStorage.getItem("musicTime");
-            music.volume = 0.2; // 🔉 ตั้งเสียงให้เบาหน่อย
-            if (time) {
-                music.currentTime = time; // ต่อจากเดิม
-            }
-            music.play().catch(err => console.log(err));
-        });
-        const music = document.getElementById("bgMusic");
+      const music = document.getElementById("bgMusic");
+
+// โหลดเวลาที่เคยบันทึกไว้
+const savedTime = localStorage.getItem("musicTime");
+if (savedTime) {
+    music.currentTime = parseFloat(savedTime); // set เวลาเดิม
+}
+
+// เล่นเพลงเมื่อ user แตะ
+document.body.addEventListener("click", () => {
+    if (music.paused) {
+        music.volume = 0.2;
+        music.play().catch(err => console.log("Autoplay blocked:", err));
+    }
+});
+
+// บันทึกเวลาล่าสุดทุก 1 วินาที
+setInterval(() => {
+    if (!music.paused) {
+        localStorage.setItem("musicTime", music.currentTime);
+    }
+}, 1000);
+
+
+
         const videos = document.querySelectorAll('video'); 
 
         videos.forEach(video => {
@@ -535,5 +549,6 @@
     </script>
 
 </body>
+
 
 </html>
