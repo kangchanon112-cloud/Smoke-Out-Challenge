@@ -1,28 +1,39 @@
 ///////////////////////////// เริ่มต้นแสดง section1//////////////////////////
 document.getElementById('section0').classList.add('active');
 
-const music = document.getElementById("bgMusic");
+ const music = document.getElementById("bgMusic");
 
-// โหลดเวลาที่เคยบันทึกไว้
-const savedTime = localStorage.getItem("musicTime");
-if (savedTime) {
-    music.currentTime = parseFloat(savedTime); // set เวลาเดิม
-}
+        // โหลดเวลาที่เคยบันทึกไว้
+        const savedTime = localStorage.getItem("musicTime");
+        if (savedTime) {
+            music.currentTime = parseFloat(savedTime);
+        }
 
-// เล่นเพลงเมื่อ user แตะ
-document.body.addEventListener("click", () => {
-    if (music.paused) {
-        music.volume = 0.2;
-        music.play().catch(err => console.log("Autoplay blocked:", err));
-    }
-});
+        // ฟังก์ชันเล่นเพลง
+        function startMusicOnce() {
+            if (music.paused) {
+                music.volume = 0.2;
+                music.play().catch(err => console.log("Autoplay blocked:", err));
+            }
 
-// บันทึกเวลาล่าสุดทุก 1 วินาที
-setInterval(() => {
-    if (!music.paused) {
-        localStorage.setItem("musicTime", music.currentTime);
-    }
-}, 1000);
+            // บันทึกเวลาตอนเล่น
+            setInterval(() => {
+                if (!music.paused) {
+                    localStorage.setItem("musicTime", music.currentTime);
+                }
+            }, 1000);
+
+            // ลบ listener หลังครั้งแรก
+            document.removeEventListener("click", startMusicOnce, true);
+            document.removeEventListener("touchstart", startMusicOnce, true);
+            document.removeEventListener("keydown", startMusicOnce, true);
+        }
+
+        // ฟังทุก interaction
+        document.addEventListener("click", startMusicOnce, { once: true, capture: true });
+        document.addEventListener("touchstart", startMusicOnce, { once: true, capture: true });
+        document.addEventListener("keydown", startMusicOnce, { once: true, capture: true });
+
 
 
 
@@ -31,7 +42,7 @@ const voices = document.querySelectorAll("audio[id^='voice']");
 
 voices.forEach(voice => {
   voice.addEventListener("play", () => {
-    music.volume = 0.02; // เบาลงตอนเสียงบรรยายเล่น
+    music.volume = 0.05; // เบาลงตอนเสียงบรรยายเล่น
   });
 
   voice.addEventListener("ended", () => {
