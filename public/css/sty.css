@@ -196,7 +196,7 @@
    /* จัดให้อยู่กลาง */
  }
 
-/* 
+ /* 
  .bg6 {
    position: relative;
    width: 100vw;
@@ -282,6 +282,7 @@
    margin: 0;
    padding: 25px;
  }
+
  .bg6 {
    background-image: url('/public/img/part1/4.png');
    background-size: clamp(50px, 80vw, 500px);
@@ -293,9 +294,10 @@
    margin: 0;
    padding: 25px;
  }
+
  .bg5 {
    background-image: url('/public/img/part1/1.png'), url('/public/img/part1/2.png'), url('/public/img/part1/3.png');
-   background-size: clamp(100px, 30vw, 300px), clamp(50px, 30vw, 250px) ,clamp(50px, 30vw, 250px);
+   background-size: clamp(100px, 30vw, 300px), clamp(50px, 30vw, 250px), clamp(50px, 30vw, 250px);
    background-repeat: no-repeat, no-repeat, no-repeat;
    background-position: left 10% top 80%, right 30% top 75%, right 5% top 90%;
    /* เว้นเป็น % */
@@ -304,11 +306,15 @@
    margin: 0;
    padding: 25px;
  }
+
  .bg7 {
    background-image: url('/public/img/part1/5.png'), url('/public/img/part1/6.png'), url('/public/img/part1/7.png'), url('/public/img/part1/8.png');
-   background-size: clamp(10px, 30vw, 200px), clamp(50px, 40vw, 300px) ,clamp(50px, 40vw, 250px),clamp(30px, 40vw, 250px);
+   background-size: clamp(10px, 30vw, 200px), clamp(50px, 40vw, 300px), clamp(50px, 40vw, 250px), clamp(30px, 40vw, 250px);
    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
-   background-position: right 0% top 85%, left 0% top 90%, left 0% top 50%, right 5% top 55%;
+   background-position: right 5% top calc(70vh),
+     left 0% top calc(60vh),
+     left 0% top calc(40vh),
+     right 0% top calc(40vh);
    /* เว้นเป็น % */
    width: 95vw;
    height: 95vh;
