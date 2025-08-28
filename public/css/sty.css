@@ -196,8 +196,8 @@
    /* จัดให้อยู่กลาง */
  }
 
-
- .bg2 {
+/* 
+ .bg6 {
    position: relative;
    width: 100vw;
    height: 100vh;
@@ -205,10 +205,9 @@
    background-color: #fbdfc7;
  }
 
- .bg2 img {
+ .bg6 img {
    position: absolute;
-   max-width: 7.7rem;
-   /* ป้องกันรูปใหญ่เกิน */
+   max-width: clamp(100px, 80vw, 600px);
    height: auto;
  }
 
@@ -231,7 +230,7 @@
    top: 60%;
    transform: translateY(-50%);
    animation: bounce3 3.5s ease-in-out infinite;
- }
+ } */
 
  @keyframes bounce1 {
 
@@ -277,6 +276,39 @@
    background-size: 8rem, 10rem;
    background-repeat: no-repeat, no-repeat;
    background-position: right 10% top 60%, left 5% top 85%;
+   /* เว้นเป็น % */
+   width: 95vw;
+   height: 95vh;
+   margin: 0;
+   padding: 25px;
+ }
+ .bg6 {
+   background-image: url('/public/img/part1/4.png');
+   background-size: clamp(50px, 80vw, 500px);
+   background-repeat: no-repeat;
+   background-position: right 60% top 80%;
+   /* เว้นเป็น % */
+   width: 95vw;
+   height: 95vh;
+   margin: 0;
+   padding: 25px;
+ }
+ .bg5 {
+   background-image: url('/public/img/part1/1.png'), url('/public/img/part1/2.png'), url('/public/img/part1/3.png');
+   background-size: clamp(100px, 30vw, 300px), clamp(50px, 30vw, 250px) ,clamp(50px, 30vw, 250px);
+   background-repeat: no-repeat, no-repeat, no-repeat;
+   background-position: left 10% top 80%, right 30% top 75%, right 5% top 90%;
+   /* เว้นเป็น % */
+   width: 95vw;
+   height: 95vh;
+   margin: 0;
+   padding: 25px;
+ }
+ .bg7 {
+   background-image: url('/public/img/part1/5.png'), url('/public/img/part1/6.png'), url('/public/img/part1/7.png'), url('/public/img/part1/8.png');
+   background-size: clamp(10px, 30vw, 200px), clamp(50px, 40vw, 300px) ,clamp(50px, 40vw, 250px),clamp(30px, 40vw, 250px);
+   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+   background-position: right 0% top 85%, left 0% top 90%, left 0% top 50%, right 5% top 55%;
    /* เว้นเป็น % */
    width: 95vw;
    height: 95vh;
