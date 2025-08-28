@@ -435,17 +435,14 @@
     <audio id="bgMusic" src="/public/img/part1/m2.mp3" loop></audio>
     <script>
 
-        window.addEventListener("load", () => {
-            // ให้เพลงเริ่มหลัง login redirect เข้ามาหน้านี้
-            const music = document.getElementById("bgMusic");
-            const time = localStorage.getItem("musicTime");
-            music.volume = 0.2; // 🔉 ตั้งเสียงให้เบาหน่อย
-            if (time) {
-                music.currentTime = time; // ต่อจากเดิม
+         const music = document.getElementById("bgMusic");
+        // ให้เพลงเริ่มเล่นหลังจาก user คลิกครั้งแรก (กัน autoplay block)
+        document.body.addEventListener("click", () => {
+            if (music.paused) {
+                music.volume = 0.2;
+                music.play().catch(err => console.log("Autoplay blocked:", err));
             }
-            music.play().catch(err => console.log(err));
-        });
-        const music = document.getElementById("bgMusic");
+        }, { once: true });
         const videos = document.querySelectorAll('video'); // <-- ต้องประกาศก่อน
 
         videos.forEach(video => {
@@ -461,6 +458,7 @@
                 music.volume = 0.2; // กลับมาเสียงปกติ
             });
         });
+
 
         document.getElementById('section1').classList.add('active');
 
@@ -542,5 +540,6 @@
     </script>
 
 </body>
+
 
 </html>
