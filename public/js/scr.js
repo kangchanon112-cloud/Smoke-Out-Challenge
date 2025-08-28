@@ -1,5 +1,5 @@
 ///////////////////////////// เริ่มต้นแสดง section1//////////////////////////
-document.getElementById('section7').classList.add('active');
+document.getElementById('section0').classList.add('active');
 
 const music = document.getElementById("bgMusic");
 const clickedLogin = localStorage.getItem("userClickedLogin");
