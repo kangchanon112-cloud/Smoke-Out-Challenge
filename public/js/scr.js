@@ -31,7 +31,7 @@ const voices = document.querySelectorAll("audio[id^='voice']");
 
 voices.forEach(voice => {
   voice.addEventListener("play", () => {
-    music.volume = 0.05; // เบาลงตอนเสียงบรรยายเล่น
+    music.volume = 0.02; // เบาลงตอนเสียงบรรยายเล่น
   });
 
   voice.addEventListener("ended", () => {
@@ -42,8 +42,6 @@ voices.forEach(voice => {
     music.volume = 0.2; // เผื่อ user หยุดกลางคัน
   });
 });
-
-
 
 
 
