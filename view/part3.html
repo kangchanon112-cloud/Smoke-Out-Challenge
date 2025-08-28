@@ -365,46 +365,51 @@
     <audio id="bgMusic" src="/public/img/part1/m2.mp3" loop></audio>
     <script>
 
-      const music = document.getElementById("bgMusic");
+        const music = document.getElementById("bgMusic");
 
-// โหลดเวลาที่เคยบันทึกไว้
-const savedTime = localStorage.getItem("musicTime");
-if (savedTime) {
-    music.currentTime = parseFloat(savedTime); // set เวลาเดิม
-}
+        // โหลดเวลาที่เคยบันทึกไว้
+        const savedTime = localStorage.getItem("musicTime");
+        if (savedTime) {
+            music.currentTime = parseFloat(savedTime); // set เวลาเดิม
+        }
 
-// เล่นเพลงเมื่อ user แตะ
-document.body.addEventListener("click", () => {
-    if (music.paused) {
-        music.volume = 0.2;
-        music.play().catch(err => console.log("Autoplay blocked:", err));
-    }
-});
+        // เล่นเพลงเมื่อ user แตะครั้งแรก (ปุ่ม, หน้าจอ, อะไรก็ได้)
+        const startMusic = () => {
+            if (music.paused) {
+                music.volume = 0.2;
+                music.play().catch(err => console.log("Autoplay blocked:", err));
+            }
+            document.removeEventListener("click", startMusic);
+            document.removeEventListener("keydown", startMusic);
+            document.removeEventListener("touchstart", startMusic);
+        };
 
-// บันทึกเวลาล่าสุดทุก 1 วินาที
-setInterval(() => {
-    if (!music.paused) {
-        localStorage.setItem("musicTime", music.currentTime);
-    }
-}, 1000);
+        // ฟังทุก event ที่ถือว่าเป็น interaction
+        document.addEventListener("click", startMusic, { once: true });
+        document.addEventListener("keydown", startMusic, { once: true });
+        document.addEventListener("touchstart", startMusic, { once: true });
 
+        // บันทึกเวลาล่าสุดทุก 1 วินาที
+        setInterval(() => {
+            if (!music.paused) {
+                localStorage.setItem("musicTime", music.currentTime);
+            }
+        }, 1000);
 
-
-        const videos = document.querySelectorAll('video'); 
-
+        // --- ลดเสียงเพลงตอน video เล่น ---
+        const videos = document.querySelectorAll("video");
         videos.forEach(video => {
-            video.addEventListener('play', () => {
-                music.volume = 0.05; // ลดเสียงเพลงตอนวิดีโอเล่น
+            video.addEventListener("play", () => {
+                music.volume = 0.05;
             });
-
-            video.addEventListener('pause', () => {
-                music.volume = 0.2; // กลับมาเสียงปกติ
+            video.addEventListener("pause", () => {
+                music.volume = 0.2;
             });
-
-            video.addEventListener('ended', () => {
-                music.volume = 0.2; // กลับมาเสียงปกติ
+            video.addEventListener("ended", () => {
+                music.volume = 0.2;
             });
         });
+
 
         document.getElementById('section1').classList.add('active');
 
@@ -431,7 +436,7 @@ setInterval(() => {
         document.getElementById('nextBtn2').addEventListener('click', (e) => {
             e.preventDefault();
             document.getElementById('section3').classList.remove('active');
-             localStorage.setItem("musicTime", music.currentTime);
+            localStorage.setItem("musicTime", music.currentTime);
             window.location.href = "quiz3";
         });
 
@@ -549,6 +554,5 @@ setInterval(() => {
     </script>
 
 </body>
-
 
 </html>
