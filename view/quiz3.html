@@ -242,32 +242,37 @@
                 answersDiv.appendChild(btn);
             });
             // สำหรับ video คำถาม
-            videoEl.onplay = () => {
-                music.volume = 0.05; // ลดเสียงเพลงขณะเล่นวิดีโอ
-            };
+            // ⏸ หยุดเพลงตอนเริ่มเล่นวิดีโอ
+            videoEl.addEventListener("play", () => {
+                music.volume = 0.05; // เบามากๆ ระหว่างวิดีโอเล่น
+            });
 
-            videoEl.onpause = () => {
+            videoEl.addEventListener("pause", () => {
                 music.volume = 0.2; // กลับมาเสียงปกติ
-            };
+                music.play().catch(err => console.log("Autoplay error:", err));
+            });
 
-            videoEl.onended = () => {
+            videoEl.addEventListener("ended", () => {
                 music.volume = 0.2; // กลับมาเสียงปกติ
+                music.play().catch(err => console.log("Autoplay error:", err));
                 renderQuestion();
-            };
+            });
 
-            // สำหรับคลิป interlude
-            interludeVideo.onplay = () => {
-                music.volume = 0.05; // ลดเสียง
-            };
+            
+            interludeVideo.addEventListener("play", () => {
+                music.volume = 0.05; // เบามากๆ ระหว่างวิดีโอเล่น
+            });
 
-            interludeVideo.onpause = () => {
-                music.volume = 0.2; // กลับมา
-            };
+            interludeVideo.addEventListener("pause", () => {
+                music.volume = 0.2; // กลับมาเสียงปกติ
+                music.play().catch(err => console.log("Autoplay error:", err));
+            });
 
-            interludeVideo.onended = () => {
-                music.volume = 0.2;
-                // ...ฟังก์ชัน endClip ของคุณ
-            };
+            interludeVideo.addEventListener("ended", () => {
+                music.volume = 0.2; // กลับมาเสียงปกติ
+                music.play().catch(err => console.log("Autoplay error:", err));
+                renderQuestion();
+            });
 
             answeredCurrentQuestion = false;
         }
