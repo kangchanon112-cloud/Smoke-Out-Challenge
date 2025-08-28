@@ -1,58 +1,43 @@
 ///////////////////////////// เริ่มต้นแสดง section1//////////////////////////
 document.getElementById('section0').classList.add('active');
 
- const music = document.getElementById("bgMusic");
+const music = document.getElementById("bgMusic");
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+const musicSource = audioCtx.createMediaElementSource(music);
+const gainNode = audioCtx.createGain();
 
-        // โหลดเวลาที่เคยบันทึกไว้
-        const savedTime = localStorage.getItem("musicTime");
-        if (savedTime) {
-            music.currentTime = parseFloat(savedTime);
-        }
+musicSource.connect(gainNode).connect(audioCtx.destination);
+gainNode.gain.value = 0.2; // ตั้งค่าเริ่มต้น
 
-        // ฟังก์ชันเล่นเพลง
-        function startMusicOnce() {
-            if (music.paused) {
-                music.volume = 0.2;
-                music.play().catch(err => console.log("Autoplay blocked:", err));
-            }
-
-            // บันทึกเวลาตอนเล่น
-            setInterval(() => {
-                if (!music.paused) {
-                    localStorage.setItem("musicTime", music.currentTime);
-                }
-            }, 1000);
-
-            // ลบ listener หลังครั้งแรก
-            document.removeEventListener("click", startMusicOnce, true);
-            document.removeEventListener("touchstart", startMusicOnce, true);
-            document.removeEventListener("keydown", startMusicOnce, true);
-        }
-
-        // ฟังทุก interaction
-        document.addEventListener("click", startMusicOnce, { once: true, capture: true });
-        document.addEventListener("touchstart", startMusicOnce, { once: true, capture: true });
-        document.addEventListener("keydown", startMusicOnce, { once: true, capture: true });
-
-
-
-
-// --- จัดการคลิปเสียง (voice) ---
+// ลดเสียงเมื่อเล่น voice
 const voices = document.querySelectorAll("audio[id^='voice']");
-
 voices.forEach(voice => {
   voice.addEventListener("play", () => {
-    music.volume = 0.05; // เบาลงตอนเสียงบรรยายเล่น
+    gainNode.gain.setTargetAtTime(0.05, audioCtx.currentTime, 0.01);
   });
-
   voice.addEventListener("ended", () => {
-    music.volume = 0.2; // กลับมาเสียงปกติ
+    gainNode.gain.setTargetAtTime(0.2, audioCtx.currentTime, 0.01);
   });
-
   voice.addEventListener("pause", () => {
-    music.volume = 0.2; // เผื่อ user หยุดกลางคัน
+    gainNode.gain.setTargetAtTime(0.2, audioCtx.currentTime, 0.01);
   });
 });
+
+// เล่นเพลงหลัง interaction
+function startMusicOnce() {
+  if (music.paused) {
+    audioCtx.resume().then(() => {
+      music.play().catch(err => console.log("Autoplay blocked:", err));
+    });
+  }
+  document.removeEventListener("click", startMusicOnce, true);
+  document.removeEventListener("touchstart", startMusicOnce, true);
+  document.removeEventListener("keydown", startMusicOnce, true);
+}
+document.addEventListener("click", startMusicOnce, { once: true, capture: true });
+document.addEventListener("touchstart", startMusicOnce, { once: true, capture: true });
+document.addEventListener("keydown", startMusicOnce, { once: true, capture: true });
+
 
 
 
