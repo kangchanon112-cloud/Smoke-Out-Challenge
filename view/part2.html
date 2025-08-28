@@ -462,16 +462,18 @@
 
         videos.forEach(video => {
             video.addEventListener('play', () => {
-                music.volume = 0.05; // ลดเสียงตอน video เล่น
+                music.volume = 0.05; // ลดเสียง bgMusic
             });
 
-            video.addEventListener('pause', () => {
-                music.volume = 0.2; // กลับมาเสียงปกติ
-            });
+            function restoreMusicVolume() {
+                music.volume = 0.2; // คืนเสียง bgMusic
+                if (music.paused) {
+                    music.play().catch(err => console.log("Autoplay blocked:", err));
+                }
+            }
 
-            video.addEventListener('ended', () => {
-                music.volume = 0.2; // กลับมาเสียงปกติ
-            });
+            video.addEventListener('pause', restoreMusicVolume);
+            video.addEventListener('ended', restoreMusicVolume);
         });
 
 
@@ -490,7 +492,6 @@
 
 
         document.body.addEventListener('click', function (e) {
-            // ถ้า click บน video หรือ button ให้ return
             if (e.target.tagName === 'VIDEO' || e.target.tagName === 'BUTTON' || e.target.closest('.arrow-text')) {
                 return;
             }
@@ -505,24 +506,25 @@
 
             const currentSectionId = activeSectionIds[currentIndex];
 
-            // ป้องกัน section ที่ไม่ให้ข้าม
             if (currentSectionId === 'section11' || currentSectionId === 'section13') return;
 
-            // หยุด video
+            // ปิด section ปัจจุบัน
+            document.getElementById(currentSectionId).classList.remove('active');
+
+            // หยุด video และ reset volume
             const videos = document.querySelectorAll('video');
             videos.forEach(v => {
                 v.pause();
                 v.currentTime = 0;
             });
-
-            // ปิด section ปัจจุบัน
-            document.getElementById(currentSectionId).classList.remove('active');
+         
 
             // เปิด section ถัดไป
             if (currentIndex + 1 < activeSectionIds.length) {
                 document.getElementById(activeSectionIds[currentIndex + 1]).classList.add('active');
             }
         });
+
 
 
 
