@@ -435,29 +435,33 @@
     <audio id="bgMusic" src="/public/img/part1/m2.mp3" loop></audio>
     <script>
 
-         const music = document.getElementById("bgMusic");
-        // ให้เพลงเริ่มเล่นหลังจาก user คลิกครั้งแรก (กัน autoplay block)
-        document.body.addEventListener("click", () => {
-            if (music.paused) {
-                music.volume = 0.2;
-                music.play().catch(err => console.log("Autoplay blocked:", err));
-            }
-        }, { once: true });
-        const videos = document.querySelectorAll('video'); // <-- ต้องประกาศก่อน
+       const music = document.getElementById("bgMusic");
 
-        videos.forEach(video => {
-            video.addEventListener('play', () => {
-                music.volume = 0.05; // ลดเสียงเพลงตอนวิดีโอเล่น
-            });
+// เล่นเพลงทุกครั้งที่แตะ (resume ถ้า pause)
+document.body.addEventListener("click", () => {
+    if (music.paused) {
+        music.volume = 0.2;
+        music.play().catch(err => console.log("Autoplay blocked:", err));
+    }
+});
 
-            video.addEventListener('pause', () => {
-                music.volume = 0.2; // กลับมาเสียงปกติ
-            });
+// ลดเสียงเพลงตอนเล่นวิดีโอ
+const videos = document.querySelectorAll('video');
 
-            video.addEventListener('ended', () => {
-                music.volume = 0.2; // กลับมาเสียงปกติ
-            });
-        });
+videos.forEach(video => {
+    video.addEventListener('play', () => {
+        music.volume = 0.05; // ลดเสียงตอน video เล่น
+    });
+
+    video.addEventListener('pause', () => {
+        music.volume = 0.2; // กลับมาเสียงปกติ
+    });
+
+    video.addEventListener('ended', () => {
+        music.volume = 0.2; // กลับมาเสียงปกติ
+    });
+});
+
 
 
         document.getElementById('section1').classList.add('active');
@@ -543,3 +547,4 @@
 
 
 </html>
+
