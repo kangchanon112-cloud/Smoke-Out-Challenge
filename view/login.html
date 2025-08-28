@@ -108,7 +108,8 @@
                         try {
                             const resPart = await fetch('/admin/get-part-status');
                             const parts = await resPart.json();
-                            localStorage.setItem("playMusicAfterLogin", "true");
+                         
+                            localStorage.setItem("userClickedLogin", "true");
                             let redirectPage = '';
                             if (parts.part1) redirectPage = 'part1';
                             else if (parts.part2) redirectPage = 'part2';
