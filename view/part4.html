@@ -179,7 +179,7 @@
             transform: scale(1.2);
         }
 
-            .floating-static {
+        .floating-static {
             position: absolute;
             font-size: 1.5rem;
             color: #333;
@@ -188,6 +188,7 @@
             padding: 12px 20px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
         }
+
         .center-expand {
             position: absolute;
             top: 50%;
@@ -709,7 +710,7 @@
 
         document.body.addEventListener('click', function (e) {
             const activeSectionIds = [
-                 'section0', 'section1', 'section2', 'section3', 'section4', 'section5', 'section6', 'section7', 'section8', 'section9'
+                'section0', 'section1', 'section2', 'section3', 'section4', 'section5', 'section6', 'section7', 'section8', 'section9'
 
             ];
 
@@ -718,7 +719,7 @@
 
             // ห้ามข้าม section3 และ section12
             const currentSectionId = activeSectionIds[currentIndex];
-            if (currentSectionId === 'section0' ||currentSectionId === 'section1' || currentSectionId === 'section3' || currentSectionId === 'section9') {
+            if (currentSectionId === 'section0' || currentSectionId === 'section1' || currentSectionId === 'section3' || currentSectionId === 'section9') {
                 return;
             }
 
@@ -760,9 +761,7 @@
         function openSectionFromHash() {
             const hash = window.location.hash.replace('#', '');
             if (hash) {
-                const allSections = document.querySelectorAll(
-                    ' #section1, #section4, #section5'
-                );
+                const allSections = document.querySelectorAll('[id^="section"]'); // เลือกทุก section
                 allSections.forEach(sec => sec.classList.remove('active'));
 
                 const targetSection = document.getElementById(hash);
