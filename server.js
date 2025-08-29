@@ -28,15 +28,15 @@ mongoose.connect('mongodb+srv://test:099227@test.jcccez1.mongodb.net/?retryWrite
     .catch(err => console.error('❌ MongoDB connection error:', err));
 
 
-io.on('connection', (socket) => {
-    console.log('ผู้ใช้เชื่อมต่อแล้ว');
-
-    socket.on('sendSticker', (sticker) => {
-        io.emit('receiveSticker', sticker);
+io.on("connection", (socket) => {
+    // สำหรับ section1
+    socket.on("sendSticker-sec1", (msg) => {
+        io.emit("receiveSticker-sec1", msg);
     });
 
-    socket.on('disconnect', () => {
-        console.log('ผู้ใช้ออกจากเว็บ');
+    // สำหรับ section0 (Part 3)
+    socket.on("sendSticker-part3", (msg) => {
+        io.emit("receiveSticker-part3", msg);
     });
 });
 
@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
-  
+
 });
 
 
@@ -77,7 +77,7 @@ app.post('/register', async (req, res) => {
         await newUser.save();
 
         // สร้างคะแนนเริ่มต้นใน DB พร้อม userId
-    
+
         // ส่ง userId กลับ client
         res.json({ success: true, message: 'สมัครสมาชิกเรียบร้อย!', userId: newUser._id });
 
