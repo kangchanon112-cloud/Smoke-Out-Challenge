@@ -91,14 +91,14 @@ const stickers = document.querySelectorAll('#stickers .sticker');
 
 // ฟังก์ชันส่งสติ๊กเกอร์
 function sendSticker(sticker) {
-  socket.emit('sendSticker', sticker);
+  socket.emit('sendSticker-part1', sticker);
 }
 
 // ฟังก์ชันส่งข้อความ (ส่งเป็น "sticker" เหมือนกัน)
 function sendMessage() {
   const text = messageInput.value.trim();
   if (!text) return;
-  socket.emit('sendSticker', text); // ถ้าต้องการแยก message กับ sticker ต้องสร้าง event ใหม่
+  socket.emit('sendSticker-part1', text); // ถ้าต้องการแยก message กับ sticker ต้องสร้าง event ใหม่
   messageInput.value = '';
 }
 
