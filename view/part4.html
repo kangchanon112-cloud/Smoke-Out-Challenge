@@ -24,6 +24,7 @@
             overflow: hidden;
         }
 
+        #section0,
         #section1,
         #section2,
         #section3,
@@ -54,6 +55,7 @@
         }
 
         /* แสดง section ที่ active */
+        #section0.active,
         #section1.active,
         #section2.active,
         #section3.active,
@@ -177,12 +179,15 @@
             transform: scale(1.2);
         }
 
-        .floating {
+            .floating-static {
             position: absolute;
-            font-size: 2rem;
-            animation: floatUp 3s ease-out forwards;
+            font-size: 1.5rem;
+            color: #333;
+            background: #e6dccf;
+            border-radius: 25px;
+            padding: 12px 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
         }
-
         .center-expand {
             position: absolute;
             top: 50%;
@@ -404,17 +409,111 @@
             /* เปลี่ยนสีข้อความตามสีเมฆ */
             white-space: nowrap;
         }
+
+
+        /* Floating messages สำหรับ Part 3 */
+        #display-part3 .floating {
+            position: absolute;
+            font-size: 50px;
+            animation: floatUp 3s linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-300px);
+                opacity: 0;
+            }
+        }
+
+        /* กล่องข้อความมินิมอล สำหรับ Part 3 */
+        #inputBox-part3 {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            background: #ffe9c4;
+            padding: 15px 20px;
+            border-radius: 25px;
+            border: 1px solid rgba(0, 0, 0, 0.266);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        #message-part3 {
+            width: 250px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            outline: none;
+            background: #fef7e4c8;
+        }
+
+        #sendBtn-part3 {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 20px;
+            background: #ffa813bb;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        #sendBtn-part3:hover {
+            background: #dd8a0c;
+        }
+
+        /* Stickers สำหรับ Part 3 */
+        #stickers-part3 {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        #stickers-part3 .sticker {
+            font-size: 35px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        #stickers-part3 .sticker:hover {
+            transform: scale(1.2);
+        }
     </style>
 
 </head>
 
 <body>
+    <div class="text-center" id="section0">
+        <div id="display-part3"></div>
+        <h2 class="mb-4">วันนี้รู้สึกอย่างไรบ้าง</h2>
+        <div id="inputBox">
+            <input type="text" id="message-part3" placeholder="พิมพ์ข้อความหรือ emoji...">
+            <button id="sendBtn-part3">ส่ง</button>
+        </div>
+
+        <div id="stickers-part3">
+            <span class="sticker" data-sticker="😀">😀</span>
+            <span class="sticker" data-sticker="🔥">🔥</span>
+            <span class="sticker" data-sticker="🎉">🎉</span>
+        </div>
+        <div class="ma">
+            <a href="#" id="nextBtn0" class="arrow-text">แตะเพื่อไปต่อ</a>
+        </div>
+    </div>
+
 
     <!-- ส่วนที่ 1 -->
     <div class="text-center bg" id="section1">
         <div id="display"></div>
 
-        <h2 class="mb-4 boxed">กลิ่นหรือรสของบุหรี่ไฟฟ้า เด็กคิดว่ามีผลทําให้คนอยากลองไหม?</h2>
+        <h2 class="mb-4 boxed">เด็ก ๆ มีวิธีปฏิเสธอย่างไร เมื่อถูกชักชวนให้สูบบุหรี่</h2>
 
 
         <div class="ma5">
@@ -569,9 +668,10 @@
 
 
 
-        document.getElementById('section1').classList.add('active');
+        document.getElementById('section0').classList.add('active');
 
         const nextBtn1 = document.getElementById('nextBtn1');
+        const nextBtn0 = document.getElementById('nextBtn0');
         function clearFloatingMessages() {
             const floatingMessages = document.querySelectorAll('body > div');
             floatingMessages.forEach(msg => {
@@ -590,6 +690,13 @@
             document.getElementById('section2').classList.add('active');
             clearFloatingMessages(); // ล้างข้อความลอย
         });
+        nextBtn0.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('section0').classList.remove('active');
+            document.getElementById('section1').classList.add('active');
+            clearFloatingMessages(); // ล้างข้อความลอย
+        });
 
         document.getElementById('nextBtn2').addEventListener('click', (e) => {
             e.preventDefault();
@@ -602,7 +709,7 @@
 
         document.body.addEventListener('click', function (e) {
             const activeSectionIds = [
-                'section1', 'section2', 'section3', 'section4', 'section5', 'section6', 'section7', 'section8', 'section9'
+                 'section0', 'section1', 'section2', 'section3', 'section4', 'section5', 'section6', 'section7', 'section8', 'section9'
 
             ];
 
@@ -611,7 +718,7 @@
 
             // ห้ามข้าม section3 และ section12
             const currentSectionId = activeSectionIds[currentIndex];
-            if (currentSectionId === 'section1' || currentSectionId === 'section3' || currentSectionId === 'section9') {
+            if (currentSectionId === 'section0' ||currentSectionId === 'section1' || currentSectionId === 'section3' || currentSectionId === 'section9') {
                 return;
             }
 
@@ -674,23 +781,28 @@
 
         const messageInput = document.getElementById('message');
         const sendBtn = document.getElementById('sendBtn');
+        const section1Display = document.getElementById('display'); // container ของ section1
 
-        // ฟังก์ชันโชว์ข้อความลอย
+        const section1 = document.getElementById('section1'); // parent ของ floating message
+
         function showFloatingMessage(msg) {
             const el = document.createElement('div');
             el.textContent = msg;
+            el.className = 'floating';
+
+            const width = section1.offsetWidth || window.innerWidth;
+            const height = section1.offsetHeight || window.innerHeight;
+
+            const randomX = Math.random() * (width - 250);
+            const randomY = Math.random() * (height - 50);
+
             el.style.position = 'absolute';
-
-
-            const randomX = Math.random() * (window.innerWidth - 250);
-            const randomY = Math.random() * (window.innerHeight - 50);
-
             el.style.left = randomX + 'px';
             el.style.top = randomY + 'px';
-
-            el.style.color = '#333'; // ตัวอักษรสีเข้ม
-            el.style.background = '#e6dccf'; // ครีมอ่อน
-            el.style.border = '1px solid #e0d8c3'; // ขอบอ่อน
+            const lightColors = ['#fff3e0', '#e0f7fa', '#f3e5f5', '#e8f5e9', '#fffde7'];
+            el.style.background = lightColors[Math.floor(Math.random() * lightColors.length)];
+            el.style.color = '#555';  // ตัวอักษรสีเทาเข้มเล็กน้อย
+            el.style.border = '1px solid #e0d8c3';
             el.style.fontSize = '1.5rem';
             el.style.fontWeight = '600';
             el.style.padding = '12px 20px';
@@ -701,16 +813,20 @@
             el.style.textShadow = '1px 2px 6px rgba(0,0,0,0.3)';
             el.style.transition = 'transform 0.5s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s ease-out';
 
-            document.body.appendChild(el);
+            section1.appendChild(el);
 
+            // แค่ขยายเข้ามา ไม่ลอย
             requestAnimationFrame(() => {
                 el.style.transform = 'scale(1) rotate(0deg)';
                 el.style.opacity = '1';
             });
+
+            // ไม่ลบข้อความ
         }
 
+
         // รับข้อความจาก server ทุกคน
-        socket.on('receiveSticker', (msg) => {
+        socket.on('receiveSticker-sec1', (msg) => {
             showFloatingMessage(msg);
         });
 
@@ -718,7 +834,7 @@
         function handleSend() {
             const text = messageInput.value.trim();
             if (!text) return;
-            socket.emit('sendSticker', text); // ส่งไป server
+            socket.emit('sendSticker-sec1', text);  // ส่งไป server
             messageInput.value = '';
         }
 
@@ -726,6 +842,61 @@
         messageInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') handleSend();
         });
+
+
+
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // ประกาศ socket ก่อนใช้งาน
+        const part3Socket = io();  // เปลี่ยนชื่อ socket
+
+        // ดึง element (สำหรับ Part 3)
+        const part3Display = document.getElementById('display-part3');   // เปลี่ยน id ใน HTML เป็น display-part3
+        const part3MessageInput = document.getElementById('message-part3'); // เปลี่ยน id เป็น message-part3
+        const part3SendBtn = document.getElementById('sendBtn-part3');      // เปลี่ยน id เป็น sendBtn-part3
+        const part3Stickers = document.querySelectorAll('#stickers-part3 .sticker'); // เปลี่ยน id เป็น stickers-part3
+
+        // ฟังก์ชันส่งสติ๊กเกอร์
+        function sendStickerPart3(sticker) {
+            part3Socket.emit('sendSticker-part3', sticker);
+        }
+        // ฟังก์ชันส่งข้อความ (ส่งเป็น "sticker" เหมือนกัน)
+        function sendMessagePart3() {
+            const text = part3MessageInput.value.trim();
+            if (!text) return;
+            part3Socket.emit('sendSticker-part3', text);
+            part3MessageInput.value = '';
+        }
+        // ผูก event
+        part3SendBtn.addEventListener('click', sendMessagePart3);
+        part3MessageInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') sendMessagePart3();
+        });
+
+        // ผูก event ให้สติ๊กเกอร์
+        part3Stickers.forEach(sticker => {
+            sticker.addEventListener('click', () => {
+                sendStickerPart3(sticker.textContent);
+            });
+        });
+
+        // รับสติ๊กเกอร์/ข้อความจาก server แล้วแสดง animation
+        part3Socket.on('receiveSticker-part3', (sticker) => {
+            const s = document.createElement('div');
+            s.textContent = sticker;
+            s.className = 'floating';
+            s.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+            s.style.top = window.innerHeight + 'px';
+            part3Display.appendChild(s);
+
+            setTimeout(() => {
+                if (s && s.parentNode) {
+                    s.remove();
+                }
+            }, 3000);
+        });
+
 
 
         const totalScoreEl = document.getElementById("totalScore");
