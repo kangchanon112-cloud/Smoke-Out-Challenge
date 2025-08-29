@@ -11,7 +11,7 @@ export const questions = [
   {
     id: 'q1.3',
     question: 'อาการปอดที่ระคายเคืองจากสารปรุงแต่งกลิ่นรสชาติเรียกว่า _______',
-    correctAnswer: ["ป๊อปคอร์น ลัง", "Popcorn Lung", "Popcorn lung", "popcorn Lung", "popcorn lung"],
+    correctAnswer: ["ป๊อปคอร์น ลัง", "ป๊อปคอร์นลัง","Popcorn Lung", "Popcorn lung", "popcorn Lung", "popcorn lung"],
     score: 1
   }
 
@@ -102,3 +102,4 @@ export const questions4 = [
     id: 'q4.6', img: '/public/img/b.png', question: 'ไปงานวันเกิดเพื่อนรุ่นพี่แล้วถูกชักชวนให้ลองสูบบุหรี่', options:
       [{ text: '• ลองสูบสักครั้ง ถือเป็นของขวัญวันเกิดให้รุ่นพี', score: 0 }, { text: '• ไว้คราวหน้าแล้วกันนะครับพี่ ตอนนี้ผมยังไม่พร้อมเลย ต้องรีบกลับบ้านแล้วด้วยครับ', score: 1 }]
   }];
+
