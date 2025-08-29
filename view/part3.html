@@ -29,16 +29,7 @@
         #section2,
         #section3,
         #section4,
-        #section5,
-        #section6,
-        #section7,
-        #section8,
-        #section9,
-        #section10,
-        #section11,
-        #section12,
-        #section13,
-        #section14 {
+        #section5 {
             display: none !important;
             width: 100%;
             height: 100%;
@@ -60,16 +51,7 @@
         #section2.active,
         #section3.active,
         #section4.active,
-        #section5.active,
-        #section6.active,
-        #section7.active,
-        #section8.active,
-        #section9.active,
-        #section10.active,
-        #section11.active,
-        #section12.active,
-        #section13.active,
-        #section14.active {
+        #section5.active {
             display: flex !important;
         }
 
@@ -444,7 +426,6 @@
     </div>
 
 
-
     <!-- ส่วนที่ 4 -->
     <div class="bg3 text-center" id="section4">
         <h3 class="fw-bold my-5 quote" style="color: #15881b;">
@@ -544,7 +525,7 @@
 
         document.getElementById('nextBtn2').addEventListener('click', (e) => {
             e.preventDefault();
-            document.getElementById('section3').classList.remove('active');
+            document.getElementById('section2').classList.remove('active');
             localStorage.setItem("musicTime", music.currentTime);
             window.location.href = "quiz3";
         });
@@ -560,9 +541,9 @@
             let currentIndex = activeSectionIds.findIndex(id => document.getElementById(id).classList.contains('active'));
             if (currentIndex === -1) return;
 
-            // ห้ามข้าม section3 และ section12
+
             const currentSectionId = activeSectionIds[currentIndex];
-            if (currentSectionId === 'section0' || currentSectionId === 'section1' || currentSectionId === 'section5' || currentSectionId === 'section2') {
+            if (currentSectionId === 'section0' || currentSectionId === 'section1' || currentSectionId === 'section2' || currentSectionId === 'section5') {
                 return;
             }
 
@@ -579,9 +560,7 @@
         function openSectionFromHash() {
             const hash = window.location.hash.replace('#', '');
             if (hash) {
-                const allSections = document.querySelectorAll(
-                    ' #section1, #section4, #section5'
-                );
+                const allSections = document.querySelectorAll('[id^="section"]'); // เลือกทุก section
                 allSections.forEach(sec => sec.classList.remove('active'));
 
                 const targetSection = document.getElementById(hash);
@@ -590,6 +569,7 @@
                 }
             }
         }
+
         openSectionFromHash();
         ////////////////////////////////////////////////////////////////////////////
 
