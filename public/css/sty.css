@@ -318,7 +318,7 @@
 
  @media (max-width: 768px) {
    .bg7 {
-     background-position: right 0% top 85%, left 0% top 90%, left 0% top 60%, right 5% top 65%;
+     background-position: right 0% top 90%, left 0% top 95%, left 0% top 65%, right 5% top 70%;
    }
  }
 
@@ -385,7 +385,7 @@
  }
 
  #sendBtn:hover {
-   background: #0056b3;
+   background: #dd8a0c;
  }
 
 
