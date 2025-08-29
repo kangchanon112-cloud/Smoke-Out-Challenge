@@ -91,14 +91,14 @@ const stickers = document.querySelectorAll('#stickers .sticker');
 
 // ฟังก์ชันส่งสติ๊กเกอร์
 function sendSticker(sticker) {
-  socket.emit('sendSticker-part1', sticker);
+  socket.emit('sendSticker-sec1', sticker);
 }
 
 // ฟังก์ชันส่งข้อความ (ส่งเป็น "sticker" เหมือนกัน)
 function sendMessage() {
   const text = messageInput.value.trim();
   if (!text) return;
-  socket.emit('sendSticker-part1', text); // ถ้าต้องการแยก message กับ sticker ต้องสร้าง event ใหม่
+  socket.emit('sendSticker-sec1', text); // ถ้าต้องการแยก message กับ sticker ต้องสร้าง event ใหม่
   messageInput.value = '';
 }
 
@@ -116,7 +116,7 @@ stickers.forEach(sticker => {
 });
 
 // รับสติ๊กเกอร์/ข้อความจาก server แล้วแสดง animation
-socket.on('receiveSticker', (sticker) => {
+socket.on('receiveSticker-sec1', (sticker) => {
   const s = document.createElement('div');
   s.textContent = sticker;
   s.className = 'floating';
