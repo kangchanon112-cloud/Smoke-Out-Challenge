@@ -13,48 +13,34 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-// Middlewares
 app.use(cors());
-app.use(express.json()); // ต้องอยู่ก่อน route
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'view')));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-
-// เชื่อม MongoDB
 mongoose.connect('mongodb+srv://test:099227@test.jcccez1.mongodb.net/?retryWrites=true&w=majority&appName=test', {
 
 })
     .then(() => console.log('✅ Connected to MongoDB'))
     .catch(err => console.error('❌ MongoDB connection error:', err));
 
-
 io.on("connection", (socket) => {
-    // สำหรับ section1
     socket.on("sendSticker-sec1", (msg) => {
         io.emit("receiveSticker-sec1", msg);
     });
-
-    // สำหรับ section0 (Part 3)
     socket.on("sendSticker-part3", (msg) => {
         io.emit("receiveSticker-part3", msg);
     });
 });
 
-
-// Schema สำหรับผู้ใช้
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
-
 });
-
 
 const User = mongoose.model('User', userSchema);
 
-
-
-//
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
@@ -62,23 +48,17 @@ app.post('/register', async (req, res) => {
     }
 
     try {
-        // ตรวจสอบ username ซ้ำ
         const existingUser = await User.findOne({ username });
         if (existingUser) {
             return res.status(400).json({ success: false, message: 'ชื่อผู้ใช้นี้มีอยู่แล้ว' });
         }
 
-        // สร้างผู้ใช้ใหม่ (เก็บ password เป็น plaintext)
         const newUser = new User({
             username,
-            password, // ไม่เข้ารหัส
+            password,
             role: 'user'
         });
         await newUser.save();
-
-        // สร้างคะแนนเริ่มต้นใน DB พร้อม userId
-
-        // ส่ง userId กลับ client
         res.json({ success: true, message: 'สมัครสมาชิกเรียบร้อย!', userId: newUser._id });
 
     } catch (err) {
@@ -86,8 +66,6 @@ app.post('/register', async (req, res) => {
     }
 });
 
-
-// ------------------- Login -------------------
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password)
@@ -98,16 +76,15 @@ app.post('/login', async (req, res) => {
         if (!user)
             return res.status(400).json({ success: false, message: 'ผู้ใช้ไม่ถูกต้อง' });
 
-        const isMatch = password === user.password; // ถ้าต้องเข้ารหัส ให้ใช้ bcrypt.compare
+        const isMatch = password === user.password;
         if (!isMatch)
             return res.status(400).json({ success: false, message: 'รหัสผ่านไม่ถูกต้อง' });
 
-        // ส่ง role กลับด้วย
         res.json({
             success: true,
             message: 'เข้าสู่ระบบเรียบร้อย',
             userID: user._id,
-            role: user.role  // <-- เพิ่มตรงนี้
+            role: user.role
         });
 
     } catch (err) {
@@ -115,13 +92,6 @@ app.post('/login', async (req, res) => {
     }
 });
 
-
-// backend.js (server)
-// ตัวอย่าง server.js
-// Schema สำหรับเก็บสถานะ part
-// กำหนดค่าเริ่มต้น
-// ====================== Part Status ======================
-// Schema สำหรับเก็บสถานะ part
 const partSchema = new mongoose.Schema({
     part1: { type: Boolean, default: true },
     part2: { type: Boolean, default: true },
@@ -129,13 +99,10 @@ const partSchema = new mongoose.Schema({
     part4: { type: Boolean, default: true }
 });
 
-// Model
 const PartStatus = mongoose.model('PartStatus', partSchema);
 
-// กำหนดค่าเริ่มต้น
 let partStatus = { part1: true, part2: true, part3: true, part4: true };
 
-// โหลดสถานะจาก DB ตอน server start
 async function loadPartStatus() {
     let doc = await PartStatus.findOne();
     if (doc) partStatus = doc.toObject();
@@ -146,25 +113,20 @@ async function loadPartStatus() {
 }
 loadPartStatus();
 
-// GET สถานะ part
 app.get('/admin/get-part-status', (req, res) => {
     res.json(partStatus);
 });
 
-// POST toggle part
 app.post('/admin/toggle-part', async (req, res) => {
     try {
         const { part } = req.body;
         if (![1, 2, 3, 4].includes(part)) return res.status(400).json({ success: false });
 
-        // ตั้งทุก part เป็น false
         partStatus = { part1: false, part2: false, part3: false, part4: false };
 
-        // เปิดเฉพาะ part ที่เลือก
         const key = `part${part}`;
         partStatus[key] = true;
 
-        // อัปเดตใน DB
         let doc = await PartStatus.findOne();
         if (!doc) {
             doc = new PartStatus(partStatus);
@@ -183,17 +145,13 @@ app.post('/admin/toggle-part', async (req, res) => {
     }
 });
 
-
-
-// Schema สำหรับเก็บคำตอบ
 const answerSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    questionId: { type: String, required: true }, // เปลี่ยนจาก question เป็น questionId
+    questionId: { type: String, required: true },
     answer: { type: String, required: true },
     date: { type: Date, default: Date.now }
 });
 
-// สร้าง Model
 const Answer = mongoose.model('Answer', answerSchema);
 
 app.post('/submit-answer', async (req, res) => {
@@ -211,24 +169,20 @@ app.post('/submit-answer', async (req, res) => {
     }
 });
 
-
 const quizScoreSchema = new mongoose.Schema({
     userID: { type: String, required: true },
     quizNumber: { type: Number, required: true },
     score: { type: Number, required: true }
 });
 
-// unique index ป้องกันซ้ำ
 quizScoreSchema.index({ userID: 1, quizNumber: 1 }, { unique: true });
 
 const QuizScore = mongoose.model("QuizScore", quizScoreSchema);
 
-// API: บันทึกคะแนน
 app.post("/saveScore", async (req, res) => {
     try {
         const { userID, quizNumber, score } = req.body;
 
-        // หา record เดิม
         const existing = await QuizScore.findOne({ userID, quizNumber });
 
         if (existing) {
@@ -250,11 +204,6 @@ app.post("/saveScore", async (req, res) => {
     }
 });
 
-
-
-
-
-// Schema เก็บข้อมูลผู้ใช้เพิ่มเติม
 const profileSchema = new mongoose.Schema({
     userID: { type: String, required: true },
     name: { type: String, required: true },
@@ -265,7 +214,6 @@ const profileSchema = new mongoose.Schema({
 
 const Profile = mongoose.model('Profile', profileSchema);
 
-// Route บันทึกข้อมูลโปรไฟล์
 app.post('/save-profile', async (req, res) => {
     const { name, age, gender, userID } = req.body;
 
@@ -274,13 +222,11 @@ app.post('/save-profile', async (req, res) => {
     }
 
     try {
-        // ตรวจสอบ userId ก่อน
         const user = await User.findById(userID);
         if (!user) {
             return res.status(404).json({ success: false, message: 'ไม่พบผู้ใช้' });
         }
 
-        // สร้าง profile พร้อมเชื่อม user
         const newProfile = new Profile({ name, age, gender, userID });
         await newProfile.save();
 
@@ -290,14 +236,13 @@ app.post('/save-profile', async (req, res) => {
     }
 });
 
-// API: รวมคะแนนทั้งหมดของ userID
 app.get("/totalScore/:userID", async (req, res) => {
     try {
         const { userID } = req.params;
 
         const result = await QuizScore.aggregate([
-            { $match: { userID } },                // เลือกเฉพาะ userID
-            { $group: { _id: "$userID", total: { $sum: "$score" } } } // รวมคะแนน
+            { $match: { userID } },
+            { $group: { _id: "$userID", total: { $sum: "$score" } } }
         ]);
 
         if (result.length === 0) {
@@ -311,6 +256,31 @@ app.get("/totalScore/:userID", async (req, res) => {
     }
 });
 
+const feedbackSchema = new mongoose.Schema({
+    userID: { type: String, required: true },
+    rating: { type: Number, required: true },
+    feedback: { type: String },
+    date: { type: Date, default: Date.now }
+});
+
+const Feedback = mongoose.model("Feedback", feedbackSchema);
+
+app.post("/submit-feedback", async (req, res) => {
+    const { userID, rating, feedback } = req.body;
+
+    if (!userID || !rating) {
+        return res.status(400).json({ success: false, message: "กรุณาเลือกคะแนนก่อนส่ง" });
+    }
+
+    try {
+        const newFeedback = new Feedback({ userID, rating, feedback });
+        await newFeedback.save();
+        res.json({ success: true, message: "ส่งข้อเสนอแนะเรียบร้อย!" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: "เกิดข้อผิดพลาดในการส่งข้อมูล" });
+    }
+});
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'view', 'index.html'));
@@ -349,8 +319,7 @@ app.get('/quiz4', (req, res) => {
     res.sendFile(path.join(__dirname, 'view', 'quiz4.html'));
 });
 
-
-const PORT = process.env.PORT || 3000; // ใช้ port ของ Render หรือ fallback เป็น 3000
+const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
