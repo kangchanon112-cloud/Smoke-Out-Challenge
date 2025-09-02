@@ -34,18 +34,13 @@
             width: 100%;
             height: 100%;
             padding: 0 50px;
-            /* กันชิดขอบ */
             box-sizing: border-box;
-
             flex-direction: column;
             justify-content: center;
-            /* กึ่งกลางแนวตั้ง */
             align-items: center;
-            /* กึ่งกลางแนวนอน */
             text-align: center;
         }
 
-        /* แสดง section ที่ active */
         #section0.active,
         #section1.active,
         #section2.active,
@@ -58,9 +53,7 @@
 
         .quote {
             max-width: 700px;
-            /* จำกัดความกว้าง */
             margin: 0 auto;
-            /* กึ่งกลางแนวนอน */
             line-height: 1.8;
             font-style: italic;
             color: #555555;
@@ -89,23 +82,18 @@
 
         .section {
             min-height: 100vh;
-            /* อย่างน้อยเต็มจอ */
             width: 100%;
             padding: 20px;
             box-sizing: border-box;
-
             display: flex;
             flex-direction: column;
             justify-content: center;
-            /* กึ่งกลางแนวตั้ง */
             align-items: center;
-            /* กึ่งกลางแนวนอน */
             text-align: center;
         }
 
 
-
-        /* กล่องข้อความมินิมอล */
+        /* //////////////////////////////// */
         #inputBox {
             display: flex;
             flex-direction: row;
@@ -171,7 +159,6 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
         }
 
-
         .center-expand {
             position: absolute;
             top: 50%;
@@ -198,17 +185,12 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            /* ชิดบน */
             align-items: center;
             height: 100vh;
             padding: 60px;
-
             box-sizing: border-box;
             position: relative;
         }
-
-
-        /* ///////////////////////////////////////////////////// */
 
         .ma {
             position: absolute;
@@ -230,7 +212,6 @@
             background-size: 8rem, 8rem, 8rem;
             background-repeat: no-repeat, no-repeat, no-repeat;
             background-position: right 0% top 100%, left 0% top 100%, right 0% top 0%;
-            /* เว้นเป็น % */
             width: 95vw;
             height: 95vh;
             margin: 0;
@@ -242,7 +223,6 @@
             background-size: 20rem;
             background-repeat: no-repeat;
             background-position: right 50% top 50%;
-            /* เว้นเป็น % */
             width: 95vw;
             height: 95vh;
             margin: 0;
@@ -254,7 +234,6 @@
             background-size: clamp(400px, 50vw, 800px);
             background-repeat: no-repeat;
             background-position: right 50% top 50%;
-            /* เว้นเป็น % */
             width: 95vw;
             height: 95vh;
             margin: 0;
@@ -266,8 +245,6 @@
             background-size: clamp(450px, 50vw, 800px), clamp(100px, 25vw, 280px);
             background-repeat: no-repeat, no-repeat;
             background-position: right 50% top 50%, right 1% top 100%;
-            ;
-            /* เว้นเป็น % */
             width: 95vw;
             height: 95vh;
             margin: 0;
@@ -276,19 +253,15 @@
 
         .boxed {
             border: 2px solid #6b4f3f;
-            /* เส้นกรอบ */
             border-radius: 10px;
-            /* มุมโค้ง */
             padding: 15px;
-            /* ระยะห่างข้อความกับกรอบ */
             background-color: #fff6ec23;
-            /* พื้นหลังอ่อนๆ */
             display: inline-block;
-            /* ให้กรอบพอดีกับข้อความ */
+
         }
 
 
-        /* Floating messages สำหรับ Part 3 */
+
         #display-part3 .floating {
             position: absolute;
             font-size: 50px;
@@ -307,7 +280,7 @@
             }
         }
 
-        /* กล่องข้อความมินิมอล สำหรับ Part 3 */
+
         #inputBox-part3 {
             display: flex;
             flex-direction: row;
@@ -345,7 +318,7 @@
             background: #dd8a0c;
         }
 
-        /* Stickers สำหรับ Part 3 */
+
         #stickers-part3 {
             margin-top: 15px;
             display: flex;
@@ -388,9 +361,7 @@
     <div class="text-center" id="section1">
         <div id="display"></div>
 
-        <h2 class="mb-4 ">เด็ก ๆ มีเป้าหมายในการใช้ชีวิตอย่างไรเพื่อไม่ให้ตนเองยุ่งเกี่ยวกับบุหรี่ไฟฟ้า</h2>
-
-
+        <h2 class="mb-4 ">กลิ่นหรือรสของบุหรี่ไฟฟ้า เด็กๆคิดว่ามีผลทำให้คนอยากลองไหม</h2>
         <div class="ma5">
 
             <div id="inputBox">
@@ -409,8 +380,7 @@
     <div class="container text-center py-4" id="section2">
         <h2 class="fw-bold my-5 quote fs-3" style="color: #222222;">
             หากคุณตกอยู่ในสถานการณ์เหล่านี้
-            คุณจะเลือกใช้เทคนิคการปฏิเสธ
-            ให้เหมาะสมกับสถานการณ์อย่างไร
+            คุณจะปฏิเสธให้เหมาะสมกับสถานการณ์อย่างไร
         </h2>
         <div class="ma">
             <a href="#" id="nextBtn2" class="arrow-text">แตะเพื่อไปต่อ</a>
@@ -448,38 +418,32 @@
 
         const music = document.getElementById("bgMusic");
 
-        // โหลดเวลาที่เคยบันทึกไว้
         const savedTime = localStorage.getItem("musicTime");
         if (savedTime) {
             music.currentTime = parseFloat(savedTime);
         }
 
-        // ฟังก์ชันเล่นเพลง
         function startMusicOnce() {
             if (music.paused) {
                 music.volume = 0.2;
                 music.play().catch(err => console.log("Autoplay blocked:", err));
             }
 
-            // บันทึกเวลาตอนเล่น
             setInterval(() => {
                 if (!music.paused) {
                     localStorage.setItem("musicTime", music.currentTime);
                 }
             }, 1000);
 
-            // ลบ listener หลังครั้งแรก
             document.removeEventListener("click", startMusicOnce, true);
             document.removeEventListener("touchstart", startMusicOnce, true);
             document.removeEventListener("keydown", startMusicOnce, true);
         }
 
-        // ฟังทุก interaction
         document.addEventListener("click", startMusicOnce, { once: true, capture: true });
         document.addEventListener("touchstart", startMusicOnce, { once: true, capture: true });
         document.addEventListener("keydown", startMusicOnce, { once: true, capture: true });
 
-        // ลดเสียงเมื่อ video เล่น (ถ้ามี)
         const videos = document.querySelectorAll("video");
         videos.forEach(video => {
             video.addEventListener("play", () => {
@@ -505,22 +469,19 @@
             floatingMessages.forEach(msg => msg.remove());
         }
 
-
-
-        // เมื่อกด nextBtn1
         nextBtn1.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             document.getElementById('section1').classList.remove('active');
             document.getElementById('section2').classList.add('active');
-            clearFloatingMessages(); // ล้างข้อคฤวามลอย
+            clearFloatingMessages();
         });
         nextBtn0.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             document.getElementById('section0').classList.remove('active');
             document.getElementById('section1').classList.add('active');
-            clearFloatingMessages(); // ล้างข้อความลอย
+            clearFloatingMessages();
         });
 
         document.getElementById('nextBtn2').addEventListener('click', (e) => {
@@ -547,10 +508,8 @@
                 return;
             }
 
-            // ปิด section ปัจจุบัน
             document.getElementById(currentSectionId).classList.remove('active');
 
-            // เปิด section ถัดไป (ถ้ามี)
             if (currentIndex + 1 < activeSectionIds.length) {
                 document.getElementById(activeSectionIds[currentIndex + 1]).classList.add('active');
             }
@@ -560,7 +519,7 @@
         function openSectionFromHash() {
             const hash = window.location.hash.replace('#', '');
             if (hash) {
-                const allSections = document.querySelectorAll('[id^="section"]'); // เลือกทุก section
+                const allSections = document.querySelectorAll('[id^="section"]');
                 allSections.forEach(sec => sec.classList.remove('active'));
 
                 const targetSection = document.getElementById(hash);
@@ -574,21 +533,18 @@
         ////////////////////////////////////////////////////////////////////////////
 
         const socket = io();
-
         const messageInput = document.getElementById('message');
         const sendBtn = document.getElementById('sendBtn');
-        const section1Display = document.getElementById('display'); // container ของ section1
-
-        const section1 = document.getElementById('section1'); // parent ของ floating message
+        const section1Display = document.getElementById('display');
+        const section1 = document.getElementById('section1');
 
         function showFloatingMessage(msg) {
             const el = document.createElement('div');
             el.textContent = msg;
-            el.className = 'floating';
+            el.className = 'floating-static';
 
             const width = section1.offsetWidth || window.innerWidth;
             const height = section1.offsetHeight || window.innerHeight;
-
             const randomX = Math.random() * (width - 250);
             const randomY = Math.random() * (height - 50);
 
@@ -597,7 +553,7 @@
             el.style.top = randomY + 'px';
             const lightColors = ['#fff3e0', '#e0f7fa', '#f3e5f5', '#e8f5e9', '#fffde7'];
             el.style.background = lightColors[Math.floor(Math.random() * lightColors.length)];
-            el.style.color = '#555';  // ตัวอักษรสีเทาเข้มเล็กน้อย
+            el.style.color = '#555';
             el.style.border = '1px solid #e0d8c3';
             el.style.fontSize = '1.5rem';
             el.style.fontWeight = '600';
@@ -611,26 +567,23 @@
 
             section1.appendChild(el);
 
-            // แค่ขยายเข้ามา ไม่ลอย
+
             requestAnimationFrame(() => {
                 el.style.transform = 'scale(1) rotate(0deg)';
                 el.style.opacity = '1';
             });
 
-            // ไม่ลบข้อความ
         }
 
 
-        // รับข้อความจาก server ทุกคน
         socket.on('receiveSticker-sec1', (msg) => {
             showFloatingMessage(msg);
         });
 
-        // ส่งข้อความ
         function handleSend() {
             const text = messageInput.value.trim();
             if (!text) return;
-            socket.emit('sendSticker-sec1', text);  // ส่งไป server
+            socket.emit('sendSticker-sec1', text);
             messageInput.value = '';
         }
 
@@ -640,44 +593,35 @@
         });
 
 
-
-
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // ประกาศ socket ก่อนใช้งาน
-        const part3Socket = io();  // เปลี่ยนชื่อ socket
 
-        // ดึง element (สำหรับ Part 3)
-        const part3Display = document.getElementById('display-part3');   // เปลี่ยน id ใน HTML เป็น display-part3
-        const part3MessageInput = document.getElementById('message-part3'); // เปลี่ยน id เป็น message-part3
-        const part3SendBtn = document.getElementById('sendBtn-part3');      // เปลี่ยน id เป็น sendBtn-part3
-        const part3Stickers = document.querySelectorAll('#stickers-part3 .sticker'); // เปลี่ยน id เป็น stickers-part3
+        const part3Socket = io();
 
-        // ฟังก์ชันส่งสติ๊กเกอร์
+        const part3Display = document.getElementById('display-part3');
+        const part3MessageInput = document.getElementById('message-part3');
+        const part3SendBtn = document.getElementById('sendBtn-part3');
+        const part3Stickers = document.querySelectorAll('#stickers-part3 .sticker');
+
         function sendStickerPart3(sticker) {
             part3Socket.emit('sendSticker-part3', sticker);
         }
-        // ฟังก์ชันส่งข้อความ (ส่งเป็น "sticker" เหมือนกัน)
         function sendMessagePart3() {
             const text = part3MessageInput.value.trim();
             if (!text) return;
             part3Socket.emit('sendSticker-part3', text);
             part3MessageInput.value = '';
         }
-        // ผูก event
         part3SendBtn.addEventListener('click', sendMessagePart3);
         part3MessageInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') sendMessagePart3();
         });
 
-        // ผูก event ให้สติ๊กเกอร์
         part3Stickers.forEach(sticker => {
             sticker.addEventListener('click', () => {
                 sendStickerPart3(sticker.textContent);
             });
         });
 
-        // รับสติ๊กเกอร์/ข้อความจาก server แล้วแสดง animation
         part3Socket.on('receiveSticker-part3', (sticker) => {
             const s = document.createElement('div');
             s.textContent = sticker;
