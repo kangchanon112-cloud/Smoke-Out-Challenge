@@ -35,11 +35,8 @@
     @media (max-width: 576px) {
       .quote {
         font-size: 0.8rem;
-        /* ลดขนาดบนมือถือ */
         line-height: 1.8;
-        /* เพิ่ม spacing ให้โปร่งกว่า */
         padding: 0 10px;
-        /* กันติดขอบจอ */
       }
     }
 
@@ -153,7 +150,6 @@
       transform: scale(0.98);
     }
 
-    /* ปรับ form ให้พอดีจอเล็ก */
     #section3 form {
       max-width: 400px;
       margin: 0 auto;
@@ -201,53 +197,15 @@
       bottom: 15%;
       left: 50%;
       transform: translateX(-50%);
-      /* จัดให้อยู่กลาง */
     }
 
     .logo-top {
       position: absolute;
       top: 50px;
-      /* ชิดบน 10px */
       left: 50%;
       transform: translateX(-50%);
-      /* จัดให้อยู่กลาง */
     }
 
-    /* 
- .bg6 {
-   position: relative;
-   width: 100vw;
-   height: 100vh;
-   overflow: hidden;
-   background-color: #fbdfc7;
- }
-
- .bg6 img {
-   position: absolute;
-   max-width: clamp(100px, 80vw, 600px);
-   height: auto;
- }
-
- .img1 {
-   left: 0%;
-   top: 70%;
-   transform: translateY(-50%);
-   animation: bounce1 4s ease-in-out infinite;
- }
-
- .img2 {
-   right: 0;
-   top: 80%;
-   transform: translateY(-50%);
-   animation: bounce2 5s ease-in-out infinite;
- }
-
- .img3 {
-   right: 10%;
-   top: 60%;
-   transform: translateY(-50%);
-   animation: bounce3 3.5s ease-in-out infinite;
- } */
 
     @keyframes bounce1 {
 
@@ -293,7 +251,6 @@
       background-size: 8rem, 10rem;
       background-repeat: no-repeat, no-repeat;
       background-position: right 10% top 60%, left 5% top 85%;
-      /* เว้นเป็น % */
       width: 95vw;
       height: 95vh;
       margin: 0;
@@ -305,7 +262,6 @@
       background-size: clamp(50px, 80vw, 500px);
       background-repeat: no-repeat;
       background-position: right 60% top 80%;
-      /* เว้นเป็น % */
       width: 95vw;
       height: 95vh;
       margin: 0;
@@ -317,7 +273,6 @@
       background-size: clamp(100px, 30vw, 300px), clamp(50px, 30vw, 250px), clamp(50px, 30vw, 250px);
       background-repeat: no-repeat, no-repeat, no-repeat;
       background-position: left 10% top 80%, right 30% top 75%, right 5% top 90%;
-      /* เว้นเป็น % */
       width: 95vw;
       height: 95vh;
       margin: 0;
@@ -329,7 +284,6 @@
       background-size: clamp(10px, 30vw, 200px), clamp(50px, 40vw, 300px), clamp(50px, 40vw, 250px), clamp(30px, 40vw, 250px);
       background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
       background-position: right 0% top 85%, left 0% top 90%, left 0% top 50%, right 5% top 55%;
-      /* เว้นเป็น % */
       width: 95vw;
       height: 95vh;
       margin: 0;
@@ -390,30 +344,22 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      /* ชิดบน */
       align-items: center;
       height: 100vh;
       padding: 60px;
-
       box-sizing: border-box;
       position: relative;
     }
 
     .boxed {
       border: 2px solid #6b4f3f;
-      /* เส้นกรอบ */
       border-radius: 10px;
-      /* มุมโค้ง */
       padding: 15px;
-      /* ระยะห่างข้อความกับกรอบ */
       background-color: #fff6ec23;
-      /* พื้นหลังอ่อนๆ */
       display: inline-block;
-      /* ให้กรอบพอดีกับข้อความ */
     }
 
 
-    /* Floating messages สำหรับ Part 3 */
     #display-part3 .floating {
       position: absolute;
       font-size: 50px;
@@ -432,7 +378,6 @@
       }
     }
 
-    /* กล่องข้อความมินิมอล สำหรับ Part 3 */
     #inputBox-part3 {
       display: flex;
       flex-direction: row;
@@ -470,7 +415,6 @@
       background: #dd8a0c;
     }
 
-    /* Stickers สำหรับ Part 3 */
     #stickers-part3 {
       margin-top: 15px;
       display: flex;
@@ -488,7 +432,6 @@
       transform: scale(1.2);
     }
 
-  /* ///////////////////////////////////////// */
     #inputBox {
       display: flex;
       flex-direction: row;
