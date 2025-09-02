@@ -11,7 +11,7 @@ export const questions = [
   {
     id: 'q1.3',
     question: 'อาการปอดที่ระคายเคืองจากสารปรุงแต่งกลิ่นรสชาติเรียกว่า _______',
-    correctAnswer: ["ป๊อปคอร์น ลัง", "ป๊อปคอร์นลัง", "ป๊อบคอร์น ลัง", "ป๊อบคอร์นลัง","Popcorn Lung", "Popcorn lung", "popcorn Lung", "popcorn lung"],
+    correctAnswer: ["ป๊อปคอร์น ลัง","ป๊อปคอร์นลัง", "Popcorn Lung", "Popcorn lung", "popcorn Lung", "popcorn lung"],
     score: 1
   }
 
@@ -19,12 +19,12 @@ export const questions = [
 
 export const questions2 = [
   {
-    id: 'q2.1', video: '/public/img/2_1.mp4', options:
+    id: 'q2.1', video: '/public/img/part2/q1.mp4', options:
       [{ text: '• ขอบใจนะ เราจะไปเล่นแบดน่ะ เพื่อนๆเรารออยู่ พวกเธอจะตามไปด้วยก็ได้นะ', score: 1 }, { text: '• น่าสนใจจัง', score: 0 }]
   },
 
   {
-    id: 'q2.2', img: '/public/img/part1/9.png', question: 'เพื่อนชวนลองสูบบุหรี่รสผลไม้', options:
+    id: 'q2.2', img: '/public/img/part1/9.png', question: '“เพื่อนชวนสูบบุหรี่รสผลไม้” คุณจะเลือกปฏิเสธอย่างไรเมื่อเจอสถานการณ์ต่อไปนี้', options:
       [{ text: '• ไม่ใช่บุหรี่ทั่วไป...คงไม่เป็นไรมั้ง ลองดู', score: 0 }, { text: '• เราสุขภาพไม่ค่อยดี เป็นภูมิแพ้ ไม่สูบดีกว่า ไม่อยากเป็นภาระของพ่อแม่ตอนป่วย', score: 1 }]
 
   },
@@ -33,15 +33,15 @@ export const questions2 = [
   //     [{ text: '• ไม่ดีกว่า บ้านเราไม่มีใครสูบบุหรี่ พ่อกับแม่ก็ไม่ชอบให้สูบ ช่วงนี้เขามีการรณรงค์ให้เลิกสูบบุหรี่กันแล้วนะ', score: 1 }, { text: '• ลองสักหน่อยก็ได้', score: 0 }]
   // },
   {
-    id: 'q2.3', video: '/public/img/2_2.mp4', options:
+    id: 'q2.3', video: '/public/img/part2/q2.mp4', options:
       [{ text: '• เพื่อนตื๊อแบบนี้ลองก็ได้', score: 0 }, { text: '• ไม่เอาหรอก เราไม่ชอบกลิ่นบุหรี่เลย หวังว่าเธอจะเข้าใจนะ', score: 1 }]
   },
   {
-    id: 'q2.4', video: '/public/img/2_4.mp4', options:
+    id: 'q2.4', video: '/public/img/part2/q3.mp4', options:
       [{ text: '• ไม่อะยังไงเราก็ไม่ลอง พร้อมกับเดินออกไปจากเพื่อนทันที', score: 1 }, { text: '• ลองสูบตามที่เพื่อนบอก', score: 0 }]
   },
   {
-    id: 'q2.5', video: '/public/img/2_5.mp4', bg: '/public/img/part2/p16.png', question: 'ถ้าเพื่อนสนิทชวนให้ลองสูบบุหรี่ จะทําอย่างไร?', options:
+    id: 'q2.5', video: '/public/img/part2/q4.mp4', bg: '/public/img/part2/p16.png', question: 'ถ้าเพื่อนสนิทชวนให้ลองสูบบุหรี่ จะทําอย่างไร?', options:
       [{ text: '• แค่ลอง...ไม่เป็นไรหรอกมั้ง', score: 0 }, { text: '• ไม่ดีกว่า...เราว่าไปเตะบอลกันเถอะ', score: 1 }]
 
   }];
@@ -102,5 +102,3 @@ export const questions4 = [
     id: 'q4.6', img: '/public/img/b.png', question: 'ไปงานวันเกิดเพื่อนรุ่นพี่แล้วถูกชักชวนให้ลองสูบบุหรี่', options:
       [{ text: '• ลองสูบสักครั้ง ถือเป็นของขวัญวันเกิดให้รุ่นพี', score: 0 }, { text: '• ไว้คราวหน้าแล้วกันนะครับพี่ ตอนนี้ผมยังไม่พร้อมเลย ต้องรีบกลับบ้านแล้วด้วยครับ', score: 1 }]
   }];
-
-
