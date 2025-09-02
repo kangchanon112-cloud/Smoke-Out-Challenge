@@ -252,14 +252,11 @@
         }
 
 
-        /* คงสัดส่วน */
+      
         video {
-            width: 100%;
-            /* กว้างเต็ม container */
+            width: 70%;
             height: auto;
-            /* รักษาอัตราส่วน */
             max-width: 100%;
-            /* ป้องกันเกิน container */
             margin-top: 20px;
         }
 
@@ -417,7 +414,8 @@
                 หรือปฏิเสธโดยทันที <br>
                 เพราะคนชวนมักมี
                 เหตุผล "สารพัด"
-                เพื่อชักชวนเรา
+                เพื่อชักชวนเรา<br>
+                <video src="/public/img/.mp4" controls></video>
             </h3>
         </div>
     </div>
@@ -431,7 +429,8 @@
             <h3 class="fw-bold quote">
                 วิเคราะห์ผลดีผลเสีย
                 รวมผลลัพธ์ของแต่ละทางเลือก <br>เพื่อเป็น
-                ข้อมูลก่อนตัดสินใจ
+                ข้อมูลก่อนตัดสินใจ<br>
+                <video src="/public/img/.mp4" controls></video>
             </h3>
         </div>
     </div>
@@ -445,7 +444,8 @@
             <h3 class="fw-bold quote">
                 เลือกและบอกเหตุผลของทางเลือกนั้น
                 ว่าเพราะอะไร <br>ซึ่งแน่นอนว่าทางเลือก
-                ที่ดีกว่าคือ <span style="color: #ff0000;">ปฏิเสธการชักชวนและไม่สูบบุหรี่</span>
+                ที่ดีกว่าคือ <span style="color: #ff0000;">ปฏิเสธการชักชวนและไม่สูบบุหรี่</span><br>
+                <video src="/public/img/.mp4" controls></video>
             </h3>
         </div>
     </div>
@@ -460,7 +460,7 @@
                 1. ปฏิเสธอย่างจริงจังทั้งท่าทาง คําพูด และนํ้าเสียง เพื่อแสดงความตั้งใจอย่างชัดเจนที่จะขอปฏิเสธ
                 <br><br>
                 2. บอกความรู้สึกประกอบเหตุผล เพราะใช้เหตุผลอย่างเดียวมักถูกโต้แย้งด้วยเหตุผลของคนชวน
-                <video src="/public/img/p2.mp4" controls></video>
+                
             </h4>
         </div>
     </div>
@@ -469,7 +469,7 @@
         <div class="section-content">
             <h4 class="fw-bold  quote" style="text-align: start; color: #222222;">
                 3. ถามความเห็นชอบที่จะปฏิเสธ เพื่อรักษานํ้าใจของคนชวน และแสดงความขอบคุณเมื่อคนชวนยอมรับการปฏิเสธ
-                <video src="/public/img/p3.mp4" controls></video>
+              
             </h4>
         </div>
     </div>
@@ -502,7 +502,7 @@
         <div class="section-content">
             <h2 class="fw-bold my-5 quote" style="color: #222222;">
                 ชมวิดีโอเกี่ยวกับการถูกเพื่อนชักชวนให้สูบบุหรี่
-                และเลือกใช้เทคนิคการปฏิเสธให้เหมาะสมกับ
+                และเลือกปฏิเสธให้เหมาะสมกับ
                 สถานการณ์ดังกล่าว
             </h2>
             <div class="ma">
@@ -526,12 +526,12 @@
     <div class="text-center" id="section13">
         <img src="/public/img/part2/p26.png" alt="" class="responsive-img">
     </div>
-    <!-- ปุ่ม toggle เสียง -->
+
     <audio id="bgMusic" src="/public/img/part1/m2.mp3" loop preload="auto"></audio>
 
     <script>
         const music = document.getElementById("bgMusic");
-        // โหลดเวลาที่เคยบันทึกไว้
+
         const savedTime = localStorage.getItem("musicTime");
         if (savedTime) {
             music.currentTime = parseFloat(savedTime);
@@ -545,23 +545,20 @@
             }
         }
 
-        // เรียกทุกครั้งที่ click, touch หรือ keydown
         document.addEventListener("click", playMusicOnTap, true);
         document.addEventListener("touchstart", playMusicOnTap, true);
         document.addEventListener("keydown", playMusicOnTap, true);
 
 
-
-        // ลดเสียงเพลงตอนเล่นวิดีโอ
         const videos = document.querySelectorAll('video');
 
         videos.forEach(video => {
             video.addEventListener('play', () => {
-                music.volume = 0.05; // ลดเสียง bgMusic
+                music.volume = 0.05; 
             });
 
             function restoreMusicVolume() {
-                music.volume = 0.2; // คืนเสียง bgMusic
+                music.volume = 0.2; 
                 if (music.paused) {
                     music.play().catch(err => console.log("Autoplay blocked:", err));
                 }
@@ -604,10 +601,9 @@
 
             if (currentSectionId === 'section11' || currentSectionId === 'section13' || currentSectionId === 'section0') return;
 
-            // ปิด section ปัจจุบัน
             document.getElementById(currentSectionId).classList.remove('active');
 
-            // หยุด video และ reset volume
+        
             const videos = document.querySelectorAll('video');
             videos.forEach(v => {
                 v.pause();
@@ -615,7 +611,7 @@
             });
 
 
-            // เปิด section ถัดไป
+           
             if (currentIndex + 1 < activeSectionIds.length) {
                 document.getElementById(activeSectionIds[currentIndex + 1]).classList.add('active');
             }
@@ -658,43 +654,42 @@
 
 
 
-        ////////////////////////
-        // ประกาศ socket ก่อนใช้งาน
+        ////////////////////////////////////////////////////////////////////////////
+     
         const socket = io();
 
-        // ดึง element
+ 
         const display = document.getElementById('display');
         const messageInput = document.getElementById('message');
         const sendBtn = document.getElementById('sendBtn');
         const stickers = document.querySelectorAll('#stickers .sticker');
 
-        // ฟังก์ชันส่งสติ๊กเกอร์
+
         function sendSticker(sticker) {
             socket.emit('sendSticker-sec1', sticker);
         }
 
-        // ฟังก์ชันส่งข้อความ (ส่งเป็น "sticker" เหมือนกัน)
+
         function sendMessage() {
             const text = messageInput.value.trim();
             if (!text) return;
-            socket.emit('sendSticker-sec1', text); // ถ้าต้องการแยก message กับ sticker ต้องสร้าง event ใหม่
+            socket.emit('sendSticker-sec1', text);
             messageInput.value = '';
         }
 
-        // ผูก event
+ 
         sendBtn.addEventListener('click', sendMessage);
         messageInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') sendMessage();
         });
 
-        // ผูก event ให้สติ๊กเกอร์
         stickers.forEach(sticker => {
             sticker.addEventListener('click', () => {
                 sendSticker(sticker.textContent);
             });
         });
 
-        // รับสติ๊กเกอร์/ข้อความจาก server แล้วแสดง animation
+      
         socket.on('receiveSticker-sec1', (sticker) => {
             const s = document.createElement('div');
             s.textContent = sticker;
@@ -706,6 +701,7 @@
             setTimeout(() => display.removeChild(s), 3000);
         });
 
+        
     </script>
 
 </body>
