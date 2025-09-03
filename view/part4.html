@@ -679,10 +679,15 @@
 
 
     <!-- ส่วนที่ 5 -->
-    <div class="container text-center py-5" id="section5">
-        <h2 class="fw-bold my-5 quote" style="color: #222222;">
+    <div class="container text-center" id="section5">
+        <h2 class="fw-bold  quote" style="color: #222222;">
         </h2>
-        <video src="/public/img/part4/.mp4" controls></video>
+        <video id="video14" src="/public/img/part4/p4.mp4" class="img-fluid rounded-3 shadow"
+            style="max-width: 800px; width: 100%; height: auto;" controls>
+        </video>
+        <div class="ma">
+            <a href="#" id="nextBtn5" class="arrow-text">แตะเพื่อไปต่อ</a>
+        </div>
     </div>
 
     <!-- ส่วนที่ 6 -->
@@ -843,6 +848,15 @@
             window.location.href = "quiz4";
         });
 
+        document.getElementById('nextBtn5').addEventListener('click', (e) => {
+            e.preventDefault();
+            const video = document.getElementById("video14");
+            video.pause();
+            video.currentTime = 0;
+            document.getElementById('section5').classList.remove('active');
+            document.getElementById('section6').classList.add('active');
+
+        });
 
 
         document.body.addEventListener('click', function (e) {
@@ -855,7 +869,7 @@
             if (currentIndex === -1) return;
 
             const currentSectionId = activeSectionIds[currentIndex];
-            if (currentSectionId === 'section0' || currentSectionId === 'section1' || currentSectionId === 'section3' || currentSectionId === 'section6' || currentSectionId === 'section12') {
+            if (currentSectionId === 'section0' || currentSectionId === 'section1' || currentSectionId === 'section3' || currentSectionId === 'section5' || currentSectionId === 'section6' || currentSectionId === 'section12') {
                 return;
             }
             document.getElementById(currentSectionId).classList.remove('active');

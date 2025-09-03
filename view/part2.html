@@ -42,7 +42,8 @@
         #section10,
         #section11,
         #section12,
-        #section13 {
+        #section13,
+        #section14 {
             display: none !important;
             width: 100%;
             height: 100%;
@@ -54,7 +55,6 @@
             text-align: center;
         }
 
-        /* แสดง section ที่ active */
         #section0.active,
         #section1.active,
         #section2.active,
@@ -68,16 +68,15 @@
         #section10.active,
         #section11.active,
         #section12.active,
-        #section13.active {
+        #section13.active,
+        #section14.active {
             display: flex !important;
         }
 
 
         .quote {
             max-width: 700px;
-            /* จำกัดความกว้าง */
             margin: 0 auto;
-            /* กึ่งกลางแนวนอน */
             line-height: 1.8;
             font-style: italic;
             color: #555555;
@@ -114,7 +113,6 @@
             min-height: 100vh;
             width: 100%;
             padding: 40px;
-            /* ใส่ padding ที่นี่แทน */
             box-sizing: border-box;
 
             display: flex;
@@ -126,7 +124,6 @@
 
         .section-content {
             padding: 40px;
-            /* ระยะห่างรอบเนื้อหา */
             width: 100%;
             box-sizing: border-box;
         }
@@ -136,7 +133,6 @@
             background-size: 8rem, 8rem, 8rem, 48rem;
             background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
             background-position: right 0% top 100%, left 0% top 100%, right 0% top 0%, right 50% top 40%;
-            /* เว้นเป็น % */
             width: 100vw;
             height: 100vh;
             margin: 0;
@@ -148,7 +144,6 @@
             background-size: 9rem, 48rem;
             background-repeat: no-repeat, no-repeat;
             background-position: right 50% top 100%, right 50% top 40%;
-            /* เว้นเป็น % */
             width: 100vw;
             height: 100vh;
             margin: 0;
@@ -252,7 +247,7 @@
         }
 
 
-      
+
         video {
             width: 70%;
             height: auto;
@@ -278,7 +273,7 @@
             }
         }
 
-        /* กล่องข้อความมินิมอล */
+
         #inputBox {
             display: flex;
             flex-direction: row;
@@ -415,7 +410,7 @@
                 เพราะคนชวนมักมี
                 เหตุผล "สารพัด"
                 เพื่อชักชวนเรา<br>
-                <video src="/public/img/.mp4" controls></video>
+                <!-- <video src="/public/img/.mp4" controls></video> -->
             </h3>
         </div>
     </div>
@@ -430,7 +425,7 @@
                 วิเคราะห์ผลดีผลเสีย
                 รวมผลลัพธ์ของแต่ละทางเลือก <br>เพื่อเป็น
                 ข้อมูลก่อนตัดสินใจ<br>
-                <video src="/public/img/.mp4" controls></video>
+                <!-- <video src="/public/img/.mp4" controls></video> -->
             </h3>
         </div>
     </div>
@@ -445,12 +440,13 @@
                 เลือกและบอกเหตุผลของทางเลือกนั้น
                 ว่าเพราะอะไร <br>ซึ่งแน่นอนว่าทางเลือก
                 ที่ดีกว่าคือ <span style="color: #ff0000;">ปฏิเสธการชักชวนและไม่สูบบุหรี่</span><br>
-                <video src="/public/img/.mp4" controls></video>
+                <!-- <video src="/public/img/.mp4" controls></video> -->
             </h3>
         </div>
     </div>
-    <!-- ส่วนที่ 7 -->
 
+
+    <!-- ส่วนที่ 7 -->
     <div class="container" id="section7" style="max-width: 700px; margin: auto;">
         <div class="section-content">
             <h2 class="fw-bold mb-4 quote text-danger" style="text-align: start; color: #222222;">
@@ -460,21 +456,24 @@
                 1. ปฏิเสธอย่างจริงจังทั้งท่าทาง คําพูด และนํ้าเสียง เพื่อแสดงความตั้งใจอย่างชัดเจนที่จะขอปฏิเสธ
                 <br><br>
                 2. บอกความรู้สึกประกอบเหตุผล เพราะใช้เหตุผลอย่างเดียวมักถูกโต้แย้งด้วยเหตุผลของคนชวน
-                
+
             </h4>
         </div>
     </div>
 
+
+    <!-- ส่วนที่ 8 -->
     <div class="container" id="section8" style="max-width: 700px; margin: auto;">
         <div class="section-content">
             <h4 class="fw-bold  quote" style="text-align: start; color: #222222;">
                 3. ถามความเห็นชอบที่จะปฏิเสธ เพื่อรักษานํ้าใจของคนชวน และแสดงความขอบคุณเมื่อคนชวนยอมรับการปฏิเสธ
-              
+
             </h4>
         </div>
     </div>
 
-    <!-- ส่วนที่ 8 -->
+
+    <!-- ส่วนที่ 9 -->
     <div class=" bg6" id="section9">
         <div class="section-content">
             <h4 class="fw-bold my-5 quote" style="text-align: start; color: #222222;">
@@ -488,7 +487,7 @@
         </div>
     </div>
 
-    <!-- ส่วนที่ 9 -->
+    <!-- ส่วนที่ 10 -->
     <div class=" text-center bg7" id="section10">
         <div class="section-content">
             <h2 class="fw-bold quote" style="color: #222222;">
@@ -497,7 +496,7 @@
             </h2>
         </div>
     </div>
-    <!-- ส่วนที่ 10 -->
+    <!-- ส่วนที่ 11 -->
     <div class=" text-center bg8" id="section11">
         <div class="section-content">
             <h2 class="fw-bold my-5 quote" style="color: #222222;">
@@ -513,7 +512,7 @@
 
 
 
-    <!-- ส่วนที่ 11 -->
+    <!-- ส่วนที่ 12 -->
     <div class=" text-center py-5 bg9" id="section12">
         <h2 class="fw-bold my-5 quote" style="color: #222222;">
             คนที่เก่งและฉลาด <br>
@@ -522,11 +521,24 @@
         </h2>
     </div>
 
-    <!-- ส่วนที่ 12 -->
+    <!-- ส่วนที่ 13 -->
     <div class="text-center" id="section13">
         <img src="/public/img/part2/p26.png" alt="" class="responsive-img">
     </div>
 
+
+    <!-- ส่วนที่ 14 -->
+    <div class="text-center" id="section14">
+        <video id="video14" src="/public/img/part2/3t.mp4" class="img-fluid rounded-3 shadow"
+            style="max-width: 800px; width: 100%; height: auto;" controls>
+        </video>
+        <div class="ma">
+                <a href="#" id="nextBtn5" class="arrow-text">แตะเพื่อไปต่อ</a>
+            </div>
+    </div>
+
+
+    <!-- เพลง -->
     <audio id="bgMusic" src="/public/img/part1/m2.mp3" loop preload="auto"></audio>
 
     <script>
@@ -554,11 +566,11 @@
 
         videos.forEach(video => {
             video.addEventListener('play', () => {
-                music.volume = 0.05; 
+                music.volume = 0.05;
             });
 
             function restoreMusicVolume() {
-                music.volume = 0.2; 
+                music.volume = 0.2;
                 if (music.paused) {
                     music.play().catch(err => console.log("Autoplay blocked:", err));
                 }
@@ -591,27 +603,32 @@
 
             const activeSectionIds = [
                 'section0', 'section1', 'section2', 'section3', 'section4', 'section5',
-                'section6', 'section7', 'section8', 'section9', 'section10', 'section11', 'section12', 'section13'
+                'section6', 'section7', 'section8', 'section9', 'section10', 'section11',
+                'section12', 'section13', 'section14'
             ];
 
-            let currentIndex = activeSectionIds.findIndex(id => document.getElementById(id).classList.contains('active'));
+            let currentIndex = activeSectionIds.findIndex(id =>
+                document.getElementById(id).classList.contains('active')
+            );
             if (currentIndex === -1) return;
 
             const currentSectionId = activeSectionIds[currentIndex];
 
-            if (currentSectionId === 'section11' || currentSectionId === 'section13' || currentSectionId === 'section0') return;
+            if (['section0', 'section11', 'section13', 'section14'].includes(currentSectionId)) return;
 
-            document.getElementById(currentSectionId).classList.remove('active');
-
-        
             const videos = document.querySelectorAll('video');
             videos.forEach(v => {
                 v.pause();
                 v.currentTime = 0;
             });
 
+            if (currentSectionId === 'section6') {
+                document.getElementById('section6').classList.remove('active');
+                document.getElementById('section14').classList.add('active');
+                return;
+            }
 
-           
+            document.getElementById(currentSectionId).classList.remove('active');
             if (currentIndex + 1 < activeSectionIds.length) {
                 document.getElementById(activeSectionIds[currentIndex + 1]).classList.add('active');
             }
@@ -630,6 +647,15 @@
             e.preventDefault();
             document.getElementById('section0').classList.remove('active');
             document.getElementById('section1').classList.add('active');
+
+        });
+        document.getElementById('nextBtn5').addEventListener('click', (e) => {
+            e.preventDefault();
+            const video = document.getElementById("video14");
+            video.pause();
+            video.currentTime = 0;
+            document.getElementById('section14').classList.remove('active');
+            document.getElementById('section7').classList.add('active');
 
         });
 
@@ -655,10 +681,10 @@
 
 
         ////////////////////////////////////////////////////////////////////////////
-     
+
         const socket = io();
 
- 
+
         const display = document.getElementById('display');
         const messageInput = document.getElementById('message');
         const sendBtn = document.getElementById('sendBtn');
@@ -677,7 +703,7 @@
             messageInput.value = '';
         }
 
- 
+
         sendBtn.addEventListener('click', sendMessage);
         messageInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') sendMessage();
@@ -689,7 +715,7 @@
             });
         });
 
-      
+
         socket.on('receiveSticker-sec1', (sticker) => {
             const s = document.createElement('div');
             s.textContent = sticker;
@@ -701,7 +727,7 @@
             setTimeout(() => display.removeChild(s), 3000);
         });
 
-        
+
     </script>
 
 </body>
