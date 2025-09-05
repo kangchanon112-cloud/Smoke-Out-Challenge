@@ -122,12 +122,12 @@
 
     const tables = {
       users: { endpoint: '/admin/users', fields: ['username', 'password', 'role'], headers: ['Username', 'Password', 'Role'], export: '/export/users-xlsx' },
-      partstatus: { endpoint: '/admin/partstatus', fields: ['part1', 'part2', 'part3', 'part4'], headers: ['Part1', 'Part2', 'Part3', 'Part4'], export: '/export/partstatus-xlsx' },
-      answers: { endpoint: '/admin/answers', fields: ['username', 'questionId', 'answer', 'date'], headers: ['Username', 'Question ID', 'Answer', 'Date'], export: '/export/answers-xlsx' },
       quizscores: { endpoint: '/admin/quizscores', fields: ['username', 'quizNumber', 'score'], headers: ['Username', 'Quiz', 'Score'], export: '/export/quizscores-xlsx' },
+      answers: { endpoint: '/admin/answers', fields: ['username', 'questionId', 'answer', 'date'], headers: ['Username', 'Question ID', 'Answer', 'Date'], export: '/export/answers-xlsx' },
       profiles: { endpoint: '/admin/profiles', fields: ['username', 'name', 'age', 'gender', 'date'], headers: ['Username', 'Name', 'Age', 'Gender', 'Date'], export: '/export/profiles-xlsx' },
+      messages: { endpoint: '/admin/messages', fields: ['username', 'question', 'message', 'timestamp'], headers: ['Username', 'Question', 'Message', 'Timestamp'], export: '/export/messages-xlsx' },
       feedback: { endpoint: '/admin/feedback', fields: ['username', 'rating', 'feedback', 'date'], headers: ['Username', 'Rating', 'Feedback', 'Date'], export: '/export/feedback-xlsx' },
-      messages: { endpoint: '/admin/messages', fields: ['username', 'question', 'message', 'timestamp'], headers: ['Username', 'Question', 'Message', 'Timestamp'], export: '/export/messages-xlsx' }
+      partstatus: { endpoint: '/admin/partstatus', fields: ['part1', 'part2', 'part3', 'part4'], headers: ['Part1', 'Part2', 'Part3', 'Part4'], export: '/export/partstatus-xlsx' }
     };
 
     let currentTable = 'users';
