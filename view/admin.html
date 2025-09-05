@@ -65,8 +65,32 @@
         <button id="part4Btn" onclick="togglePart(4)">Loading...</button>
     </div>
 
+
+ <div style="
+    position: fixed; 
+    bottom: 20px; 
+    left: 50%; 
+    transform: translateX(-50%);
+    text-align: center;
+">
+    <a href="/dashboard">
+        <button style="
+            background-color:#6b4f3f; 
+            color:white; 
+            padding:15px 30px; 
+            border-radius:12px; 
+            font-size:1.5rem; 
+            width:250px;
+            font-weight:bold;
+        ">
+             Dashboard
+        </button>
+    </a>
+</div>
+
+</div>
+
    <script>
-    // 1️⃣ ประกาศ fetchStatus ก่อน
     async function fetchStatus() {
         const res = await fetch('/admin/get-part-status');
         const data = await res.json();
@@ -77,7 +101,6 @@
         }
     }
 
-    // 2️⃣ togglePart เรียก fetchStatus ได้เลย
     async function togglePart(partNumber) {
         for(let i=1;i<=4;i++){
             document.getElementById(`part${i}Btn`).disabled = true;
@@ -90,7 +113,7 @@
         });
         const data = await res.json();
 
-        fetchStatus(); // รีเฟรชสถานะ
+        fetchStatus(); 
 
         for(let i=1;i<=4;i++){
             document.getElementById(`part${i}Btn`).disabled = false;
@@ -101,7 +124,6 @@
         }
     }
 
-    // 3️⃣ โหลดสถานะตอนเปิดหน้า
     fetchStatus();
 </script>
 

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard Compact</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+  <style>
+    .top-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .top-controls select,
+    .top-controls input {
+      height: 35px;
+    }
+
+    .top-bar a {
+      display: flex;
+      align-items: center;
+    }
+
+    body {
+      background-color: #fbdfc7;
+      font-family: "Prompt", sans-serif;
+      padding: 20px;
+      color: #333;
+    }
+
+    h1 {
+      color: #6b4f3f;
+      margin-bottom: 20px;
+    }
+
+    .top-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      gap: 10px;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      background-color: #fff6ec;
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background-color: #ffe9c4;
+      color: #6b4f3f;
+      font-weight: 600;
+      padding: 8px;
+    }
+
+    td {
+      padding: 8px;
+    }
+
+    tbody tr:nth-of-type(odd) {
+      background-color: #fff3e6;
+    }
+
+    .btn-export {
+      background-color: #ffe9c4;
+      color: #6b4f3f;
+      font-weight: 600;
+    }
+
+    .btn-export:hover {
+      background-color: #e2d7c5;
+      color: #fff;
+    }
+
+    .search-input {
+      max-width: 200px;
+    }
+  </style>
+</head>
+
+<body>
+  
+<h1 class="d-flex justify-content-between align-items-center">
+  <span>Admin Dashboard</span>
+  <a href="/admin" class="btn btn-sm" style="background-color:#6b4f3f; color:white; border-radius:6px;">
+    หน้า PART
+  </a>
+</h1>
+
+
+<div class="top-controls">
+  <select id="tableSelect" class="form-select" style="max-width:180px;">
+    <option value="users">Users</option>
+    <option value="partstatus">Part Status</option>
+    <option value="answers">Answers</option>
+    <option value="quizscores">Quiz Scores</option>
+    <option value="profiles">Profiles</option>
+    <option value="feedback">Feedback</option>
+    <option value="messages">Messages</option>
+  </select>
+
+ <div class="top-bar d-flex align-items-center gap-2" style="margin-bottom:15px;">
+  <input type="text" id="searchInput" class="form-control form-control-sm" placeholder="Search..." style="max-width:180px;">
+  <a id="exportBtn" href="/export/users-xlsx" title="Export Excel" class="btn btn-sm btn-export d-flex align-items-center">
+    <i class="bi bi-file-earmark-excel-fill" style="font-size:1.2rem; margin-right:4px;"></i>Export
+  </a>
+</div>
+
+</div>
+
+
+  <div class="table-container">
+    <table class="table table-striped" id="dataTable">
+      <thead>
+        <tr id="tableHead"></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const tableSelect = document.getElementById('tableSelect');
+    const searchInput = document.getElementById('searchInput');
+    const exportBtn = document.getElementById('exportBtn');
+    const tableHead = document.getElementById('tableHead');
+    const tableBody = document.querySelector('#dataTable tbody');
+
+    const tables = {
+      users: { endpoint: '/admin/users', fields: ['username', 'password', 'role'], headers: ['Username', 'Password', 'Role'], export: '/export/users-xlsx' },
+      partstatus: { endpoint: '/admin/partstatus', fields: ['part1', 'part2', 'part3', 'part4'], headers: ['Part1', 'Part2', 'Part3', 'Part4'], export: '/export/partstatus-xlsx' },
+      answers: { endpoint: '/admin/answers', fields: ['username', 'questionId', 'answer', 'date'], headers: ['Username', 'Question ID', 'Answer', 'Date'], export: '/export/answers-xlsx' },
+      quizscores: { endpoint: '/admin/quizscores', fields: ['username', 'quizNumber', 'score'], headers: ['Username', 'Quiz', 'Score'], export: '/export/quizscores-xlsx' },
+      profiles: { endpoint: '/admin/profiles', fields: ['username', 'name', 'age', 'gender', 'date'], headers: ['Username', 'Name', 'Age', 'Gender', 'Date'], export: '/export/profiles-xlsx' },
+      feedback: { endpoint: '/admin/feedback', fields: ['username', 'rating', 'feedback', 'date'], headers: ['Username', 'Rating', 'Feedback', 'Date'], export: '/export/feedback-xlsx' },
+      messages: { endpoint: '/admin/messages', fields: ['username', 'question', 'message', 'timestamp'], headers: ['Username', 'Question', 'Message', 'Timestamp'], export: '/export/messages-xlsx' }
+    };
+
+    let currentTable = 'users';
+
+    async function loadData(tableKey) {
+      const t = tables[tableKey];
+      exportBtn.href = t.export;
+
+      tableHead.innerHTML = t.headers.map(h => `<th>${h}</th>`).join('');
+
+      try {
+        const res = await fetch(t.endpoint);
+        const data = await res.json();
+        const key = Object.keys(data).find(k => k !== 'success');
+        tableBody.innerHTML = '';
+        (data[key] || []).forEach(item => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = t.fields.map(f => `<td>${item[f] ?? ''}</td>`).join('');
+          tableBody.appendChild(tr);
+        });
+      } catch (err) { console.error(err); }
+    }
+
+    tableSelect.addEventListener('change', () => {
+      currentTable = tableSelect.value;
+      loadData(currentTable);
+      searchInput.value = '';
+    });
+
+    searchInput.addEventListener('input', () => {
+      const filter = searchInput.value.toLowerCase();
+      const rows = tableBody.querySelectorAll('tr');
+      rows.forEach(row => {
+        let show = false;
+        Array.from(row.cells).forEach(cell => {
+          if (cell.textContent.toLowerCase().includes(filter)) show = true;
+        });
+        row.style.display = show ? '' : 'none';
+      });
+    });
+
+    // โหลดครั้งแรก
+    loadData(currentTable);
+  </script>
+</body>
+
+</html>
