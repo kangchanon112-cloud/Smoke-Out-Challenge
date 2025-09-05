@@ -179,7 +179,7 @@
         let answeredCurrentQuestion = false;
         let score = 0;
         let quizNumber = 2;
-        const userID = localStorage.getItem("userID");
+        const username = localStorage.getItem("username");
         let isQ5VideoShown = false;
 
         function renderQuestion() {
@@ -282,7 +282,7 @@
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    userID: userID,
+                    username: username, 
                     questionId: q.id,
                     answer: opt.text
                 })
@@ -341,9 +341,9 @@
         }
 
         function saveScoreToDB() {
-            const userID = localStorage.getItem("userID");
-            if (!userID) {
-                alert("ไม่พบ userID กรุณา login ก่อน");
+            const username = localStorage.getItem("username"); 
+            if (!username) {
+                alert("ไม่พบ username กรุณา login ก่อน");
                 window.location.href = "/login";
                 return;
             }
@@ -353,7 +353,7 @@
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    userID: userID,
+                    username: username, 
                     quizNumber: quizNumber,
                     score: Math.min(score, 5)
                 })

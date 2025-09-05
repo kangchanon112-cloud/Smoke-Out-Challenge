@@ -284,13 +284,13 @@
 
             localStorage.setItem('quizAnswers', JSON.stringify(answers));
             score += Number(opt.score);
-            const userID = localStorage.getItem("userID");
-            if (userID) {
+            const username = localStorage.getItem("username");
+            if (username) {
                 fetch("/submit-answer", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        userID: userID,
+                        username: username,
                         questionId: q.id,
                         answer: opt.text
                     })
@@ -299,7 +299,7 @@
                     .then(data => console.log("ส่งคำตอบแล้ว:", data))
                     .catch(err => console.error(err));
             } else {
-                console.warn("ไม่พบ userID ใน localStorage");
+                console.warn("ไม่พบ username ใน localStorage");
             }
             if (Number(opt.score) === 1) {
                 showResultPopup(q.id, true);
@@ -376,10 +376,10 @@
 
 
         function saveScoreToDB() {
-            const userID = localStorage.getItem("userID");
-            console.log("ส่งไป DB:", { userID, quizNumber, score });
-            if (!userID) {
-                alert("ไม่พบ userID กรุณา login ก่อน");
+            const userIusernameD = localStorage.getItem("username");
+            console.log("ส่งไป DB:", { username, quizNumber, score });
+            if (!username) {
+                alert("ไม่พบ username กรุณา login ก่อน");
                 window.location.href = "/login";
                 return;
             }
@@ -387,7 +387,7 @@
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    userID,
+                    username,
                     quizNumber,
                     score: Math.min(score, 6)
                 })
