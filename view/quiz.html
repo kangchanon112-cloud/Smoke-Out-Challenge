@@ -170,7 +170,6 @@
         }
         music.play().catch(err => console.log(err));
 
-
         import { questions } from './array.js';
         const h1 = document.querySelector('h1');
         const answersDiv = document.querySelector('.answers');
@@ -180,7 +179,7 @@
         let answeredCurrentQuestion = false;
         let score = 0;
         let quizNumber = 1;
-        const userID = localStorage.getItem("userID");
+        const username = localStorage.getItem("username");
 
         function playIntro() {
             const introDiv = document.getElementById("intro");
@@ -218,9 +217,7 @@
                 introDiv.innerHTML = "";
                 renderQuestion();
             });
-
         }
-
 
         function renderQuestion() {
             const q = questions[currentQuestionIndex];
@@ -264,23 +261,20 @@
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    userID: userID,
+                    username: username,
                     questionId: q.id,
                     answer: opt.text
                 })
             })
-
                 .then(res => res.json())
                 .then(data => console.log("ส่งคำตอบแล้ว:", data))
                 .catch(err => console.error(err));
 
-            // ใน submitAnswer
             if (Number(opt.score) === 1) {
                 showResultPopup(q.id, true);
             } else {
                 showResultPopup(q.id, false);
             }
-
         }
 
         function checkTextAnswer(q, userInput) {
@@ -296,18 +290,16 @@
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    userID: userID,
+                    username: username,
                     questionId: q.id,
                     answer: userInput
                 })
             })
-
                 .then(res => res.json())
                 .then(data => console.log("ส่งคำตอบแล้ว:", data))
                 .catch(err => console.error(err));
 
             showResultPopup(q.id, isCorrect);
-
         }
 
         function showResultPopup(questionId, isCorrect) {
@@ -335,26 +327,6 @@
             }, 2000);
         }
 
-
-        // function showResultPopup(isCorrect) {
-        //     let img = document.createElement("img");
-        //     img.src = isCorrect ? "/public/img/5.png" : "/public/img/4.png";
-
-        //     popup.innerHTML = "";
-        //     popup.appendChild(img);
-
-        //     popup.className = "popup"; 
-        //     popup.classList.add(isCorrect ? "correct" : "wrong");
-        //     popup.classList.remove('show');
-        //     void popup.offsetWidth;
-        //     popup.classList.add('show');
-
-        //     setTimeout(() => {
-        //         popup.classList.remove('show');
-        //         nextQuestion();
-        //     }, 2000);
-        // }
-
         function nextQuestion() {
             if (currentQuestionIndex < questions.length - 1) {
                 currentQuestionIndex++;
@@ -364,21 +336,17 @@
             }
         }
 
-
         function saveScoreToDB() {
-            const userID = localStorage.getItem("userID");
-            if (!userID) {
-                alert("ไม่พบ userID กรุณา login ก่อน");
+            if (!username) {
+                alert("ไม่พบ username กรุณา login ก่อน");
                 window.location.href = "/login";
                 return;
             }
             fetch("/saveScore", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    userID: userID,
+                    username: username,
                     quizNumber: quizNumber,
                     score: Math.min(score, 3)
                 })
@@ -393,8 +361,8 @@
         }
 
         playIntro();
-
     </script>
+
 
 </body>
 

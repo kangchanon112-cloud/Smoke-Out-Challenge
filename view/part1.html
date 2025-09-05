@@ -876,7 +876,30 @@
   function handleSend() {
     const text = messageInput.value.trim();
     if (!text) return;
+
     socket.emit('sendSticker-sec1', text);
+
+    const username = localStorage.getItem("username") || "guest";
+    fetch("/save-message", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username,
+        question: "เด็ก ๆ มีเป้าหมายในการใช้ชีวิตอย่างไรเพื่อไม่ให้ตนเองยุ่งเกี่ยวกับบุหรี่ไฟฟ้า",
+        message: text,
+        timestamp: new Date()
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          console.log("บันทึกเรียบร้อย");
+        } else {
+          console.error("บันทึกไม่สำเร็จ");
+        }
+      })
+      .catch(err => console.error(err));
+
     messageInput.value = '';
   }
 
@@ -1046,16 +1069,16 @@
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   window.addEventListener('hashchange', openSectionFromHash);
+
   document.getElementById('profileForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
     const name = document.getElementById('nameInput').value.trim();
     const age = parseInt(document.getElementById('ageInput').value);
     const gender = document.getElementById('genderSelect').value;
-    const userId = localStorage.getItem('userID');
+    const username = localStorage.getItem('username'); 
 
     if (!name || !age || !gender) {
-
       return;
     }
 
@@ -1063,19 +1086,17 @@
       const res = await fetch('/save-profile', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, age, gender, userID: userId })
+        body: JSON.stringify({ name, age, gender, username: username })
       });
 
       const data = await res.json();
       if (data.success) {
         localStorage.setItem('profileId', data.profileId);
-
       } else {
         alert(data.message || 'เกิดข้อผิดพลาด');
       }
     } catch (err) {
       console.error(err);
-
     }
   });
 

@@ -304,6 +304,203 @@ app.post('/save-message', async (req, res) => {
     }
 });
 
+
+// backend (server.js หรือ index.js)
+app.get('/admin/answers', async (req, res) => {
+    try {
+        const answers = await Answer.find().sort({ date: -1 }); // เรียงล่าสุดก่อน
+        res.json({ success: true, answers });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: "เกิดข้อผิดพลาด" });
+    }
+});
+
+
+import ExcelJS from "exceljs";
+
+// ================== USERS ==================
+app.get('/export/users-xlsx', async (req, res) => {
+  try {
+    const users = await User.find().lean();
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Users");
+
+    worksheet.columns = [
+      { header: "Username", key: "username", width: 20 },
+      { header: "Password", key: "password", width: 20 },
+      { header: "Role", key: "role", width: 10 }
+    ];
+
+    users.forEach(u => worksheet.addRow(u));
+
+    res.setHeader("Content-Type","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    res.setHeader("Content-Disposition", "attachment; filename=users.xlsx");
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Export error" });
+  }
+});
+
+// ================== PART STATUS ==================
+app.get('/export/partstatus-xlsx', async (req, res) => {
+  try {
+    const parts = await PartStatus.find().lean();
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("PartStatus");
+
+    worksheet.columns = [
+      { header: "Part1", key: "part1", width: 10 },
+      { header: "Part2", key: "part2", width: 10 },
+      { header: "Part3", key: "part3", width: 10 },
+      { header: "Part4", key: "part4", width: 10 }
+    ];
+
+    parts.forEach(p => worksheet.addRow(p));
+
+    res.setHeader("Content-Type","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    res.setHeader("Content-Disposition", "attachment; filename=partstatus.xlsx");
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Export error" });
+  }
+});
+
+// ================== ANSWERS ==================
+app.get('/export/answers-xlsx', async (req, res) => {
+  try {
+    const answers = await Answer.find().lean();
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Answers");
+
+    worksheet.columns = [
+      { header: "Username", key: "username", width: 20 },
+      { header: "Question ID", key: "questionId", width: 20 },
+      { header: "Answer", key: "answer", width: 30 },
+      { header: "Date", key: "date", width: 20 }
+    ];
+
+    answers.forEach(a => worksheet.addRow(a));
+
+    res.setHeader("Content-Type","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    res.setHeader("Content-Disposition", "attachment; filename=answers.xlsx");
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Export error" });
+  }
+});
+
+// ================== QUIZ SCORES ==================
+app.get('/export/quizscores-xlsx', async (req, res) => {
+  try {
+    const scores = await QuizScore.find().lean();
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("QuizScores");
+
+    worksheet.columns = [
+      { header: "Username", key: "username", width: 20 },
+      { header: "Quiz Number", key: "quizNumber", width: 15 },
+      { header: "Score", key: "score", width: 10 }
+    ];
+
+    scores.forEach(s => worksheet.addRow(s));
+
+    res.setHeader("Content-Type","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    res.setHeader("Content-Disposition", "attachment; filename=quizscores.xlsx");
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Export error" });
+  }
+});
+
+// ================== PROFILES ==================
+app.get('/export/profiles-xlsx', async (req, res) => {
+  try {
+    const profiles = await Profile.find().lean();
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Profiles");
+
+    worksheet.columns = [
+      { header: "Username", key: "username", width: 20 },
+      { header: "Name", key: "name", width: 20 },
+      { header: "Age", key: "age", width: 10 },
+      { header: "Gender", key: "gender", width: 10 },
+      { header: "Date", key: "date", width: 20 }
+    ];
+
+    profiles.forEach(p => worksheet.addRow(p));
+
+    res.setHeader("Content-Type","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    res.setHeader("Content-Disposition", "attachment; filename=profiles.xlsx");
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Export error" });
+  }
+});
+
+// ================== FEEDBACK ==================
+app.get('/export/feedback-xlsx', async (req, res) => {
+  try {
+    const feedbacks = await Feedback.find().lean();
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Feedback");
+
+    worksheet.columns = [
+      { header: "Username", key: "username", width: 20 },
+      { header: "Rating", key: "rating", width: 10 },
+      { header: "Feedback", key: "feedback", width: 40 },
+      { header: "Date", key: "date", width: 20 }
+    ];
+
+    feedbacks.forEach(f => worksheet.addRow(f));
+
+    res.setHeader("Content-Type","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    res.setHeader("Content-Disposition", "attachment: filename=feedback.xlsx");
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Export error" });
+  }
+});
+
+// ================== MESSAGES ==================
+app.get('/export/messages-xlsx', async (req, res) => {
+  try {
+    const messages = await Message.find().lean();
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Messages");
+
+    worksheet.columns = [
+      { header: "Username", key: "username", width: 20 },
+      { header: "Question", key: "question", width: 30 },
+      { header: "Message", key: "message", width: 40 },
+      { header: "Timestamp", key: "timestamp", width: 20 }
+    ];
+
+    messages.forEach(m => worksheet.addRow(m));
+
+    res.setHeader("Content-Type","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    res.setHeader("Content-Disposition", "attachment; filename=messages.xlsx");
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Export error" });
+  }
+});
+
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'view', 'index.html'));
 });
