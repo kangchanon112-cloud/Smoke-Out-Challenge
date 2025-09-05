@@ -209,7 +209,7 @@
 
         .ma {
             position: absolute;
-            bottom: 50px;
+            bottom: 10%;
             left: 0;
             right: 0;
         }
@@ -620,12 +620,8 @@
     <!-- ส่วนที่ 1 -->
     <div class="text-center bg" id="section1">
         <div id="display"></div>
-
         <h2 class="mb-4 boxed">เด็ก ๆ มีวิธีปฏิเสธอย่างไร เมื่อถูกชักชวนให้สูบบุหรี่</h2>
-
-
         <div class="ma5">
-
             <div id="inputBox">
                 <input type="text" id="message" placeholder="พิมพ์ข้อความ...">
                 <button id="sendBtn">ส่ง</button>
@@ -644,7 +640,9 @@
             เยี่ยมมากเลยมาถึงครึ่งทางแล้วคุณมีความพยายามและตั้งใจจริงอย่าลืมว่าทุกก้าวเล็กๆ
             ที่เดินมาถึงตรงนี้คือความสําเร็จที่นับได้แล้ว สู้ต่ออีกหน่อยอีกครึ่งทางก็จะถึงเป้าหมายแล้วนะ
         </h2>
-
+        <div class="ma">
+            <a href="#" id="nextBtn9" class="arrow-text">แตะเพื่อไปต่อ</a>
+        </div>
     </div>
 
 
@@ -706,7 +704,6 @@
             การปฏิเสธบุหรี่ได้
             คือความกล้าหาญที่แท้จริง ไม่ใช่
             ทุกคนจะทําได้นะ
-
         </h2>
     </div>
 
@@ -757,9 +754,7 @@
             <br>
             <button id="submitFeedback">ส่งข้อเสนอแนะ</button>
         </div>
-
         <div id="popupMessage"></div>
-
     </div>
 
     <audio id="bgMusic" src="/public/img/part1/m2.mp3" loop></audio>
@@ -860,6 +855,7 @@
         });
 
 
+
         document.body.addEventListener('click', function (e) {
             const activeSectionIds = [
                 'section0', 'section1', 'section2', 'section3', 'section4', 'section5', 'section6', 'section7', 'section8', 'section9', 'section10', 'section11', 'section12'
@@ -870,7 +866,7 @@
             if (currentIndex === -1) return;
 
             const currentSectionId = activeSectionIds[currentIndex];
-            if (currentSectionId === 'section0' || currentSectionId === 'section1' || currentSectionId === 'section3' || currentSectionId === 'section5' || currentSectionId === 'section6' || currentSectionId === 'section12') {
+            if (currentSectionId === 'section0' || currentSectionId === 'section1' || currentSectionId === 'section2' || currentSectionId === 'section3' || currentSectionId === 'section5' || currentSectionId === 'section6' || currentSectionId === 'section12') {
                 return;
             }
             document.getElementById(currentSectionId).classList.remove('active');
@@ -896,14 +892,60 @@
             }, speed);
         }
 
-        document.getElementById("nextBtn1").addEventListener("click", () => {
+
+
+        ////////////////////////////////////////////////////////////////////////////////
+
+        let typing = false;
+        let typingTimer = null;
+
+        function typeEffect(elementId, speed = 100) {
+            const el = document.getElementById(elementId);
+            const fullText = el.dataset.fulltext || el.innerText.trim();
+            el.dataset.fulltext = fullText;
+            el.innerText = "";
+
+            let i = 0;
+            typing = true;
+
+            typingTimer = setInterval(() => {
+                el.innerText += fullText[i];
+                i++;
+                if (i >= fullText.length) {
+                    clearInterval(typingTimer);
+                    typing = false;
+                }
+            }, speed);
+        }
+
+        const skipBtn = document.getElementById("nextBtn9");
+        skipBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const el = document.getElementById("quote2");
+            const fullText = el.dataset.fulltext;
+
+            if (typing) {
+                clearInterval(typingTimer);
+                el.innerText = fullText;
+                typing = false;
+            } else {
+                document.getElementById("section2").classList.remove("active");
+                document.getElementById("section3").classList.add("active");
+            }
+        });
+
+        document.getElementById("nextBtn1").addEventListener("click", (e) => {
+            e.preventDefault();
+            document.getElementById("section1").classList.remove("active");
+            document.getElementById("section2").classList.add("active");
+
             setTimeout(() => {
                 typeEffect("quote2", 50);
             }, 200);
         });
 
 
-
+        ////////////////////////////////////////////////////////////
 
         function openSectionFromHash() {
             const hash = window.location.hash.replace('#', '');
@@ -923,6 +965,8 @@
         openSectionFromHash();
 
 
+
+        ///////////////////////////////////
         const socket = io();
 
         const messageInput = document.getElementById('message');

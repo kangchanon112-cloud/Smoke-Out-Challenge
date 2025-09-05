@@ -97,14 +97,11 @@
                         localStorage.setItem('userID', data.userID);
                         localStorage.setItem('role', data.role);
 
-                        // admin ไปหน้า admin ปกติ
                         if (data.role === 'admin') {
                             setTimeout(() => { window.location.href = 'admin'; }, 1000);
                             return;
                         }
 
-                        // user -> fetch partStatus ก่อน redirect
-                        // user -> fetch partStatus ก่อน redirect
                         try {
                             const resPart = await fetch('/admin/get-part-status');
                             const parts = await resPart.json();
@@ -115,7 +112,7 @@
                             else if (parts.part2) redirectPage = 'part2';
                             else if (parts.part3) redirectPage = 'part3';
                             else if (parts.part4) redirectPage = 'part4';
-                            else redirectPage = 'no-part'; // ถ้าไม่มี part เปิด
+                            else redirectPage = 'no-part';
 
                             setTimeout(() => { window.location.href = redirectPage; }, 1000);
 

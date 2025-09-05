@@ -81,7 +81,6 @@
             const confirmPassword = document.getElementById('regConfirmPassword').value;
             const messageDiv = document.getElementById('message');
 
-            // ตรวจสอบรหัสผ่านยืนยัน
             if (!username || !password || !confirmPassword) {
                 messageDiv.textContent = 'กรอกข้อมูลให้ครบทุกช่อง!';
                 return;
@@ -91,7 +90,6 @@
                 return;
             }
 
-            // ส่งข้อมูลไปเซิร์ฟเวอร์
             fetch('/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -102,7 +100,7 @@
                     messageDiv.textContent = data.message;
                     if (data.success) {
                         messageDiv.style.color = 'green';
-                        setTimeout(() => { window.location.href = 'login'; }, 1500); // ไปหน้า login อัตโนมัติ
+                        setTimeout(() => { window.location.href = 'login'; }, 1500);
                     } else {
                         messageDiv.style.color = 'red';
                     }
