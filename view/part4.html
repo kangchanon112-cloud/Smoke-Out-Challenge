@@ -1022,9 +1022,33 @@
         function handleSend() {
             const text = messageInput.value.trim();
             if (!text) return;
+
             socket.emit('sendSticker-sec1', text);
+
+            const userID = localStorage.getItem("userID") || "guest"; 
+            fetch("/save-message", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userID,
+                    part: "part4",
+                    message: text,
+                    timestamp: new Date()
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log("บันทึกเรียบร้อย");
+                    } else {
+                        console.error("บันทึกไม่สำเร็จ");
+                    }
+                })
+                .catch(err => console.error(err));
+
             messageInput.value = '';
         }
+
 
         sendBtn.addEventListener('click', handleSend);
         messageInput.addEventListener('keydown', (e) => {

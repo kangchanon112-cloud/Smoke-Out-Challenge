@@ -282,6 +282,30 @@ app.post("/submit-feedback", async (req, res) => {
     }
 });
 
+
+const messageSchema = new mongoose.Schema({
+    userID: String,
+    part: String,
+    message: String,
+    timestamp: Date
+});
+
+const Message = mongoose.model('Message', messageSchema);
+
+app.post('/save-message', async (req, res) => {
+    try {
+        const { userID, part, message, timestamp } = req.body;
+        const newMsg = new Message({ userID, part, message, timestamp });
+        await newMsg.save();
+        res.json({ success: true, message: "บันทึกเรียบร้อย" });
+    } catch (err) {
+        console.error(err);
+        res.json({ success: false, message: "เกิดข้อผิดพลาด" });
+    }
+});
+
+
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'view', 'index.html'));
 });
