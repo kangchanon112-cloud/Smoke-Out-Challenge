@@ -549,7 +549,7 @@
       </div>
     </div>
     <div class="ma">
-       <a href="#" id="nextBtn8" onclick="playText(5)" class="arrow-text">แตะเพื่อไปต่อ</a>
+      <a href="#" id="nextBtn8" onclick="playText(5)" class="arrow-text">แตะเพื่อไปต่อ</a>
     </div>
   </div>
 
@@ -905,7 +905,26 @@
   function sendMessagePart3() {
     const text = part3MessageInput.value.trim();
     if (!text) return;
+
     part3Socket.emit('sendSticker-part3', text);
+
+    const username = localStorage.getItem("username") || "guest";
+    fetch("/save-message", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username,
+        question: "วันนี้รู้สึกอย่างไรบ้าง",
+        message: text,
+        timestamp: new Date()
+      })
+    }).then(res => res.json())
+      .then(data => {
+        if (data.success) console.log("บันทึกเรียบร้อย");
+        else console.error("บันทึกไม่สำเร็จ");
+      })
+      .catch(err => console.error(err));
+
     part3MessageInput.value = '';
   }
 

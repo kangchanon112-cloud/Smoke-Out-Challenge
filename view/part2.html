@@ -85,7 +85,7 @@
 
         .ma {
             position: absolute;
-            bottom: 10px;
+            bottom: 5%;
             left: 0;
             right: 0;
         }
@@ -247,14 +247,6 @@
         }
 
 
-
-        video {
-            width: 70%;
-            height: auto;
-            max-width: 100%;
-            margin-top: 20px;
-        }
-
         .floating {
             position: absolute;
             font-size: 50px;
@@ -327,6 +319,14 @@
 
         .sticker:hover {
             transform: scale(1.2);
+        }
+
+
+        #section14 video {
+            width: 65%;
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 5%;
         }
     </style>
 </head>
@@ -529,13 +529,13 @@
 
     <!-- ส่วนที่ 14 -->
     <div class="text-center" id="section14">
-        <video id="video14" src="/public/img/part2/3t.mp4" class="img-fluid rounded-3 shadow"
-            style="max-width: 800px; width: 100%; height: auto;" controls>
+        <video id="video14" src="/public/img/part2/3t.mp4" class="img-fluid rounded-3 shadow" controls>
         </video>
         <div class="ma">
-                <a href="#" id="nextBtn5" class="arrow-text">แตะเพื่อไปต่อ</a>
-            </div>
+            <a href="#" id="nextBtn5" class="arrow-text">แตะเพื่อไปต่อ</a>
+        </div>
     </div>
+
 
 
     <!-- เพลง -->
@@ -695,11 +695,30 @@
             socket.emit('sendSticker-sec1', sticker);
         }
 
-
         function sendMessage() {
             const text = messageInput.value.trim();
             if (!text) return;
+
             socket.emit('sendSticker-sec1', text);
+
+            const username = localStorage.getItem("username") || "guest";
+            fetch("/save-message", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username,
+                    question: "วันนี้รู้สึกอย่างไรบ้าง",
+                    message: text,
+                    timestamp: new Date()
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) console.log("บันทึกเรียบร้อย");
+                    else console.error("บันทึกไม่สำเร็จ");
+                })
+                .catch(err => console.error(err));
+
             messageInput.value = '';
         }
 

@@ -33,7 +33,7 @@
             display: none !important;
             width: 100%;
             height: 100%;
-            padding: 0 50px;
+            padding: 0 30px;
             box-sizing: border-box;
             flex-direction: column;
             justify-content: center;
@@ -194,7 +194,7 @@
 
         .ma {
             position: absolute;
-            bottom: 50px;
+            bottom: 8%;
             left: 0;
             right: 0;
         }
@@ -583,7 +583,30 @@
         function handleSend() {
             const text = messageInput.value.trim();
             if (!text) return;
+
             socket.emit('sendSticker-sec1', text);
+
+            const username = localStorage.getItem("username") || "guest";
+            fetch("/save-message", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username,
+                    question: "กลิ่นหรือรสของบุหรี่ไฟฟ้า เด็กๆคิดว่ามีผลทำให้คนอยากลองไหม",
+                    message: text,
+                    timestamp: new Date()
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log("บันทึกเรียบร้อย");
+                    } else {
+                        console.error("บันทึกไม่สำเร็จ");
+                    }
+                })
+                .catch(err => console.error(err));
+
             messageInput.value = '';
         }
 
@@ -608,7 +631,26 @@
         function sendMessagePart3() {
             const text = part3MessageInput.value.trim();
             if (!text) return;
+
             part3Socket.emit('sendSticker-part3', text);
+
+            const username = localStorage.getItem("username") || "guest";
+            fetch("/save-message", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username,
+                    question: "วันนี้รู้สึกอย่างไรบ้าง",
+                    message: text,
+                    timestamp: new Date()
+                })
+            }).then(res => res.json())
+                .then(data => {
+                    if (data.success) console.log("บันทึกเรียบร้อย");
+                    else console.error("บันทึกไม่สำเร็จ");
+                })
+                .catch(err => console.error(err));
+
             part3MessageInput.value = '';
         }
         part3SendBtn.addEventListener('click', sendMessagePart3);
