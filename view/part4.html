@@ -1017,6 +1017,7 @@
             if (e.key === 'Enter') handleSend();
         });
 
+        ///////////////////////////////////////////////////////////////////////////////////////
         const part3Socket = io();
         const part3Display = document.getElementById('display-part3');
         const part3MessageInput = document.getElementById('message-part3');
@@ -1029,9 +1030,29 @@
         function sendMessagePart3() {
             const text = part3MessageInput.value.trim();
             if (!text) return;
+
             part3Socket.emit('sendSticker-part3', text);
+
+            const username = localStorage.getItem("username") || "guest";
+            fetch("/save-message", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username,
+                    question: "วันนี้รู้สึกอย่างไรบ้าง",
+                    message: text,
+                    timestamp: new Date()
+                })
+            }).then(res => res.json())
+                .then(data => {
+                    if (data.success) console.log("บันทึกเรียบร้อย");
+                    else console.error("บันทึกไม่สำเร็จ");
+                })
+                .catch(err => console.error(err));
+
             part3MessageInput.value = '';
         }
+
         part3SendBtn.addEventListener('click', sendMessagePart3);
         part3MessageInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') sendMessagePart3();
@@ -1058,6 +1079,7 @@
             }, 3000);
         });
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         const totalScoreEl = document.getElementById("totalScore");
         const username = localStorage.getItem("username");
         const scoreImage = document.getElementById("scoreImage");
