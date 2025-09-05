@@ -376,7 +376,7 @@
 
 
         function saveScoreToDB() {
-            const userIusernameD = localStorage.getItem("username");
+            const username = localStorage.getItem("username");
             console.log("ส่งไป DB:", { username, quizNumber, score });
             if (!username) {
                 alert("ไม่พบ username กรุณา login ก่อน");
