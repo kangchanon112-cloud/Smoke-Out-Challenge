@@ -59,7 +59,7 @@ app.post('/register', async (req, res) => {
             role: 'user'
         });
         await newUser.save();
-        res.json({ success: true, message: 'สมัครสมาชิกเรียบร้อย!', userId: newUser._id });
+        res.json({ success: true, message: 'สมัครสมาชิกเรียบร้อย!', username: newUser.username });
 
     } catch (err) {
         res.status(500).json({ success: false, message: err.message });
@@ -83,7 +83,7 @@ app.post('/login', async (req, res) => {
         res.json({
             success: true,
             message: 'เข้าสู่ระบบเรียบร้อย',
-            userID: user._id,
+            username: user.username,
             role: user.role
         });
 
@@ -146,7 +146,7 @@ app.post('/admin/toggle-part', async (req, res) => {
 });
 
 const answerSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    username: { type: String, ref: 'User' },
     questionId: { type: String, required: true },
     answer: { type: String, required: true },
     date: { type: Date, default: Date.now }
@@ -155,13 +155,13 @@ const answerSchema = new mongoose.Schema({
 const Answer = mongoose.model('Answer', answerSchema);
 
 app.post('/submit-answer', async (req, res) => {
-    const { userID, questionId, answer } = req.body;
+    const { username, questionId, answer } = req.body;
 
-    if (!userID || !questionId || !answer)
-        return res.status(400).json({ success: false, message: 'ต้องส่ง userID, questionId และ answer' });
+    if (!username || !questionId || !answer)
+        return res.status(400).json({ success: false, message: 'ต้องส่ง username, questionId และ answer' });
 
     try {
-        const newAnswer = new Answer({ userId: userID, questionId, answer });
+        const newAnswer = new Answer({ username, questionId, answer });
         await newAnswer.save();
         res.json({ success: true, message: 'บันทึกคำตอบเรียบร้อย!' });
     } catch (err) {
@@ -170,20 +170,20 @@ app.post('/submit-answer', async (req, res) => {
 });
 
 const quizScoreSchema = new mongoose.Schema({
-    userID: { type: String, required: true },
+    username: { type: String, required: true },
     quizNumber: { type: Number, required: true },
     score: { type: Number, required: true }
 });
 
-quizScoreSchema.index({ userID: 1, quizNumber: 1 }, { unique: true });
+quizScoreSchema.index({ username: 1, quizNumber: 1 }, { unique: true });
 
 const QuizScore = mongoose.model("QuizScore", quizScoreSchema);
 
 app.post("/saveScore", async (req, res) => {
     try {
-        const { userID, quizNumber, score } = req.body;
+        const { username, quizNumber, score } = req.body;
 
-        const existing = await QuizScore.findOne({ userID, quizNumber });
+        const existing = await QuizScore.findOne({ username, quizNumber });
 
         if (existing) {
             if (score > existing.score) {
@@ -194,7 +194,7 @@ app.post("/saveScore", async (req, res) => {
                 return res.json({ message: "คะแนนเดิมสูงกว่าแล้ว", score: existing.score });
             }
         } else {
-            const newScore = new QuizScore({ userID, quizNumber, score });
+            const newScore = new QuizScore({ username, quizNumber, score });
             await newScore.save();
             return res.json({ message: "บันทึกคะแนนใหม่แล้ว", score: newScore.score });
         }
@@ -205,7 +205,7 @@ app.post("/saveScore", async (req, res) => {
 });
 
 const profileSchema = new mongoose.Schema({
-    userID: { type: String, required: true },
+    username: { type: String, required: true },
     name: { type: String, required: true },
     age: { type: Number, required: true },
     gender: { type: String, required: true },
@@ -215,19 +215,19 @@ const profileSchema = new mongoose.Schema({
 const Profile = mongoose.model('Profile', profileSchema);
 
 app.post('/save-profile', async (req, res) => {
-    const { name, age, gender, userID } = req.body;
+    const { name, age, gender, username } = req.body;
 
-    if (!name || !age || !gender || !userID) {
+    if (!name || !age || !gender || !username) {
         return res.status(400).json({ success: false });
     }
 
     try {
-        const user = await User.findById(userID);
+        const user = await User.findOne({ username });
         if (!user) {
             return res.status(404).json({ success: false, message: 'ไม่พบผู้ใช้' });
         }
 
-        const newProfile = new Profile({ name, age, gender, userID });
+        const newProfile = new Profile({ name, age, gender, username });
         await newProfile.save();
 
         res.json({ success: true, message: 'บันทึกข้อมูลเรียบร้อย!', profileId: newProfile._id });
@@ -236,20 +236,20 @@ app.post('/save-profile', async (req, res) => {
     }
 });
 
-app.get("/totalScore/:userID", async (req, res) => {
+app.get("/totalScore/:username", async (req, res) => {
     try {
-        const { userID } = req.params;
+        const { username } = req.params;
 
         const result = await QuizScore.aggregate([
-            { $match: { userID } },
-            { $group: { _id: "$userID", total: { $sum: "$score" } } }
+            { $match: { username } },
+            { $group: { _id: "$username", total: { $sum: "$score" } } }
         ]);
 
         if (result.length === 0) {
-            return res.json({ success: true, userID, totalScore: 0 });
+            return res.json({ success: true, username, totalScore: 0 });
         }
 
-        res.json({ success: true, userID, totalScore: result[0].total });
+        res.json({ success: true, username, totalScore: result[0].total });
     } catch (err) {
         console.error(err);
         res.status(500).json({ success: false, message: "เกิดข้อผิดพลาด" });
@@ -257,7 +257,7 @@ app.get("/totalScore/:userID", async (req, res) => {
 });
 
 const feedbackSchema = new mongoose.Schema({
-    userID: { type: String, required: true },
+    username: { type: String, required: true },
     rating: { type: Number, required: true },
     feedback: { type: String },
     date: { type: Date, default: Date.now }
@@ -266,14 +266,14 @@ const feedbackSchema = new mongoose.Schema({
 const Feedback = mongoose.model("Feedback", feedbackSchema);
 
 app.post("/submit-feedback", async (req, res) => {
-    const { userID, rating, feedback } = req.body;
+    const { username, rating, feedback } = req.body;
 
-    if (!userID || !rating) {
+    if (!username || !rating) {
         return res.status(400).json({ success: false, message: "กรุณาเลือกคะแนนก่อนส่ง" });
     }
 
     try {
-        const newFeedback = new Feedback({ userID, rating, feedback });
+        const newFeedback = new Feedback({ username, rating, feedback });
         await newFeedback.save();
         res.json({ success: true, message: "ส่งข้อเสนอแนะเรียบร้อย!" });
     } catch (err) {
@@ -284,8 +284,8 @@ app.post("/submit-feedback", async (req, res) => {
 
 
 const messageSchema = new mongoose.Schema({
-    userID: String,
-    part: String,
+    username: String,
+    question: String,
     message: String,
     timestamp: Date
 });
@@ -294,8 +294,8 @@ const Message = mongoose.model('Message', messageSchema);
 
 app.post('/save-message', async (req, res) => {
     try {
-        const { userID, part, message, timestamp } = req.body;
-        const newMsg = new Message({ userID, part, message, timestamp });
+        const { username, question, message, timestamp } = req.body;
+        const newMsg = new Message({ username, question, message, timestamp });
         await newMsg.save();
         res.json({ success: true, message: "บันทึกเรียบร้อย" });
     } catch (err) {
@@ -303,8 +303,6 @@ app.post('/save-message', async (req, res) => {
         res.json({ success: false, message: "เกิดข้อผิดพลาด" });
     }
 });
-
-
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'view', 'index.html'));

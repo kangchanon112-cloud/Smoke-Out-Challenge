@@ -73,66 +73,66 @@
         <a href="/">ยังไม่มีบัญชี? สมัครสมาชิก</a>
     </div>
 
-    <script>
-        function login() {
-            const username = document.getElementById('loginUsername').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            const messageDiv = document.getElementById('message');
+  <script>
+    function login() {
+        const username = document.getElementById('loginUsername').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        const messageDiv = document.getElementById('message');
 
-            if (!username || !password) {
-                messageDiv.textContent = 'กรอกข้อมูลให้ครบทุกช่อง!';
-                return;
-            }
-
-            fetch('/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
-            })
-                .then(res => res.json())
-                .then(async data => {
-                    messageDiv.textContent = data.message;
-                    if (data.success) {
-                        messageDiv.style.color = 'green';
-                        localStorage.setItem('userID', data.userID);
-                        localStorage.setItem('role', data.role);
-
-                        if (data.role === 'admin') {
-                            setTimeout(() => { window.location.href = 'admin'; }, 1000);
-                            return;
-                        }
-
-                        try {
-                            const resPart = await fetch('/admin/get-part-status');
-                            const parts = await resPart.json();
-                         
-                            localStorage.setItem("userClickedLogin", "true");
-                            let redirectPage = '';
-                            if (parts.part1) redirectPage = 'part1';
-                            else if (parts.part2) redirectPage = 'part2';
-                            else if (parts.part3) redirectPage = 'part3';
-                            else if (parts.part4) redirectPage = 'part4';
-                            else redirectPage = 'no-part';
-
-                            setTimeout(() => { window.location.href = redirectPage; }, 1000);
-
-                        } catch (err) {
-                            console.error(err);
-                            alert('โหลดสถานะ part ล้มเหลว');
-                        }
-
-                    } else {
-                        messageDiv.style.color = 'red';
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    messageDiv.textContent = 'เกิดข้อผิดพลาด';
-                    messageDiv.style.color = 'red';
-                });
+        if (!username || !password) {
+            messageDiv.textContent = 'กรอกข้อมูลให้ครบทุกช่อง!';
+            messageDiv.style.color = 'red';
+            return;
         }
-    </script>
 
+        fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        })
+        .then(res => res.json())
+        .then(async data => {
+            messageDiv.textContent = data.message;
+            if (data.success) {
+                messageDiv.style.color = 'green';
+                localStorage.setItem('username', data.username);
+                localStorage.setItem('role', data.role);
+
+                if (data.role === 'admin') {
+                    setTimeout(() => { window.location.href = 'admin'; }, 1000);
+                    return;
+                }
+
+                try {
+                    const resPart = await fetch('/admin/get-part-status');
+                    const parts = await resPart.json();
+
+                    localStorage.setItem("userClickedLogin", "true");
+                    let redirectPage = '';
+                    if (parts.part1) redirectPage = 'part1';
+                    else if (parts.part2) redirectPage = 'part2';
+                    else if (parts.part3) redirectPage = 'part3';
+                    else if (parts.part4) redirectPage = 'part4';
+                    else redirectPage = 'no-part';
+
+                    setTimeout(() => { window.location.href = redirectPage; }, 1000);
+
+                } catch (err) {
+                    console.error(err);
+                    alert('โหลดสถานะ part ล้มเหลว');
+                }
+
+            } else {
+                messageDiv.style.color = 'red';
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            messageDiv.textContent = 'เกิดข้อผิดพลาด';
+            messageDiv.style.color = 'red';
+        });
+    }
+</script>
 
 </body>
 
