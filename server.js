@@ -65,7 +65,7 @@ app.post('/register', async (req, res) => {
     res.json({
       success: true,
       message: 'สมัครสมาชิกเรียบร้อย!',
-      userID: newUser._id,  
+      userID: newUser._id,
       username: newUser.username
     });
 
@@ -573,6 +573,42 @@ app.get('/admin/messages', async (req, res) => {
 });
 
 ///////////////////////////////////////////////
+// ================== DELETE ==================
+app.delete('/admin/:collection/:id', async (req, res) => {
+  try {
+    const { collection, id } = req.params;
+    const models = { users: User, quizscores: QuizScore, answers: Answer, profiles: Profile, messages: Message, feedback: Feedback, partstatus: PartStatus };
+
+    const Model = models[collection];
+    if (!Model) return res.status(400).json({ success: false, message: "Invalid collection" });
+
+    await Model.findByIdAndDelete(id);
+    res.json({ success: true, message: "ลบข้อมูลเรียบร้อย" });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "เกิดข้อผิดพลาด" });
+  }
+});
+
+// ================== UPDATE ==================
+app.put('/admin/:collection/:id', async (req, res) => {
+  try {
+    const { collection, id } = req.params;
+    const updateData = req.body;
+    const models = { users: User, quizscores: QuizScore, answers: Answer, profiles: Profile, messages: Message, feedback: Feedback, partstatus: PartStatus };
+
+    const Model = models[collection];
+    if (!Model) return res.status(400).json({ success: false, message: "Invalid collection" });
+
+    const updated = await Model.findByIdAndUpdate(id, updateData, { new: true });
+    res.json({ success: true, updated });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "เกิดข้อผิดพลาด" });
+  }
+});
+
+///////////////////////////////////////////////
+
+
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'view', 'index.html'));

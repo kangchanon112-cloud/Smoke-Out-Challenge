@@ -71,7 +71,32 @@
     .search-input {
       max-width: 200px;
     }
+
+    #alertModal .modal-content {
+      background-color: #fff3e6;
+      color: #6b4f3f;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    #editModal .modal-content {
+      background-color: #fff6ec;
+      color: #6b4f3f;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    #editModal .btn-primary {
+      background-color: #6b4f3f;
+      border-color: #6b4f3f;
+    }
+
+    #editModal .btn-primary:hover {
+      background-color: #5a4233;
+      border-color: #5a4233;
+    }
   </style>
+
 </head>
 
 <body>
@@ -112,6 +137,36 @@
     </table>
   </div>
 
+  <div class="modal fade" id="alertModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body" id="alertModalBody"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">ตกลง</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">แก้ไขข้อมูล</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editForm"></form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+          <button type="button" class="btn btn-primary" id="saveEditBtn">บันทึก</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     const tableSelect = document.getElementById('tableSelect');
@@ -119,44 +174,158 @@
     const exportBtn = document.getElementById('exportBtn');
     const tableHead = document.getElementById('tableHead');
     const tableBody = document.querySelector('#dataTable tbody');
-
     const tables = {
-      users: { endpoint: '/admin/users', fields: ['username', 'password', 'role'], headers: ['Username', 'Password', 'Role'], export: '/export/users-xlsx' },
-      quizscores: { endpoint: '/admin/quizscores', fields: ['username', 'quizNumber', 'score'], headers: ['Username', 'Quiz', 'Score'], export: '/export/quizscores-xlsx' },
-      answers: { endpoint: '/admin/answers', fields: ['username', 'questionId', 'answer', 'date'], headers: ['Username', 'Question ID', 'Answer', 'Date'], export: '/export/answers-xlsx' },
-      profiles: { endpoint: '/admin/profiles', fields: ['username', 'name', 'age', 'gender', 'date'], headers: ['Username', 'Name', 'Age', 'Gender', 'Date'], export: '/export/profiles-xlsx' },
-      messages: { endpoint: '/admin/messages', fields: ['username', 'question', 'message', 'timestamp'], headers: ['Username', 'Question', 'Message', 'Timestamp'], export: '/export/messages-xlsx' },
-      feedback: { endpoint: '/admin/feedback', fields: ['username', 'rating', 'feedback', 'date'], headers: ['Username', 'Rating', 'Feedback', 'Date'], export: '/export/feedback-xlsx' },
-      partstatus: { endpoint: '/admin/partstatus', fields: ['part1', 'part2', 'part3', 'part4'], headers: ['Part1', 'Part2', 'Part3', 'Part4'], export: '/export/partstatus-xlsx' }
+      users: {
+        endpoint: '/admin/users',
+        fields: ['_id', 'username', 'password', 'role'],
+        headers: ['ID', 'Username', 'Password', 'Role'],
+        export: '/export/users-xlsx'
+      },
+      quizscores: {
+        endpoint: '/admin/quizscores',
+        fields: ['username', 'quizNumber', 'score'],  
+        headers: ['Username', 'Quiz', 'Score'],
+        export: '/export/quizscores-xlsx'
+      },
+      answers: {
+        endpoint: '/admin/answers',
+        fields: ['username', 'questionId', 'answer', 'date'],
+        headers: ['Username', 'Question ID', 'Answer', 'Date'],
+        export: '/export/answers-xlsx'
+      },
+      profiles: {
+        endpoint: '/admin/profiles',
+        fields: ['username', 'name', 'age', 'gender', 'date'],
+        headers: ['Username', 'Name', 'Age', 'Gender', 'Date'],
+        export: '/export/profiles-xlsx'
+      },
+      messages: {
+        endpoint: '/admin/messages',
+        fields: ['username', 'question', 'message', 'timestamp'],
+        headers: ['Username', 'Question', 'Message', 'Timestamp'],
+        export: '/export/messages-xlsx'
+      },
+      feedback: {
+        endpoint: '/admin/feedback',
+        fields: ['username', 'rating', 'feedback', 'date'],
+        headers: ['Username', 'Rating', 'Feedback', 'Date'],
+        export: '/export/feedback-xlsx'
+      },
+      partstatus: {
+        endpoint: '/admin/partstatus',
+        fields: ['part1', 'part2', 'part3', 'part4'],
+        headers: ['Part1', 'Part2', 'Part3', 'Part4'],
+        export: '/export/partstatus-xlsx'
+      }
     };
 
     let currentTable = 'users';
+    let currentEditId = null;
+    let currentEditTable = null;
 
+    // ================= LOAD DATA =================
     async function loadData(tableKey) {
       const t = tables[tableKey];
       exportBtn.href = t.export;
 
-      tableHead.innerHTML = t.headers.map(h => `<th>${h}</th>`).join('');
+      tableHead.innerHTML = t.headers.map(h => `<th>${h}</th>`).join('') + '<th>Actions</th>';
 
       try {
         const res = await fetch(t.endpoint);
         const data = await res.json();
         const key = Object.keys(data).find(k => k !== 'success');
         tableBody.innerHTML = '';
+
         (data[key] || []).forEach(item => {
           const tr = document.createElement('tr');
           tr.innerHTML = t.fields.map(f => `<td>${item[f] ?? ''}</td>`).join('');
+
+          const actionTd = document.createElement('td');
+          actionTd.innerHTML = `
+        <button class="btn btn-sm btn-warning me-1" onclick="editRow('${tableKey}', '${item._id}')">
+          <i class="bi bi-pencil-square"></i>
+        </button>
+        <button class="btn btn-sm btn-danger" onclick="deleteRow('${tableKey}', '${item._id}')">
+          <i class="bi bi-trash"></i>
+        </button>
+      `;
+          tr.appendChild(actionTd);
           tableBody.appendChild(tr);
         });
       } catch (err) { console.error(err); }
     }
 
-    tableSelect.addEventListener('change', () => {
-      currentTable = tableSelect.value;
-      loadData(currentTable);
-      searchInput.value = '';
+    // ================= EDIT ROW =================
+    async function editRow(tableKey, id) {
+      const t = tables[tableKey];
+      const rowData = [...tableBody.querySelectorAll('tr')].find(r => r.cells[0].innerText === id);
+      if (!rowData) return alert("ไม่พบข้อมูล!");
+
+      const form = document.getElementById('editForm');
+      form.innerHTML = '';
+      currentEditId = id;
+      currentEditTable = tableKey;
+
+      for (let i = 1; i < t.fields.length; i++) {
+        const field = t.fields[i];
+        const value = rowData.cells[i].innerText;
+
+        const div = document.createElement('div');
+        div.classList.add('mb-3');
+        div.innerHTML = `
+      <label class="form-label">${field}</label>
+      <input type="text" class="form-control" name="${field}" value="${value}">
+    `;
+        form.appendChild(div);
+      }
+
+      const modal = new bootstrap.Modal(document.getElementById('editModal'));
+      modal.show();
+    }
+
+    // ================= SAVE EDIT =================
+    document.getElementById('saveEditBtn').addEventListener('click', async () => {
+      const form = document.getElementById('editForm');
+      const inputs = form.querySelectorAll('input');
+      const updated = {};
+      inputs.forEach(input => { updated[input.name] = input.value; });
+
+      const t = tables[currentEditTable];
+      try {
+        const res = await fetch(`${t.endpoint}/${currentEditId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updated)
+        });
+        const result = await res.json();
+        if (result.success) {
+          showAlert("อัพเดตสำเร็จ");
+          loadData(currentEditTable);
+          bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
+        } else {
+          showAlert("อัพเดตล้มเหลว");
+        }
+      } catch (err) { console.error(err); showAlert("เกิดข้อผิดพลาด"); }
     });
-    
+
+    // ================= DELETE ROW =================
+    async function deleteRow(tableKey, id) {
+      if (!confirm("คุณต้องการลบข้อมูลนี้หรือไม่?")) return;
+
+      const t = tables[tableKey];
+      try {
+        const res = await fetch(`${t.endpoint}/${id}`, { method: 'DELETE' });
+        const result = await res.json();
+        if (result.success) {
+          showAlert("ลบข้อมูลสำเร็จ");
+          loadData(currentTable);
+        } else {
+          showAlert("ลบข้อมูลล้มเหลว");
+        }
+      } catch (err) { console.error(err); showAlert("เกิดข้อผิดพลาด"); }
+    }
+
+    // ================= SEARCH =================
     searchInput.addEventListener('input', () => {
       const filter = searchInput.value.toLowerCase();
       tableBody.querySelectorAll('tr').forEach(row => {
@@ -165,10 +334,26 @@
       });
     });
 
-    loadData(currentTable);
+    // ================= CHANGE TABLE =================
+    tableSelect.addEventListener('change', () => {
+      currentTable = tableSelect.value;
+      loadData(currentTable);
+      searchInput.value = '';
+    });
 
+    // ================= INITIAL LOAD =================
+    loadData(currentTable);
     setInterval(() => loadData(currentTable), 10000);
+
+    function showAlert(message) {
+      const modalBody = document.getElementById('alertModalBody');
+      modalBody.innerText = message;
+      const modal = new bootstrap.Modal(document.getElementById('alertModal'));
+      modal.show();
+    }
+
   </script>
+
 </body>
 
 </html>
