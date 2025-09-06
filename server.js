@@ -34,10 +34,12 @@ io.on("connection", (socket) => {
 });
 
 const userSchema = new mongoose.Schema({
+  userID: { type: mongoose.Schema.Types.ObjectId, auto: true },
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
 });
+
 
 const User = mongoose.model('User', userSchema);
 
@@ -59,12 +61,19 @@ app.post('/register', async (req, res) => {
       role: 'user'
     });
     await newUser.save();
-    res.json({ success: true, message: 'สมัครสมาชิกเรียบร้อย!', username: newUser.username });
+
+    res.json({
+      success: true,
+      message: 'สมัครสมาชิกเรียบร้อย!',
+      userID: newUser._id,  
+      username: newUser.username
+    });
 
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
 });
+
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
