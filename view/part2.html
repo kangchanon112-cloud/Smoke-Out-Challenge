@@ -524,6 +524,7 @@
     <!-- ส่วนที่ 13 -->
     <div class="text-center" id="section13">
         <img src="/public/img/part2/p26.png" alt="" class="responsive-img">
+        <button id="nextPartBtn" class="btn btn-warning text-secondary mt-3">Part 3</button>
     </div>
 
 
@@ -543,6 +544,12 @@
 
     <script>
         const music = document.getElementById("bgMusic");
+
+        document.getElementById('nextPartBtn').addEventListener('click', () => {
+            window.location.href = 'part3.html';
+        });
+
+
 
         const savedTime = localStorage.getItem("musicTime");
         if (savedTime) {

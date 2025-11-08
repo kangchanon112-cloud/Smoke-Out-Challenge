@@ -335,6 +335,20 @@
         #stickers-part3 .sticker:hover {
             transform: scale(1.2);
         }
+
+        #section5 {
+            position: relative;
+        }
+
+        #nextPartBtn {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 25px;
+            font-size: 1.2rem;
+            border-radius: 30px;
+        }
     </style>
 </head>
 
@@ -411,12 +425,19 @@
         <h2 class="fw-bold my-5 quote" style="color: #222222;">
             คุณกล้าพอไหม <br>ที่จะมาร่วมกับเราอีกครั้ง
         </h2>
+        <button id="nextPartBtn" class="btn btn-warning text-secondary mt-3">Part 4</button>
     </div>
+
 
     <audio id="bgMusic" src="/public/img/part1/m2.mp3" loop></audio>
     <script>
 
         const music = document.getElementById("bgMusic");
+        
+        document.getElementById('nextPartBtn').addEventListener('click', () => {
+            window.location.href = 'part4.html';
+        });
+
 
         const savedTime = localStorage.getItem("musicTime");
         if (savedTime) {

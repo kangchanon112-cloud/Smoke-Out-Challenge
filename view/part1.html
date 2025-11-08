@@ -744,6 +744,7 @@
       <h4 class="fw-semibold mt-5" style="color: #b38600;">
         โปรดติดตามกิจกรรมครั้งต่อไปน้าาา <span style="font-size: 1.5rem;">✨</span>
       </h4>
+      <button id="nextPartBtn" class="btn btn-warning text-secondary mt-3">Part 2</button>
     </div>
   </div>
 
@@ -752,6 +753,10 @@
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   document.getElementById('section0').classList.add('active');
+
+  document.getElementById('nextPartBtn').addEventListener('click', () => {
+    window.location.href = 'part2.html';
+  });
 
 
   const music = document.getElementById("bgMusic");
@@ -1076,7 +1081,7 @@
     const name = document.getElementById('nameInput').value.trim();
     const age = parseInt(document.getElementById('ageInput').value);
     const gender = document.getElementById('genderSelect').value;
-    const username = localStorage.getItem('username'); 
+    const username = localStorage.getItem('username');
 
     if (!name || !age || !gender) {
       return;
